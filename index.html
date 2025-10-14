@@ -12,7 +12,7 @@
       background-color: #000;
       color: white;
       font-family: 'Poppins', sans-serif;
-      overflow: hidden;
+      overflow-x: hidden;
       text-align: center;
     }
 
@@ -32,6 +32,7 @@
 
     #intro img {
       width: 160px;
+      max-width: 40%;
       opacity: 0;
       animation: zoomLogo 2s ease forwards;
     }
@@ -42,6 +43,7 @@
       opacity: 0;
       animation: showText 2s ease forwards 1.4s;
       color: #f1c40f;
+      word-wrap: break-word;
     }
 
     @keyframes zoomLogo {
@@ -68,10 +70,12 @@
       height: 100vh;
       background: radial-gradient(circle at center, #111 0%, #000 100%);
       transition: opacity 0.8s;
+      padding: 10px;
     }
 
     #login img {
       width: 160px;
+      max-width: 40%;
       margin-bottom: 20px;
       border-radius: 50%;
     }
@@ -81,6 +85,7 @@
       border-radius: 8px;
       border: none;
       width: 70%;
+      max-width: 400px;
       font-size: 20px;
       margin-bottom: 20px;
       text-align: center;
@@ -96,6 +101,7 @@
       cursor: pointer;
       font-size: 20px;
       transition: 0.3s;
+      word-wrap: break-word;
     }
 
     button:hover { background: #ff4081; }
@@ -106,6 +112,7 @@
       height: 100vh;
       background-color: #111;
       flex-direction: column;
+      overflow-x: hidden;
     }
 
     .header {
@@ -113,10 +120,13 @@
       justify-content: space-between;
       align-items: center;
       padding: 15px 25px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .header img {
       width: 100px;
+      max-width: 30%;
       height: 100px;
       object-fit: cover;
       border-radius: 50%;
@@ -128,46 +138,64 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      gap: 30px;
+      gap: 20px;
+      padding: 10px;
     }
 
     .menu-btn {
-      width: 300px;
-      padding: 30px;
-      font-size: 26px;
+      width: 80%;
+      max-width: 300px;
+      padding: 20px;
+      font-size: 24px;
       border-radius: 16px;
       background: linear-gradient(135deg, #e91e63, #f1c40f);
       color: black;
       font-weight: bold;
+      transition: 0.3s;
     }
 
-    .menu-btn:hover {
-      transform: scale(1.05);
-    }
+    .menu-btn:hover { transform: scale(1.05); }
 
-    /* === PANEL DE VENTAS === */
+    /* === PANEL DE VENTAS COMO TABLA === */
     #ventasPanel {
       display: none;
       padding: 20px;
       text-align: center;
     }
 
-    .producto {
-      margin: 30px 0;
-      font-size: 28px;
+    table.ventasTable {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 20px;
+      border-collapse: separate;
+      border-spacing: 15px 10px;
     }
 
-    .producto button {
-      width: 60px;
-      height: 60px;
-      font-size: 28px;
-      margin: 0 15px;
-      border-radius: 12px;
+    table.ventasTable td {
+      vertical-align: middle;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    table.ventasTable td button {
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+      border-radius: 10px;
+      margin: 0 5px;
     }
 
     #total {
-      font-size: 32px;
-      margin-top: 30px;
+      font-size: 28px;
+      margin-bottom: 20px;
+      word-wrap: break-word;
+    }
+
+    #ventasPanel button.volver-btn {
+      margin-top: 10px;
+      padding: 14px 30px;
+      font-size: 20px;
+      border-radius: 12px;
     }
 
     /* === LISTA DE INVITADOS === */
@@ -182,32 +210,34 @@
     .nombre {
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
       background: #222;
-      padding: 20px;
+      padding: 15px;
       border-radius: 12px;
-      margin: 10px 0;
-      font-size: 22px;
+      margin: 8px 0;
+      font-size: 20px;
       align-items: center;
+      gap: 10px;
     }
 
     .nombre button {
       background: #27ae60;
-      font-size: 20px;
+      font-size: 18px;
       padding: 10px 20px;
       border-radius: 10px;
+      word-wrap: break-word;
     }
 
-    .nombre button:disabled {
-      background: gray;
-    }
+    .nombre button:disabled { background: gray; }
 
     input#buscar {
-      font-size: 20px;
+      font-size: 18px;
       padding: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       border-radius: 8px;
       border: none;
       width: 80%;
+      max-width: 400px;
     }
 
     /* === BARRA DE PROGRESO === */
@@ -218,21 +248,23 @@
       justify-content: center;
       width: 90%;
       max-width: 600px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .progress-icon {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      max-width: 15%;
+      height: 50px;
       object-fit: contain;
       flex-shrink: 0;
     }
 
     .progress-bar {
       flex: 1;
-      height: 25px;
+      height: 20px;
       background: #333;
       border-radius: 15px;
-      margin: 0 10px; 
       overflow: hidden;
       position: relative;
     }
@@ -242,6 +274,31 @@
       width: 0%;
       background: linear-gradient(90deg, #f1c40f, #e91e63);
       transition: width 0.5s ease;
+    }
+
+    /* === MEDIA QUERIES PARA RESPONSIVE === */
+    @media (max-width: 768px) {
+      .menu-btn { font-size: 20px; padding: 16px; }
+      table.ventasTable td { font-size: 20px; }
+      table.ventasTable td button { width: 45px; height: 45px; font-size: 20px; }
+      #total { font-size: 24px; }
+      .nombre { font-size: 18px; padding: 12px; }
+      .nombre button { font-size: 16px; padding: 8px 16px; }
+      input#buscar { font-size: 16px; }
+      .progress-bar { height: 15px; }
+      .progress-icon { width: 40px; height: 40px; }
+    }
+
+    @media (max-width: 480px) {
+      .menu-btn { font-size: 18px; padding: 12px; }
+      table.ventasTable td { font-size: 18px; }
+      table.ventasTable td button { width: 40px; height: 40px; font-size: 18px; }
+      #total { font-size: 20px; }
+      .nombre { font-size: 16px; padding: 10px; flex-direction: column; gap: 5px; }
+      .nombre button { font-size: 14px; padding: 6px 12px; }
+      input#buscar { font-size: 14px; }
+      .progress-bar { height: 12px; }
+      .progress-icon { width: 30px; height: 30px; }
     }
   </style>
 </head>
@@ -274,21 +331,30 @@
     <!-- Panel de Ventas -->
     <div id="ventasPanel">
       <h2 style="font-size: 36px;">Registro de Ventas</h2>
-      <div class="producto">
-        <h3>Promoción ($250)</h3>
-        <button onclick="modificar('promo', -1)">−</button>
-        <span id="promoCount">0</span>
-        <button onclick="modificar('promo', 1)">+</button>
-      </div>
-      <div class="producto">
-        <h3>Unidad ($150)</h3>
-        <button onclick="modificar('unidad', -1)">−</button>
-        <span id="unidadCount">0</span>
-        <button onclick="modificar('unidad', 1)">+</button>
-      </div>
-      <div id="total">Total: ₱0</div>
+      <table class="ventasTable">
+        <tr>
+          <td>Promoción ($250)</td>
+          <td>
+            <button onclick="modificar('promo', -1)">−</button>
+            <span id="promoCount">0</span>
+            <button onclick="modificar('promo', 1)">+</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Unidad ($150)</td>
+          <td>
+            <button onclick="modificar('unidad', -1)">−</button>
+            <span id="unidadCount">0</span>
+            <button onclick="modificar('unidad', 1)">+</button>
+          </td>
+        </tr>
+        <tr>
+          <td>Total:</td>
+          <td><span id="total">₱0</span></td>
+        </tr>
+      </table>
       <button onclick="pagar()">Pagar</button>
-      <button onclick="volverMenu()">Volver</button>
+      <button class="volver-btn" onclick="volverMenu()">Volver</button>
     </div>
 
     <!-- Lista de Invitados -->
@@ -315,7 +381,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
   <script>
-    // === CONFIG FIREBASE ===
     const firebaseConfig = {
       apiKey: "AIzaSyDLW12w5ZznypXJYMrTNouttdX0vrG6Bzg",
       authDomain: "alamos-club-d1847.firebaseapp.com",
@@ -328,7 +393,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // === LOGIN ===
+    // LOGIN
     function login() {
       const pass = document.getElementById("password").value;
       if (pass === "12345") {
@@ -341,7 +406,7 @@
       }
     }
 
-    // === PANEL DE VENTAS ===
+    // PANEL DE VENTAS
     let promo = 0, unidad = 0;
 
     function mostrarVentas() {
@@ -359,7 +424,7 @@
       const total = promo * 250 + unidad * 150;
       document.getElementById("promoCount").textContent = promo;
       document.getElementById("unidadCount").textContent = unidad;
-      document.getElementById("total").textContent = "Total: $" + total;
+      document.getElementById("total").textContent = "$" + total;
     }
 
     async function pagar() {
@@ -368,7 +433,6 @@
         alert("⚠️ No hay productos en la venta");
         return;
       }
-
       try {
         await db.collection("ventas").add({
           fecha: new Date(),
@@ -390,15 +454,15 @@
       document.getElementById("menuPrincipal").style.display = "flex";
     }
 
-    // === LISTA DE INVITADOS ===
+    // LISTA DE INVITADOS
     async function mostrarInvitados() {
       document.getElementById("menuPrincipal").style.display = "none";
       document.getElementById("invitadosPanel").style.display = "block";
       const output = document.getElementById("output");
       const buscar = document.getElementById("buscar");
 
-      const snapshot = await db.collection("invitados").orderBy("nombre").get();
-      const invitados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      let snapshot = await db.collection("invitados").orderBy("nombre").get();
+      let invitados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
       function render(filtro = "") {
         output.innerHTML = "";
@@ -406,21 +470,27 @@
         filtrados.forEach(inv => {
           const div = document.createElement("div");
           div.className = "nombre";
+
           const span = document.createElement("span");
           span.textContent = inv.nombre;
+
           const btn = document.createElement("button");
           btn.textContent = inv.asistio ? "✅ Asistió" : "Marcar asistencia";
           btn.disabled = inv.asistio;
+
           btn.onclick = async () => {
             await db.collection("invitados").doc(inv.id).update({ asistio: true });
+            inv.asistio = true;
             btn.textContent = "✅ Asistió";
             btn.disabled = true;
             actualizarProgreso();
           };
+
           div.appendChild(span);
           div.appendChild(btn);
           output.appendChild(div);
         });
+        actualizarProgreso();
       }
 
       function actualizarProgreso() {
@@ -431,8 +501,7 @@
       }
 
       render();
-      actualizarProgreso();
-      buscar.addEventListener("input", (e) => render(e.target.value));
+      buscar.addEventListener("input", e => render(e.target.value));
     }
   </script>
 </body>
