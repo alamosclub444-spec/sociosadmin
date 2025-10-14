@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Alamo’s Club - Control Interno</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* === ESTILOS GENERALES === */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: #000;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    /* === ANIMACIÓN DE INICIO === */
+    #intro {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      animation: fadeOut 2.8s ease forwards;
+      animation-delay: 2.2s;
+      z-index: 10;
+    }
+
+    #intro img {
+      width: 160px;
+      opacity: 0;
+      animation: zoomLogo 2s ease forwards;
+    }
+
+    #intro h1 {
+      font-size: 2.4em;
+      margin-top: 15px;
+      opacity: 0;
+      animation: showText 2s ease forwards 1.4s;
+      color: #f1c40f;
+    }
+
+    @keyframes zoomLogo {
+      0% { transform: scale(0.2); opacity: 0; }
+      50% { transform: scale(1.3); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes showText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* === LOGIN === */
+    #login {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: radial-gradient(circle at center, #111 0%, #000 100%);
+      transition: opacity 0.8s;
+    }
+
+    #login img {
+      width: 160px;
+      margin-bottom: 20px;
+      border-radius: 50%;
+    }
+
+    input[type="password"] {
+      padding: 16px;
+      border-radius: 8px;
+      border: none;
+      width: 70%;
+      font-size: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    button {
+      background: #e91e63;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 10px;
+      padding: 16px 32px;
+      cursor: pointer;
+      font-size: 20px;
+      transition: 0.3s;
+    }
+
+    button:hover { background: #ff4081; }
+
+    /* === PANEL PRINCIPAL === */
+    #panel {
+      display: none;
+      height: 100vh;
+      background-color: #111;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 25px;
+    }
+
+    .header img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .menu-btn {
+      width: 300px;
+      padding: 30px;
+      font-size: 26px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #e91e63, #f1c40f);
+      color: black;
+      font-weight: bold;
+    }
+
+    .menu-btn:hover {
+      transform: scale(1.05);
+    }
+
+    /* === PANEL DE VENTAS === */
+    #ventasPanel {
+      display: none;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .producto {
+      margin: 30px 0;
+      font-size: 28px;
+    }
+
+    .producto button {
+      width: 60px;
+      height: 60px;
+      font-size: 28px;
+      margin: 0 15px;
+      border-radius: 12px;
+    }
+
+    #total {
+      font-size: 32px;
+      margin-top: 30px;
+    }
+
+    /* === LISTA DE INVITADOS === */
+    #invitadosPanel {
+      display: none;
+      padding: 20px;
+      max-height: 80vh;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    .nombre {
+      display: flex;
+      justify-content: space-between;
+      background: #222;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 10px 0;
+      font-size: 22px;
+      align-items: center;
+    }
+
+    .nombre button {
+      background: #27ae60;
+      font-size: 20px;
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    .nombre button:disabled {
+      background: gray;
+    }
+
+    input#buscar {
+      font-size: 20px;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: none;
+      width: 80%;
+    }
+
+    /* === BARRA DE PROGRESO === */
+    .progress-container {
+      display: flex;
+      align-items: center;
+      margin: 20px auto;
+      justify-content: center;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    .progress-icon {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .progress-bar {
+      flex: 1;
+      height: 25px;
+      background: #333;
+      border-radius: 15px;
+      margin: 0 10px; 
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #f1c40f, #e91e63);
+      transition: width 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ANIMACIÓN INICIAL -->
+  <div id="intro">
+    <img src="LOGO.PNG" alt="Logo">
+    <h1>Bienvenido</h1>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login">
+    <img src="logotipo.png" alt="Logotipo">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="login()">Ingresar</button>
+  </div>
+
+  <!-- PANEL PRINCIPAL -->
+  <div id="panel">
+    <div class="header">
+      <img src="LOGO.PNG" alt="Logo">
+      <img src="logotipo.png" alt="Logotipo">
+    </div>
+    <div class="content" id="menuPrincipal">
+      <button class="menu-btn" onclick="mostrarVentas()">Barra</button>
+      <button class="menu-btn" onclick="mostrarInvitados()">Lista de Invitados</button>
+    </div>
+
+    <!-- Panel de Ventas -->
+    <div id="ventasPanel">
+      <h2 style="font-size: 36px;">Registro de Ventas</h2>
+      <div class="producto">
+        <h3>Promoción ($250)</h3>
+        <button onclick="modificar('promo', -1)">−</button>
+        <span id="promoCount">0</span>
+        <button onclick="modificar('promo', 1)">+</button>
+      </div>
+      <div class="producto">
+        <h3>Unidad ($150)</h3>
+        <button onclick="modificar('unidad', -1)">−</button>
+        <span id="unidadCount">0</span>
+        <button onclick="modificar('unidad', 1)">+</button>
+      </div>
+      <div id="total">Total: ₱0</div>
+      <button onclick="pagar()">Pagar</button>
+      <button onclick="volverMenu()">Volver</button>
+    </div>
+
+    <!-- Lista de Invitados -->
+    <div id="invitadosPanel">
+      <h2 style="font-size: 36px;">Lista de Invitados</h2>
+
+      <!-- Barra de progreso -->
+      <div class="progress-container">
+        <img src="LOGO.PNG" alt="Logo" class="progress-icon">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <img src="FLAG.PNG" alt="Meta" class="progress-icon">
+      </div>
+
+      <input type="text" id="buscar" placeholder="Buscar nombre...">
+      <div id="output"></div>
+      <button onclick="volverMenu()">Volver</button>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // === CONFIG FIREBASE ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLW12w5ZznypXJYMrTNouttdX0vrG6Bzg",
+      authDomain: "alamos-club-d1847.firebaseapp.com",
+      projectId: "alamos-club-d1847",
+      storageBucket: "alamos-club-d1847.firebasestorage.app",
+      messagingSenderId: "666754924136",
+      appId: "1:666754924136:web:03b63136a94e98515d45dd",
+      measurementId: "G-MNFMT9QLBN"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // === LOGIN ===
+    function login() {
+      const pass = document.getElementById("password").value;
+      if (pass === "12345") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("panel").style.display = "flex";
+      } else if (pass === "Aldoariel2") {
+        alert("⚙️ Perfil socio (pendiente de configurar)");
+      } else {
+        alert("❌ Contraseña incorrecta");
+      }
+    }
+
+    // === PANEL DE VENTAS ===
+    let promo = 0, unidad = 0;
+
+    function mostrarVentas() {
+      document.getElementById("menuPrincipal").style.display = "none";
+      document.getElementById("ventasPanel").style.display = "block";
+    }
+
+    function modificar(tipo, valor) {
+      if (tipo === "promo") promo = Math.max(0, promo + valor);
+      if (tipo === "unidad") unidad = Math.max(0, unidad + valor);
+      actualizarTotal();
+    }
+
+    function actualizarTotal() {
+      const total = promo * 250 + unidad * 150;
+      document.getElementById("promoCount").textContent = promo;
+      document.getElementById("unidadCount").textContent = unidad;
+      document.getElementById("total").textContent = "Total: $" + total;
+    }
+
+    async function pagar() {
+      const total = promo * 250 + unidad * 150;
+      if (total === 0) {
+        alert("⚠️ No hay productos en la venta");
+        return;
+      }
+
+      try {
+        await db.collection("ventas").add({
+          fecha: new Date(),
+          promociones: promo,
+          unidades: unidad,
+          total: total
+        });
+        alert("✅ Venta registrada correctamente.");
+        promo = 0; unidad = 0;
+        actualizarTotal();
+      } catch (e) {
+        alert("❌ Error al registrar venta: " + e.message);
+      }
+    }
+
+    function volverMenu() {
+      document.getElementById("ventasPanel").style.display = "none";
+      document.getElementById("invitadosPanel").style.display = "none";
+      document.getElementById("menuPrincipal").style.display = "flex";
+    }
+
+    // === LISTA DE INVITADOS ===
+    async function mostrarInvitados() {
+      document.getElementById("menuPrincipal").style.display = "none";
+      document.getElementById("invitadosPanel").style.display = "block";
+      const output = document.getElementById("output");
+      const buscar = document.getElementById("buscar");
+
+      const snapshot = await db.collection("invitados").orderBy("nombre").get();
+      const invitados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      function render(filtro = "") {
+        output.innerHTML = "";
+        const filtrados = invitados.filter(i => i.nombre.toLowerCase().includes(filtro.toLowerCase()));
+        filtrados.forEach(inv => {
+          const div = document.createElement("div");
+          div.className = "nombre";
+          const span = document.createElement("span");
+          span.textContent = inv.nombre;
+          const btn = document.createElement("button");
+          btn.textContent = inv.asistio ? "✅ Asistió" : "Marcar asistencia";
+          btn.disabled = inv.asistio;
+          btn.onclick = async () => {
+            await db.collection("invitados").doc(inv.id).update({ asistio: true });
+            btn.textContent = "✅ Asistió";
+            btn.disabled = true;
+            actualizarProgreso();
+          };
+          div.appendChild(span);
+          div.appendChild(btn);
+          output.appendChild(div);
+        });
+      }
+
+      function actualizarProgreso() {
+        const total = invitados.length;
+        const asistieron = invitados.filter(i => i.asistio).length;
+        const porcentaje = (asistieron / total) * 100;
+        document.getElementById("progressFill").style.width = porcentaje + "%";
+      }
+
+      render();
+      actualizarProgreso();
+      buscar.addEventListener("input", (e) => render(e.target.value));
+    }
+  </script>
+</body>
+</html>
