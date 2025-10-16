@@ -465,7 +465,7 @@
 
     <!-- MENU PRINCIPAL (empleados por defecto) -->
     <div class="content" id="menuPrincipal">
-      <button class="menu-btn" onclick="mostrarVentas()">Barra</button>
+      <button class="menu-btn" onclick="mostrarVentas()">Barra de Bebidas</button>
       <button class="menu-btn" onclick="mostrarInvitados()">Lista de Invitados</button>
       <!-- BOTÓN EXIT agregado SOLO para empleados (regresa a pantalla de login) -->
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
@@ -476,7 +476,7 @@
       <button class="menu-btn" onclick="abrirRegistro()">Registro</button>
       <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
       <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
-      <!-- NOTA: no agregamos aquí Exit según tu instrucción -->
+      <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
     <!-- Panel de Ventas (empleados) -->
@@ -531,7 +531,7 @@
       <h2 style="font-size: 32px;">Registro de Producto</h2>
       <div class="registro-row">
         <input type="text" id="prodNombre" class="prod-name" placeholder="Nombre del producto">
-        <input type="number" id="prodPrecio" class="prod-price" placeholder="Precio (por unidad)" min="0" step="0.01">
+        <input type="number" id="prodPrecio" class="prod-price" placeholder="Precio" min="0" step="0.01">
         <div class="qty-controls">
           <button onclick="cambiarUnidades(-1)">−</button>
           <div id="unidadesDisplay" style="font-size:20px;padding:0 10px;min-width:34px;">1</div>
@@ -811,7 +811,7 @@
         return;
       }
       if (isNaN(precio) || precio < 0) {
-        alert("Ingresa un precio válido (solo números).");
+        alert("Ingresa un precio válido.");
         return;
       }
       if (!chkIguales && !chkPorcentaje) {
