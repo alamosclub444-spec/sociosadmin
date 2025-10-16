@@ -164,7 +164,7 @@
     }
 
     /* === PANEL DE VENTAS COMO TABLA === */
-    #ventasPanel, #ventasSocioPanel {
+    #ventasPanel {
       display: none;
       padding: 20px;
       text-align: center;
@@ -192,14 +192,13 @@
       margin: 0 5px;
     }
 
-    #total, #ventasSocioTotal {
+    #total {
       font-size: 28px;
       margin-bottom: 20px;
       word-wrap: break-word;
     }
 
-    #ventasPanel button.volver-btn,
-    #ventasSocioPanel button.volver-btn {
+    #ventasPanel button.volver-btn {
       margin-top: 10px;
       padding: 14px 30px;
       font-size: 20px;
@@ -443,6 +442,7 @@
   </style>
 </head>
 <body>
+
   <!-- ANIMACIÓN INICIAL -->
   <div id="intro">
     <img src="LOGO.PNG" alt="Logo">
@@ -463,23 +463,23 @@
       <img src="logotipo.png" alt="Logotipo">
     </div>
 
-    <!-- MENÚ PRINCIPAL EMPLEADOS -->
+    <!-- MENU PRINCIPAL (empleados por defecto) -->
     <div class="content" id="menuPrincipal">
       <button class="menu-btn" onclick="mostrarVentas()">Barra</button>
       <button class="menu-btn" onclick="mostrarInvitados()">Lista de Invitados</button>
+      <!-- BOTÓN EXIT agregado SOLO para empleados (regresa a pantalla de login) -->
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
-    <!-- MENÚ SOCIOS -->
+    <!-- MENU SOCIOS (se muestra cuando password Aldoariel2) -->
     <div class="content" id="menuSocios">
       <button class="menu-btn" onclick="abrirRegistro()">Registro</button>
       <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
       <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
-      <button class="menu-btn" onclick="mostrarVentasSocio()">Ventas</button>
-      <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
+      <!-- NOTA: no agregamos aquí Exit según tu instrucción -->
     </div>
 
-    <!-- PANEL VENTAS EMPLEADOS -->
+    <!-- Panel de Ventas (empleados) -->
     <div id="ventasPanel">
       <h2 style="font-size: 36px;">Registro de Ventas</h2>
       <table class="ventasTable">
@@ -508,265 +508,438 @@
       <button class="volver-btn" onclick="volverMenu()">Volver</button>
     </div>
 
-    <!-- PANEL VENTAS SOCIOS -->
-    <div id="ventasSocioPanel">
-      <h2 style="font-size:36px;">Ventas Registradas</h2>
-      <div id="ventasSocioContainer"></div>
-      <div id="ventasSocioTotal">Total General: $0</div>
-      <button class="volver-btn" onclick="cerrarVentasSocio()">Volver</button>
+    <!-- Lista de Invitados (empleados) -->
+    <div id="invitadosPanel">
+      <h2 style="font-size: 36px;">Lista de Invitados</h2>
+
+      <!-- Barra de progreso -->
+      <div class="progress-container">
+        <img src="LOGO.PNG" alt="Logo" class="progress-icon">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <img src="FLAG.PNG" alt="Meta" class="progress-icon">
+      </div>
+
+      <input type="text" id="buscar" placeholder="Buscar nombre...">
+      <div id="output"></div>
+      <button onclick="volverMenu()">Volver</button>
     </div>
 
-    <!-- MÁS PANELES COMO INVITADOS, REGISTRO, LISTA DE REGISTRO, INVERSION ... -->
-<script>
-  // === LOGIN ===
-  function login() {
-    const pw = document.getElementById('password').value;
-    if (pw === "empleado") {
-      document.getElementById('login').style.display = "none";
-      document.getElementById('menuPrincipal').style.display = "flex";
-      document.getElementById('panel').style.display = "flex";
-    } else if (pw === "socio") {
-      document.getElementById('login').style.display = "none";
-      document.getElementById('menuSocios').style.display = "flex";
-      document.getElementById('panel').style.display = "flex";
-    } else {
-      alert("Contraseña incorrecta");
-    }
-    document.getElementById('password').value = "";
-  }
-
-  function salirAInicio() {
-    document.getElementById('panel').style.display = "none";
-    document.getElementById('menuPrincipal').style.display = "none";
-    document.getElementById('menuSocios').style.display = "none";
-    document.getElementById('login').style.display = "flex";
-  }
-
-  function volverMenu() {
-    document.getElementById('ventasPanel').style.display = "none";
-    document.getElementById('menuPrincipal').style.display = "flex";
-    resetVentas();
-  }
-
-  // === VENTAS EMPLEADOS ===
-  let ventas = { promo: 0, unidad: 0 };
-  const precios = { promo: 250, unidad: 150 };
-
-  function modificar(tipo, cantidad) {
-    ventas[tipo] = Math.max(0, ventas[tipo] + cantidad);
-    document.getElementById(tipo + "Count").innerText = ventas[tipo];
-    actualizarTotal();
-  }
-
-  function actualizarTotal() {
-    const total = ventas.promo * precios.promo + ventas.unidad * precios.unidad;
-    document.getElementById("total").innerText = `$${total}`;
-  }
-
-  function resetVentas() {
-    ventas.promo = 0;
-    ventas.unidad = 0;
-    document.getElementById("promoCount").innerText = "0";
-    document.getElementById("unidadCount").innerText = "0";
-    actualizarTotal();
-  }
-
-  function mostrarVentas() {
-    document.getElementById('menuPrincipal').style.display = "none";
-    document.getElementById('ventasPanel').style.display = "block";
-  }
-
-  function pagar() {
-    alert("Venta registrada correctamente");
-    resetVentas();
-  }
-
-  // === VENTAS SOCIOS ===
-  let ventasSocio = [];
-
-  function mostrarVentasSocio() {
-    document.getElementById('menuSocios').style.display = "none";
-    document.getElementById('ventasSocioPanel').style.display = "block";
-    renderVentasSocio();
-  }
-
-  function cerrarVentasSocio() {
-    document.getElementById('ventasSocioPanel').style.display = "none";
-    document.getElementById('menuSocios').style.display = "flex";
-  }
-
-  function renderVentasSocio() {
-    const container = document.getElementById('ventasSocioContainer');
-    container.innerHTML = "";
-    let totalGeneral = 0;
-    ventasSocio.forEach((venta, index) => {
-      const div = document.createElement('div');
-      div.style.marginBottom = "12px";
-      div.innerHTML = `${venta.producto} x${venta.cantidad} = $${venta.precio * venta.cantidad}`;
-      container.appendChild(div);
-      totalGeneral += venta.precio * venta.cantidad;
-    });
-    document.getElementById('ventasSocioTotal').innerText = `Total General: $${totalGeneral}`;
-  }
-
-  // === LISTA DE INVITADOS ===
-  const invitados = [
-    "Aldo Alamo", "Ariel Alamo", "Axel Alamo", "Brisa", "Eduardo", "Kenya", "Gabriel", "Yerania"
-  ];
-
-  function mostrarInvitados() {
-    document.getElementById('menuPrincipal').style.display = "none";
-    let panel = document.getElementById('invitadosPanel');
-    if(!panel) {
-      panel = document.createElement('div');
-      panel.id = "invitadosPanel";
-      document.getElementById('panel').appendChild(panel);
-    }
-    panel.innerHTML = `<input type="text" id="buscar" placeholder="Buscar..." onkeyup="filtrarInvitados()"><div id="listaInvitados"></div><button class="volver-btn" onclick="volverMenu()">Volver</button>`;
-    renderInvitados();
-    panel.style.display = "block";
-  }
-
-  function renderInvitados() {
-    const lista = document.getElementById('listaInvitados');
-    lista.innerHTML = "";
-    invitados.forEach(nombre => {
-      const div = document.createElement('div');
-      div.className = "nombre";
-      div.innerHTML = `<span>${nombre}</span><button>Asistió</button>`;
-      lista.appendChild(div);
-    });
-  }
-
-  function filtrarInvitados() {
-    const filtro = document.getElementById('buscar').value.toLowerCase();
-    const lista = document.getElementById('listaInvitados').children;
-    Array.from(lista).forEach(div => {
-      const nombre = div.querySelector('span').innerText.toLowerCase();
-      div.style.display = nombre.includes(filtro) ? "flex" : "none";
-    });
-  }
-
-  // === REGISTRO DE PRODUCTOS (SOCIOS) ===
-  let productos = [];
-
-  function abrirRegistro() {
-    document.getElementById('menuSocios').style.display = "none";
-    let panel = document.getElementById('registroPanel');
-    if (!panel) {
-      panel = document.createElement('div');
-      panel.id = "registroPanel";
-      document.getElementById('panel').appendChild(panel);
-    }
-    panel.innerHTML = `
-      <h2>Registro de Productos</h2>
-      <div id="productosContainer"></div>
-      <button class="small-btn" onclick="agregarProducto()">Agregar Producto</button>
-      <button class="volver-btn" onclick="cerrarRegistro()">Volver</button>
-    `;
-    panel.style.display = "block";
-    renderProductos();
-  }
-
-  function cerrarRegistro() {
-    document.getElementById('registroPanel').style.display = "none";
-    document.getElementById('menuSocios').style.display = "flex";
-  }
-
-  function agregarProducto() {
-    const nombre = prompt("Nombre del producto:");
-    const precio = parseInt(prompt("Precio del producto:"), 10);
-    if (nombre && !isNaN(precio)) {
-      productos.push({ nombre, precio, cantidad: 0 });
-      renderProductos();
-    }
-  }
-
-  function renderProductos() {
-    const container = document.getElementById('productosContainer');
-    container.innerHTML = "";
-    productos.forEach((prod, index) => {
-      const div = document.createElement('div');
-      div.className = "registro-row";
-      div.innerHTML = `
-        <span>${prod.nombre}</span>
-        <span>$${prod.precio}</span>
+    <!-- REGISTRO (SOCIOS) -->
+    <div id="registroPanel">
+      <h2 style="font-size: 32px;">Registro de Producto</h2>
+      <div class="registro-row">
+        <input type="text" id="prodNombre" class="prod-name" placeholder="Nombre del producto">
+        <input type="number" id="prodPrecio" class="prod-price" placeholder="Precio (por unidad)" min="0" step="0.01">
         <div class="qty-controls">
-          <button onclick="modificarProducto(${index}, -1)">−</button>
-          <span>${prod.cantidad}</span>
-          <button onclick="modificarProducto(${index}, 1)">+</button>
+          <button onclick="cambiarUnidades(-1)">−</button>
+          <div id="unidadesDisplay" style="font-size:20px;padding:0 10px;min-width:34px;">1</div>
+          <button onclick="cambiarUnidades(1)">+</button>
         </div>
-      `;
-      container.appendChild(div);
+      </div>
+
+      <div class="checkbox-row">
+        <label><input type="checkbox" id="chkIguales"> Partes iguales</label>
+        <label><input type="checkbox" id="chkPorcentaje"> Porcentaje</label>
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;">
+        <button class="menu-btn socios-small" onclick="registrarProducto()">Registrar</button>
+        <button class="menu-btn socios-small" onclick="cerrarRegistro()">Volver</button>
+      </div>
+    </div>
+
+    <!-- LISTA REGISTRO (SOCIOS) -->
+    <div id="listaRegistroPanel">
+      <h2 style="font-size: 32px;">Lista de Registros</h2>
+      <div id="listaRegistrosContainer">
+        <!-- tabla generada por JS -->
+      </div>
+      <div class="total-row" id="totalRegistros">Total General: $0</div>
+      <div style="margin-top:12px;">
+        <button class="menu-btn socios-small" onclick="cerrarListaRegistro()">Volver</button>
+      </div>
+    </div>
+
+    <!-- INVERSION (SOCIOS) -->
+    <div id="inversionPanel">
+      <h2 style="font-size: 32px;">Inversión por Socio</h2>
+      <div id="inversionContainer">
+        <!-- tabla generada por JS -->
+      </div>
+      <div style="margin-top:12px;">
+        <button class="menu-btn socios-small" onclick="cerrarInversion()">Volver</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDLW12w5ZznypXJYMrTNouttdX0vrG6Bzg",
+      authDomain: "alamos-club-d1847.firebaseapp.com",
+      projectId: "alamos-club-d1847",
+      storageBucket: "alamos-club-d1847.firebasestorage.app",
+      messagingSenderId: "666754924136",
+      appId: "1:666754924136:web:03b63136a94e98515d45dd",
+      measurementId: "G-MNFMT9QLBN"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // CONTROL DE INTRO (ocultar después)
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const intro = document.getElementById('intro');
+        if (intro) intro.style.display = 'none';
+      }, 3200);
     });
-  }
 
-  function modificarProducto(index, delta) {
-    productos[index].cantidad = Math.max(0, productos[index].cantidad + delta);
-    renderProductos();
-  }
-
-  // === LISTA DE REGISTRO (SOCIOS) ===
-  function abrirListaRegistro() {
-    document.getElementById('menuSocios').style.display = "none";
-    let panel = document.getElementById('listaRegistroPanel');
-    if(!panel) {
-      panel = document.createElement('div');
-      panel.id = "listaRegistroPanel";
-      document.getElementById('panel').appendChild(panel);
+    // LOGIN
+    function login() {
+      const pass = document.getElementById("password").value;
+      if (pass === "12345") {
+        // empleado
+        document.getElementById("login").style.display = "none";
+        document.getElementById("panel").style.display = "flex";
+        document.getElementById("menuPrincipal").style.display = "flex";
+        document.getElementById("menuSocios").style.display = "none";
+      } else if (pass === "Aldoariel2") {
+        // SOCIO
+        document.getElementById("login").style.display = "none";
+        document.getElementById("panel").style.display = "flex";
+        document.getElementById("menuPrincipal").style.display = "none";
+        document.getElementById("menuSocios").style.display = "flex";
+      } else {
+        alert("❌ Contraseña incorrecta");
+      }
     }
-    panel.innerHTML = "<h2>Lista de Registro</h2><div id='registroTabla'></div><button class='volver-btn' onclick='cerrarListaRegistro()'>Volver</button>";
-    panel.style.display = "block";
-    renderListaRegistro();
-  }
 
-  function cerrarListaRegistro() {
-    document.getElementById('listaRegistroPanel').style.display = "none";
-    document.getElementById('menuSocios').style.display = "flex";
-  }
+    function salirAInicio() {
+      // regresa a pantalla de login (empleado exit)
+      document.getElementById("panel").style.display = "none";
+      document.getElementById("login").style.display = "flex";
+      document.getElementById("password").value = "";
+      // ocultar subpanels por si acaso
+      hideAllPanels();
+    }
 
-  function renderListaRegistro() {
-    const container = document.getElementById('registroTabla');
-    container.innerHTML = "";
-    let total = 0;
-    productos.forEach(p => {
-      const row = document.createElement('div');
-      row.innerText = `${p.nombre} x${p.cantidad} = $${p.cantidad * p.precio}`;
-      container.appendChild(row);
-      total += p.cantidad * p.precio;
+    function hideAllPanels() {
+      // ocultar todos los subpanels
+      document.getElementById("ventasPanel").style.display = "none";
+      document.getElementById("invitadosPanel").style.display = "none";
+      document.getElementById("registroPanel").style.display = "none";
+      document.getElementById("listaRegistroPanel").style.display = "none";
+      document.getElementById("inversionPanel").style.display = "none";
+      // mostrar menus por defecto ocultos
+      document.getElementById("menuPrincipal").style.display = "none";
+      document.getElementById("menuSocios").style.display = "none";
+    }
+
+    // ---------------------------------------------------------------------
+    // PANEL DE VENTAS (empleado) - sin cambios lógicos
+    let promo = 0, unidad = 0;
+    function mostrarVentas() {
+      document.getElementById("menuPrincipal").style.display = "none";
+      document.getElementById("ventasPanel").style.display = "block";
+    }
+    function modificar(tipo, valor) {
+      if (tipo === "promo") promo = Math.max(0, promo + valor);
+      if (tipo === "unidad") unidad = Math.max(0, unidad + valor);
+      actualizarTotal();
+    }
+    function actualizarTotal() {
+      const total = promo * 250 + unidad * 150;
+      document.getElementById("promoCount").textContent = promo;
+      document.getElementById("unidadCount").textContent = unidad;
+      document.getElementById("total").textContent = "$" + total;
+    }
+    async function pagar() {
+      const total = promo * 250 + unidad * 150;
+      if (total === 0) {
+        alert("⚠️ No hay productos en la venta");
+        return;
+      }
+      try {
+        await db.collection("ventas").add({
+          fecha: new Date(),
+          promociones: promo,
+          unidades: unidad,
+          total: total
+        });
+        alert("✅ Venta registrada correctamente.");
+        promo = 0; unidad = 0;
+        actualizarTotal();
+      } catch (e) {
+        alert("❌ Error al registrar venta: " + e.message);
+      }
+    }
+    function volverMenu() {
+      // devuelve al menú apropiado según lo que haya ingresado
+      document.getElementById("ventasPanel").style.display = "none";
+      document.getElementById("invitadosPanel").style.display = "none";
+      // si contraseña actual fue la de socio se muestra menuSocios, si empleado menuPrincipal
+      // no mantenemos estado seguro del tipo de usuario — asumimos que el menú que queremos mostrar está visible.
+      // Para simplicidad, mostramos el menú de empleados (esto solo se usa en flujo empleado).
+      document.getElementById("menuPrincipal").style.display = "flex";
+    }
+
+    // LISTA DE INVITADOS (empleado) - sin cambios lógicos
+    async function mostrarInvitados() {
+      document.getElementById("menuPrincipal").style.display = "none";
+      document.getElementById("invitadosPanel").style.display = "block";
+      const output = document.getElementById("output");
+      const buscar = document.getElementById("buscar");
+
+      let snapshot = await db.collection("invitados").orderBy("nombre").get();
+      let invitados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      function render(filtro = "") {
+        output.innerHTML = "";
+        const filtrados = invitados.filter(i => i.nombre.toLowerCase().includes(filtro.toLowerCase()));
+        filtrados.forEach(inv => {
+          const div = document.createElement("div");
+          div.className = "nombre";
+
+          const span = document.createElement("span");
+          span.textContent = inv.nombre;
+
+          const btn = document.createElement("button");
+          btn.textContent = inv.asistio ? "✅ Asistió" : "Marcar asistencia";
+          btn.disabled = inv.asistio;
+
+          btn.onclick = async () => {
+            await db.collection("invitados").doc(inv.id).update({ asistio: true });
+            inv.asistio = true;
+            btn.textContent = "✅ Asistió";
+            btn.disabled = true;
+            actualizarProgreso();
+          };
+
+          div.appendChild(span);
+          div.appendChild(btn);
+          output.appendChild(div);
+        });
+        actualizarProgreso();
+      }
+
+      function actualizarProgreso() {
+        const total = invitados.length || 1;
+        const asistieron = invitados.filter(i => i.asistio).length;
+        const porcentaje = (asistieron / total) * 100;
+        document.getElementById("progressFill").style.width = porcentaje + "%";
+      }
+
+      render();
+      buscar.addEventListener("input", e => render(e.target.value));
+    }
+
+    // ---------------------------------------------------------------------
+    // SOCIOS - navegación
+    function abrirRegistro() {
+      // mostrar panel registro
+      document.getElementById("menuSocios").style.display = "none";
+      document.getElementById("registroPanel").style.display = "block";
+      // inicializar campos
+      document.getElementById("prodNombre").value = "";
+      document.getElementById("prodPrecio").value = "";
+      unidades = 1;
+      document.getElementById("unidadesDisplay").textContent = unidades;
+      document.getElementById("chkIguales").checked = true;
+      document.getElementById("chkPorcentaje").checked = false;
+    }
+
+    function cerrarRegistro() {
+      document.getElementById("registroPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
+    }
+
+    function abrirListaRegistro() {
+      document.getElementById("menuSocios").style.display = "none";
+      document.getElementById("listaRegistroPanel").style.display = "block";
+      renderListaRegistro();
+    }
+
+    function cerrarListaRegistro() {
+      document.getElementById("listaRegistroPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
+    }
+
+    function abrirInversion() {
+      document.getElementById("menuSocios").style.display = "none";
+      document.getElementById("inversionPanel").style.display = "block";
+      renderInversion();
+    }
+
+    function cerrarInversion() {
+      document.getElementById("inversionPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
+    }
+
+    // ============================================================
+    // REGISTRO - lógica
+    let unidades = 1;
+    function cambiarUnidades(delta) {
+      unidades = Math.max(1, unidades + delta);
+      document.getElementById("unidadesDisplay").textContent = unidades;
+    }
+
+    // hacer los checkboxes mutualmente excluyentes
+    document.addEventListener('change', (e) => {
+      if (e.target && e.target.id === 'chkIguales' && e.target.checked) {
+        document.getElementById('chkPorcentaje').checked = false;
+      }
+      if (e.target && e.target.id === 'chkPorcentaje' && e.target.checked) {
+        document.getElementById('chkIguales').checked = false;
+      }
     });
-    const totalDiv = document.createElement('div');
-    totalDiv.className = "total-row";
-    totalDiv.innerText = `Total General: $${total}`;
-    container.appendChild(totalDiv);
-  }
 
-  // === INVERSION (SOCIOS) ===
-  function abrirInversion() {
-    document.getElementById('menuSocios').style.display = "none";
-    let panel = document.getElementById('inversionPanel');
-    if(!panel) {
-      panel = document.createElement('div');
-      panel.id = "inversionPanel";
-      document.getElementById('panel').appendChild(panel);
+    async function registrarProducto() {
+      const nombre = (document.getElementById("prodNombre").value || "").trim();
+      const precioStr = document.getElementById("prodPrecio").value;
+      const precio = parseFloat(precioStr);
+      const chkIguales = document.getElementById("chkIguales").checked;
+      const chkPorcentaje = document.getElementById("chkPorcentaje").checked;
+
+      if (!nombre) {
+        alert("Ingresa el nombre del producto.");
+        return;
+      }
+      if (isNaN(precio) || precio < 0) {
+        alert("Ingresa un precio válido (solo números).");
+        return;
+      }
+      if (!chkIguales && !chkPorcentaje) {
+        alert("Selecciona un método de reparto: Partes iguales o Porcentaje.");
+        return;
+      }
+
+      // confirmación
+      const confirmMsg = `Vas a registrar:\n\n${nombre}\nCantidad: ${unidades}\nPrecio por unidad: $${precio.toFixed(2)}\nTotal: $${(precio * unidades).toFixed(2)}\n\n¿Confirmar?`;
+      if (!confirm(confirmMsg)) return;
+
+      // guardar en Firestore colección 'registros'
+      try {
+        await db.collection("registros").add({
+          nombre: nombre,
+          unidadPrecio: precio,
+          unidades: unidades,
+          splitType: chkIguales ? "igual" : "porcentaje",
+          fecha: new Date()
+        });
+        alert("✅ Registro exitoso.");
+        // reset form
+        document.getElementById("prodNombre").value = "";
+        document.getElementById("prodPrecio").value = "";
+        unidades = 1;
+        document.getElementById("unidadesDisplay").textContent = unidades;
+        document.getElementById("chkIguales").checked = true;
+        document.getElementById("chkPorcentaje").checked = false;
+      } catch (e) {
+        alert("❌ Error al guardar registro: " + e.message);
+      }
     }
-    panel.innerHTML = `
-      <h2>Inversión</h2>
-      <table class="inversionTable">
-        <tr><th>Socio</th><th>%</th></tr>
-        <tr><td>Aldo</td><td>60%</td></tr>
-        <tr><td>Ariel</td><td>20%</td></tr>
-        <tr><td>Axel</td><td>20%</td></tr>
-      </table>
-      <button class="volver-btn" onclick="cerrarInversion()">Volver</button>
-    `;
-    panel.style.display = "block";
-  }
 
-  function cerrarInversion() {
-    document.getElementById('inversionPanel').style.display = "none";
-    document.getElementById('menuSocios').style.display = "flex";
-  }
-</script>
+    // ============================================================
+    // LISTA REGISTRO - renderiza tabla agrupada por nombre
+    async function renderListaRegistro() {
+      const container = document.getElementById("listaRegistrosContainer");
+      container.innerHTML = "<div>Cargando...</div>";
+      try {
+        const snapshot = await db.collection("registros").orderBy("nombre").get();
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        // agrupar por nombre
+        const mapa = {};
+        docs.forEach(r => {
+          const key = r.nombre.trim();
+          const total = (parseFloat(r.unidadPrecio) || 0) * (parseFloat(r.unidades) || 0);
+          if (!mapa[key]) mapa[key] = { nombre: key, unidades: 0, total: 0 };
+          mapa[key].unidades += (parseInt(r.unidades) || 0);
+          mapa[key].total += total;
+        });
+
+        const items = Object.values(mapa);
+        // armar tabla HTML
+        if (items.length === 0) {
+          container.innerHTML = "<div>No hay registros aún.</div>";
+          document.getElementById("totalRegistros").textContent = "Total General: $0";
+          return;
+        }
+
+        let html = '<table class="registrosTable"><thead><tr><th>Producto</th><th>Unidades</th><th>Precio (Total)</th></tr></thead><tbody>';
+        let totalGeneral = 0;
+        items.forEach(it => {
+          html += `<tr><td>${escapeHtml(it.nombre)}</td><td>${it.unidades}</td><td>$${formatNumber(it.total)}</td></tr>`;
+          totalGeneral += it.total;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        document.getElementById("totalRegistros").textContent = "Total General: $" + formatNumber(totalGeneral);
+      } catch (e) {
+        container.innerHTML = "<div>Error al cargar registros: " + e.message + "</div>";
+      }
+    }
+
+    // ============================================================
+    // INVERSION - calcular según registros y mostrar por socio
+    async function renderInversion() {
+      const container = document.getElementById("inversionContainer");
+      container.innerHTML = "<div>Cargando...</div>";
+      try {
+        const snapshot = await db.collection("registros").get();
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+        // inicializar totales
+        let aldo = 0, ariel = 0, axel = 0;
+        docs.forEach(r => {
+          const unidadesR = parseFloat(r.unidades) || 0;
+          const precioUnidad = parseFloat(r.unidadPrecio) || 0;
+          const total = unidadesR * precioUnidad;
+          const split = (r.splitType || 'igual').toString();
+          if (split === 'igual') {
+            const part = total / 3;
+            aldo += part; ariel += part; axel += part;
+          } else {
+            // porcentaje: 60% Aldo, 20% Ariel, 20% Axel
+            aldo += total * 0.6;
+            ariel += total * 0.2;
+            axel += total * 0.2;
+          }
+        });
+
+        // armar tabla
+        let html = '<table class="inversionTable"><thead><tr><th>Nombre Socio</th><th>Inversión</th></tr></thead><tbody>';
+        html += `<tr><td>Aldo</td><td>$${formatNumber(aldo)}</td></tr>`;
+        html += `<tr><td>Ariel</td><td>$${formatNumber(ariel)}</td></tr>`;
+        html += `<tr><td>Axel</td><td>$${formatNumber(axel)}</td></tr>`;
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = "<div>Error al calcular inversiones: " + e.message + "</div>";
+      }
+    }
+
+    // ============================================================
+    // UTILIDADES
+    function formatNumber(n) {
+      // sin forzar locales para evitar comas raras: dos decimales si necesario, quitar .00 si entero
+      const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
+      if (Number.isInteger(rounded)) return rounded.toString();
+      return rounded.toFixed(2);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return "";
+      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    // fin script
+  </script>
 </body>
 </html>
