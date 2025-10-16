@@ -156,8 +156,15 @@
 
     .menu-btn:hover { transform: scale(1.05); }
 
+    .small-btn {
+      padding: 8px 12px;
+      font-size: 14px;
+      border-radius: 8px;
+      background: #444;
+    }
+
     /* === PANEL DE VENTAS COMO TABLA === */
-    #ventasPanel {
+    #ventasPanel, #ventasSocioPanel {
       display: none;
       padding: 20px;
       text-align: center;
@@ -185,13 +192,14 @@
       margin: 0 5px;
     }
 
-    #total {
+    #total, #ventasSocioTotal {
       font-size: 28px;
       margin-bottom: 20px;
       word-wrap: break-word;
     }
 
-    #ventasPanel button.volver-btn {
+    #ventasPanel button.volver-btn,
+    #ventasSocioPanel button.volver-btn {
       margin-top: 10px;
       padding: 14px 30px;
       font-size: 20px;
@@ -276,6 +284,134 @@
       transition: width 0.5s ease;
     }
 
+    /* === SOCIOS: MENU Y SUBPANELS === */
+    #menuSocios {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .socios-small {
+      width: 160px;
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 12px;
+    }
+
+    /* === REGISTRO PRODUCTO === */
+    #registroPanel {
+      display: none;
+      padding: 20px;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .registro-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    input[type="text"].prod-name {
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      width: 40%;
+      min-width: 160px;
+    }
+
+    input[type="number"].prod-price {
+      padding: 12px;
+      font-size: 18px;
+      border-radius: 8px;
+      border: none;
+      width: 20%;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-controls button {
+      width: 44px;
+      height: 44px;
+      font-size: 22px;
+      border-radius: 8px;
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    /* === LISTA REGISTRO === */
+    #listaRegistroPanel {
+      display: none;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    table.registrosTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+
+    table.registrosTable th, table.registrosTable td {
+      border-bottom: 1px solid #333;
+      padding: 10px;
+      text-align: left;
+    }
+
+    table.registrosTable th {
+      font-size: 16px;
+      color: #f1c40f;
+    }
+
+    .total-row {
+      text-align: right;
+      font-size: 18px;
+      margin-top: 10px;
+    }
+
+    /* === INVERSION === */
+    #inversionPanel {
+      display: none;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    table.inversionTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table.inversionTable th, table.inversionTable td {
+      padding: 10px;
+      border-bottom: 1px solid #333;
+      text-align: left;
+    }
+
+    table.inversionTable th {
+      color: #f1c40f;
+    }
+
     /* === MEDIA QUERIES PARA RESPONSIVE === */
     @media (max-width: 768px) {
       .menu-btn { font-size: 20px; padding: 16px; }
@@ -287,6 +423,7 @@
       input#buscar { font-size: 16px; }
       .progress-bar { height: 15px; }
       .progress-icon { width: 40px; height: 40px; }
+      input[type="text"].prod-name { width: 100%; }
     }
 
     @media (max-width: 480px) {
@@ -299,11 +436,13 @@
       input#buscar { font-size: 14px; }
       .progress-bar { height: 12px; }
       .progress-icon { width: 30px; height: 30px; }
+      .registro-row { flex-direction: column; }
+      input[type="text"].prod-name { width: 100%; }
+      input[type="number"].prod-price { width: 48%; }
     }
   </style>
 </head>
 <body>
-
   <!-- ANIMACIÓN INICIAL -->
   <div id="intro">
     <img src="LOGO.PNG" alt="Logo">
@@ -323,12 +462,24 @@
       <img src="LOGO.PNG" alt="Logo">
       <img src="logotipo.png" alt="Logotipo">
     </div>
+
+    <!-- MENÚ PRINCIPAL EMPLEADOS -->
     <div class="content" id="menuPrincipal">
       <button class="menu-btn" onclick="mostrarVentas()">Barra</button>
       <button class="menu-btn" onclick="mostrarInvitados()">Lista de Invitados</button>
+      <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
-    <!-- Panel de Ventas -->
+    <!-- MENÚ SOCIOS -->
+    <div class="content" id="menuSocios">
+      <button class="menu-btn" onclick="abrirRegistro()">Registro</button>
+      <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
+      <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
+      <button class="menu-btn" onclick="mostrarVentasSocio()">Ventas</button>
+      <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
+    </div>
+
+    <!-- PANEL VENTAS EMPLEADOS -->
     <div id="ventasPanel">
       <h2 style="font-size: 36px;">Registro de Ventas</h2>
       <table class="ventasTable">
@@ -350,159 +501,272 @@
         </tr>
         <tr>
           <td>Total:</td>
-          <td><span id="total">₱0</span></td>
+          <td><span id="total">$0</span></td>
         </tr>
       </table>
       <button onclick="pagar()">Pagar</button>
       <button class="volver-btn" onclick="volverMenu()">Volver</button>
     </div>
 
-    <!-- Lista de Invitados -->
-    <div id="invitadosPanel">
-      <h2 style="font-size: 36px;">Lista de Invitados</h2>
-
-      <!-- Barra de progreso -->
-      <div class="progress-container">
-        <img src="LOGO.PNG" alt="Logo" class="progress-icon">
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <img src="FLAG.PNG" alt="Meta" class="progress-icon">
-      </div>
-
-      <input type="text" id="buscar" placeholder="Buscar nombre...">
-      <div id="output"></div>
-      <button onclick="volverMenu()">Volver</button>
+    <!-- PANEL VENTAS SOCIOS -->
+    <div id="ventasSocioPanel">
+      <h2 style="font-size:36px;">Ventas Registradas</h2>
+      <div id="ventasSocioContainer"></div>
+      <div id="ventasSocioTotal">Total General: $0</div>
+      <button class="volver-btn" onclick="cerrarVentasSocio()">Volver</button>
     </div>
-  </div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDLW12w5ZznypXJYMrTNouttdX0vrG6Bzg",
-      authDomain: "alamos-club-d1847.firebaseapp.com",
-      projectId: "alamos-club-d1847",
-      storageBucket: "alamos-club-d1847.firebasestorage.app",
-      messagingSenderId: "666754924136",
-      appId: "1:666754924136:web:03b63136a94e98515d45dd",
-      measurementId: "G-MNFMT9QLBN"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-
-    // LOGIN
-    function login() {
-      const pass = document.getElementById("password").value;
-      if (pass === "12345") {
-        document.getElementById("login").style.display = "none";
-        document.getElementById("panel").style.display = "flex";
-      } else if (pass === "Aldoariel2") {
-        alert("⚙️ Perfil socio (pendiente de configurar)");
-      } else {
-        alert("❌ Contraseña incorrecta");
-      }
+    <!-- MÁS PANELES COMO INVITADOS, REGISTRO, LISTA DE REGISTRO, INVERSION ... -->
+<script>
+  // === LOGIN ===
+  function login() {
+    const pw = document.getElementById('password').value;
+    if (pw === "empleado") {
+      document.getElementById('login').style.display = "none";
+      document.getElementById('menuPrincipal').style.display = "flex";
+      document.getElementById('panel').style.display = "flex";
+    } else if (pw === "socio") {
+      document.getElementById('login').style.display = "none";
+      document.getElementById('menuSocios').style.display = "flex";
+      document.getElementById('panel').style.display = "flex";
+    } else {
+      alert("Contraseña incorrecta");
     }
+    document.getElementById('password').value = "";
+  }
 
-    // PANEL DE VENTAS
-    let promo = 0, unidad = 0;
+  function salirAInicio() {
+    document.getElementById('panel').style.display = "none";
+    document.getElementById('menuPrincipal').style.display = "none";
+    document.getElementById('menuSocios').style.display = "none";
+    document.getElementById('login').style.display = "flex";
+  }
 
-    function mostrarVentas() {
-      document.getElementById("menuPrincipal").style.display = "none";
-      document.getElementById("ventasPanel").style.display = "block";
+  function volverMenu() {
+    document.getElementById('ventasPanel').style.display = "none";
+    document.getElementById('menuPrincipal').style.display = "flex";
+    resetVentas();
+  }
+
+  // === VENTAS EMPLEADOS ===
+  let ventas = { promo: 0, unidad: 0 };
+  const precios = { promo: 250, unidad: 150 };
+
+  function modificar(tipo, cantidad) {
+    ventas[tipo] = Math.max(0, ventas[tipo] + cantidad);
+    document.getElementById(tipo + "Count").innerText = ventas[tipo];
+    actualizarTotal();
+  }
+
+  function actualizarTotal() {
+    const total = ventas.promo * precios.promo + ventas.unidad * precios.unidad;
+    document.getElementById("total").innerText = `$${total}`;
+  }
+
+  function resetVentas() {
+    ventas.promo = 0;
+    ventas.unidad = 0;
+    document.getElementById("promoCount").innerText = "0";
+    document.getElementById("unidadCount").innerText = "0";
+    actualizarTotal();
+  }
+
+  function mostrarVentas() {
+    document.getElementById('menuPrincipal').style.display = "none";
+    document.getElementById('ventasPanel').style.display = "block";
+  }
+
+  function pagar() {
+    alert("Venta registrada correctamente");
+    resetVentas();
+  }
+
+  // === VENTAS SOCIOS ===
+  let ventasSocio = [];
+
+  function mostrarVentasSocio() {
+    document.getElementById('menuSocios').style.display = "none";
+    document.getElementById('ventasSocioPanel').style.display = "block";
+    renderVentasSocio();
+  }
+
+  function cerrarVentasSocio() {
+    document.getElementById('ventasSocioPanel').style.display = "none";
+    document.getElementById('menuSocios').style.display = "flex";
+  }
+
+  function renderVentasSocio() {
+    const container = document.getElementById('ventasSocioContainer');
+    container.innerHTML = "";
+    let totalGeneral = 0;
+    ventasSocio.forEach((venta, index) => {
+      const div = document.createElement('div');
+      div.style.marginBottom = "12px";
+      div.innerHTML = `${venta.producto} x${venta.cantidad} = $${venta.precio * venta.cantidad}`;
+      container.appendChild(div);
+      totalGeneral += venta.precio * venta.cantidad;
+    });
+    document.getElementById('ventasSocioTotal').innerText = `Total General: $${totalGeneral}`;
+  }
+
+  // === LISTA DE INVITADOS ===
+  const invitados = [
+    "Aldo Alamo", "Ariel Alamo", "Axel Alamo", "Brisa", "Eduardo", "Kenya", "Gabriel", "Yerania"
+  ];
+
+  function mostrarInvitados() {
+    document.getElementById('menuPrincipal').style.display = "none";
+    let panel = document.getElementById('invitadosPanel');
+    if(!panel) {
+      panel = document.createElement('div');
+      panel.id = "invitadosPanel";
+      document.getElementById('panel').appendChild(panel);
     }
+    panel.innerHTML = `<input type="text" id="buscar" placeholder="Buscar..." onkeyup="filtrarInvitados()"><div id="listaInvitados"></div><button class="volver-btn" onclick="volverMenu()">Volver</button>`;
+    renderInvitados();
+    panel.style.display = "block";
+  }
 
-    function modificar(tipo, valor) {
-      if (tipo === "promo") promo = Math.max(0, promo + valor);
-      if (tipo === "unidad") unidad = Math.max(0, unidad + valor);
-      actualizarTotal();
+  function renderInvitados() {
+    const lista = document.getElementById('listaInvitados');
+    lista.innerHTML = "";
+    invitados.forEach(nombre => {
+      const div = document.createElement('div');
+      div.className = "nombre";
+      div.innerHTML = `<span>${nombre}</span><button>Asistió</button>`;
+      lista.appendChild(div);
+    });
+  }
+
+  function filtrarInvitados() {
+    const filtro = document.getElementById('buscar').value.toLowerCase();
+    const lista = document.getElementById('listaInvitados').children;
+    Array.from(lista).forEach(div => {
+      const nombre = div.querySelector('span').innerText.toLowerCase();
+      div.style.display = nombre.includes(filtro) ? "flex" : "none";
+    });
+  }
+
+  // === REGISTRO DE PRODUCTOS (SOCIOS) ===
+  let productos = [];
+
+  function abrirRegistro() {
+    document.getElementById('menuSocios').style.display = "none";
+    let panel = document.getElementById('registroPanel');
+    if (!panel) {
+      panel = document.createElement('div');
+      panel.id = "registroPanel";
+      document.getElementById('panel').appendChild(panel);
     }
+    panel.innerHTML = `
+      <h2>Registro de Productos</h2>
+      <div id="productosContainer"></div>
+      <button class="small-btn" onclick="agregarProducto()">Agregar Producto</button>
+      <button class="volver-btn" onclick="cerrarRegistro()">Volver</button>
+    `;
+    panel.style.display = "block";
+    renderProductos();
+  }
 
-    function actualizarTotal() {
-      const total = promo * 250 + unidad * 150;
-      document.getElementById("promoCount").textContent = promo;
-      document.getElementById("unidadCount").textContent = unidad;
-      document.getElementById("total").textContent = "$" + total;
+  function cerrarRegistro() {
+    document.getElementById('registroPanel').style.display = "none";
+    document.getElementById('menuSocios').style.display = "flex";
+  }
+
+  function agregarProducto() {
+    const nombre = prompt("Nombre del producto:");
+    const precio = parseInt(prompt("Precio del producto:"), 10);
+    if (nombre && !isNaN(precio)) {
+      productos.push({ nombre, precio, cantidad: 0 });
+      renderProductos();
     }
+  }
 
-    async function pagar() {
-      const total = promo * 250 + unidad * 150;
-      if (total === 0) {
-        alert("⚠️ No hay productos en la venta");
-        return;
-      }
-      try {
-        await db.collection("ventas").add({
-          fecha: new Date(),
-          promociones: promo,
-          unidades: unidad,
-          total: total
-        });
-        alert("✅ Venta registrada correctamente.");
-        promo = 0; unidad = 0;
-        actualizarTotal();
-      } catch (e) {
-        alert("❌ Error al registrar venta: " + e.message);
-      }
+  function renderProductos() {
+    const container = document.getElementById('productosContainer');
+    container.innerHTML = "";
+    productos.forEach((prod, index) => {
+      const div = document.createElement('div');
+      div.className = "registro-row";
+      div.innerHTML = `
+        <span>${prod.nombre}</span>
+        <span>$${prod.precio}</span>
+        <div class="qty-controls">
+          <button onclick="modificarProducto(${index}, -1)">−</button>
+          <span>${prod.cantidad}</span>
+          <button onclick="modificarProducto(${index}, 1)">+</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  function modificarProducto(index, delta) {
+    productos[index].cantidad = Math.max(0, productos[index].cantidad + delta);
+    renderProductos();
+  }
+
+  // === LISTA DE REGISTRO (SOCIOS) ===
+  function abrirListaRegistro() {
+    document.getElementById('menuSocios').style.display = "none";
+    let panel = document.getElementById('listaRegistroPanel');
+    if(!panel) {
+      panel = document.createElement('div');
+      panel.id = "listaRegistroPanel";
+      document.getElementById('panel').appendChild(panel);
     }
+    panel.innerHTML = "<h2>Lista de Registro</h2><div id='registroTabla'></div><button class='volver-btn' onclick='cerrarListaRegistro()'>Volver</button>";
+    panel.style.display = "block";
+    renderListaRegistro();
+  }
 
-    function volverMenu() {
-      document.getElementById("ventasPanel").style.display = "none";
-      document.getElementById("invitadosPanel").style.display = "none";
-      document.getElementById("menuPrincipal").style.display = "flex";
+  function cerrarListaRegistro() {
+    document.getElementById('listaRegistroPanel').style.display = "none";
+    document.getElementById('menuSocios').style.display = "flex";
+  }
+
+  function renderListaRegistro() {
+    const container = document.getElementById('registroTabla');
+    container.innerHTML = "";
+    let total = 0;
+    productos.forEach(p => {
+      const row = document.createElement('div');
+      row.innerText = `${p.nombre} x${p.cantidad} = $${p.cantidad * p.precio}`;
+      container.appendChild(row);
+      total += p.cantidad * p.precio;
+    });
+    const totalDiv = document.createElement('div');
+    totalDiv.className = "total-row";
+    totalDiv.innerText = `Total General: $${total}`;
+    container.appendChild(totalDiv);
+  }
+
+  // === INVERSION (SOCIOS) ===
+  function abrirInversion() {
+    document.getElementById('menuSocios').style.display = "none";
+    let panel = document.getElementById('inversionPanel');
+    if(!panel) {
+      panel = document.createElement('div');
+      panel.id = "inversionPanel";
+      document.getElementById('panel').appendChild(panel);
     }
+    panel.innerHTML = `
+      <h2>Inversión</h2>
+      <table class="inversionTable">
+        <tr><th>Socio</th><th>%</th></tr>
+        <tr><td>Aldo</td><td>60%</td></tr>
+        <tr><td>Ariel</td><td>20%</td></tr>
+        <tr><td>Axel</td><td>20%</td></tr>
+      </table>
+      <button class="volver-btn" onclick="cerrarInversion()">Volver</button>
+    `;
+    panel.style.display = "block";
+  }
 
-    // LISTA DE INVITADOS
-    async function mostrarInvitados() {
-      document.getElementById("menuPrincipal").style.display = "none";
-      document.getElementById("invitadosPanel").style.display = "block";
-      const output = document.getElementById("output");
-      const buscar = document.getElementById("buscar");
-
-      let snapshot = await db.collection("invitados").orderBy("nombre").get();
-      let invitados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      function render(filtro = "") {
-        output.innerHTML = "";
-        const filtrados = invitados.filter(i => i.nombre.toLowerCase().includes(filtro.toLowerCase()));
-        filtrados.forEach(inv => {
-          const div = document.createElement("div");
-          div.className = "nombre";
-
-          const span = document.createElement("span");
-          span.textContent = inv.nombre;
-
-          const btn = document.createElement("button");
-          btn.textContent = inv.asistio ? "✅ Asistió" : "Marcar asistencia";
-          btn.disabled = inv.asistio;
-
-          btn.onclick = async () => {
-            await db.collection("invitados").doc(inv.id).update({ asistio: true });
-            inv.asistio = true;
-            btn.textContent = "✅ Asistió";
-            btn.disabled = true;
-            actualizarProgreso();
-          };
-
-          div.appendChild(span);
-          div.appendChild(btn);
-          output.appendChild(div);
-        });
-        actualizarProgreso();
-      }
-
-      function actualizarProgreso() {
-        const total = invitados.length;
-        const asistieron = invitados.filter(i => i.asistio).length;
-        const porcentaje = (asistieron / total) * 100;
-        document.getElementById("progressFill").style.width = porcentaje + "%";
-      }
-
-      render();
-      buscar.addEventListener("input", e => render(e.target.value));
-    }
-  </script>
+  function cerrarInversion() {
+    document.getElementById('inversionPanel').style.display = "none";
+    document.getElementById('menuSocios').style.display = "flex";
+  }
+</script>
 </body>
 </html>
