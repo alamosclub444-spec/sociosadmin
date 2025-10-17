@@ -445,6 +445,46 @@
         font-weight: bold;
     }
 
+    /* === PANEL GANANCIA (NUEVO) === */
+    #gananciaPanel {
+      display: none;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    #gananciaPanel .input-row {
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      align-items:center;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+    #gananciaPanel input[type="number"] {
+      padding:12px;
+      font-size:18px;
+      border-radius:8px;
+      border:none;
+      width: 60%;
+      max-width:400px;
+      text-align:center;
+    }
+    #gananciaPanel .btn-row { display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
+
+    table.gananciasEventosTable, table.gananciasSociosTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+      color: white;
+    }
+    table.gananciasEventosTable th, table.gananciasEventosTable td,
+    table.gananciasSociosTable th, table.gananciasSociosTable td {
+      border-bottom:1px solid #333;
+      padding:10px;
+      text-align:left;
+    }
+    table.gananciasEventosTable th, table.gananciasSociosTable th { color:#f1c40f; font-size:16px; }
 
     /* === INVERSION === */
     #inversionPanel {
@@ -529,6 +569,8 @@
       <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
       <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
       <button class="menu-btn" onclick="abrirVisualizacionVentas()">Ventas</button>
+      <!-- NUEVO BOTON GANANCIA -->
+      <button class="menu-btn" onclick="abrirGanancia()">Ganancia</button>
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
@@ -639,6 +681,28 @@
       </div>
     </div>
 
+    <!-- NUEVO PANEL GANANCIA -->
+    <div id="gananciaPanel">
+      <h2 style="font-size:32px;">Ganancias por Evento</h2>
+
+      <div class="input-row">
+        <input type="number" id="cantidadObtenida" placeholder="Cantidad obtenida (solo números)" min="0" step="0.01">
+      </div>
+
+      <div class="btn-row">
+        <button class="menu-btn socios-small" onclick="guardarGanancia()">Ganancia total</button>
+        <button class="menu-btn socios-small" onclick="cerrarGanancia()">Volver</button>
+      </div>
+
+      <hr style="width:90%; margin:18px auto; border-color:#333;">
+
+      <h3 style="font-size:20px; margin-top:10px;">Eventos (Evento | Ganancia)</h3>
+      <div id="gananciasEventosContainer">Cargando...</div>
+
+      <h3 style="font-size:20px; margin-top:10px;">Ganancias por Socio</h3>
+      <div id="gananciasSociosContainer">Cargando...</div>
+    </div>
+
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -706,6 +770,7 @@
       document.getElementById("listaRegistroPanel").style.display = "none";
       document.getElementById("inversionPanel").style.display = "none";
       document.getElementById("visualizacionVentasPanel").style.display = "none";
+      document.getElementById("gananciaPanel").style.display = "none";
       // mostrar menus por defecto ocultos
       document.getElementById("menuPrincipal").style.display = "none";
       document.getElementById("menuSocios").style.display = "none";
@@ -724,8 +789,6 @@
             
             // Agregar las colecciones de eventos
             eventos.forEach((ev) => {
-                // ev.id es el nombre de la colección real (ej: evento_1)
-                // ev.nombre es el nombre de despliegue (ej: Evento 1 (Fiesta VIP))
                 registroCollections.push({
                     id: ev.id, 
                     nombre: ev.nombre 
@@ -945,6 +1008,195 @@
     function cerrarVisualizacionVentas() {
         document.getElementById("visualizacionVentasPanel").style.display = "none";
         document.getElementById("menuSocios").style.display = "flex";
+    }
+
+    // ============================================================
+    // NUEVO: GANANCIA - abrir/cerrar / renderizado / guardar
+    async function abrirGanancia() {
+      document.getElementById("menuSocios").style.display = "none";
+      document.getElementById("gananciaPanel").style.display = "block";
+
+      // asegurarse de tener las colecciones de registros (registros + eventos)
+      await loadEventCollections();
+
+      // cargar y renderizar tablas de ganancias
+      await renderGananciasEventos();
+      await renderGananciasSocios();
+    }
+
+    function cerrarGanancia() {
+      document.getElementById("gananciaPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
+      // limpiar input
+      document.getElementById("cantidadObtenida").value = "";
+    }
+
+    // Render tabla de eventos (colección: ganancias_eventos)
+    async function renderGananciasEventos() {
+      const container = document.getElementById("gananciasEventosContainer");
+      container.innerHTML = "Cargando eventos...";
+      try {
+        const snapshot = await db.collection("ganancias_eventos").orderBy("eventoNumber", "asc").get();
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        if (docs.length === 0) {
+          container.innerHTML = "<div>No hay registros de ganancias aún.</div>";
+          return;
+        }
+        let html = '<table class="gananciasEventosTable"><thead><tr><th>Evento</th><th>Ganancia</th></tr></thead><tbody>';
+        docs.forEach(d => {
+          const eventoLabel = d.eventoLabel || (`Evento ${d.eventoNumber}`);
+          html += `<tr><td>${escapeHtml(eventoLabel)}</td><td>$${formatNumber(parseFloat(d.ganancia || 0))}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = "<div>Error al cargar ganancias por evento: " + e.message + "</div>";
+      }
+    }
+
+    // Render tabla de socios (colección: ganancias_socios)
+    async function renderGananciasSocios() {
+      const container = document.getElementById("gananciasSociosContainer");
+      container.innerHTML = "Cargando socios...";
+      try {
+        const snapshot = await db.collection("ganancias_socios").get();
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        // si no existen, crear los tres socios con 0 (solo la primera vez)
+        if (docs.length === 0) {
+          // crear documentos Aldo, Ariel, Axel
+          const batch = db.batch();
+          const aldoRef = db.collection("ganancias_socios").doc("Aldo");
+          const arielRef = db.collection("ganancias_socios").doc("Ariel");
+          const axelRef = db.collection("ganancias_socios").doc("Axel");
+          batch.set(aldoRef, { nombre: "Aldo", acumulado: 0 });
+          batch.set(arielRef, { nombre: "Ariel", acumulado: 0 });
+          batch.set(axelRef, { nombre: "Axel", acumulado: 0 });
+          await batch.commit();
+          // volver a llamar para renderizar
+          return renderGananciasSocios();
+        }
+        // armar tabla
+        let html = '<table class="gananciasSociosTable"><thead><tr><th>Nombre del socio</th><th>Ganancia acumulada</th></tr></thead><tbody>';
+        docs.forEach(d => {
+          html += `<tr><td>${escapeHtml(d.nombre || d.id)}</td><td>$${formatNumber(parseFloat(d.acumulado || 0))}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = "<div>Error al cargar ganancias de socios: " + e.message + "</div>";
+      }
+    }
+
+    // Guardar nueva ganancia: calcula ganancia del evento y reparte entre socios
+    async function guardarGanancia() {
+      const input = document.getElementById("cantidadObtenida");
+      const cantidadStr = input.value;
+      const cantidad = parseFloat(cantidadStr);
+      if (isNaN(cantidad) || cantidad < 0) {
+        alert("Ingresa una cantidad válida (número).");
+        return;
+      }
+
+      // Determinar número de evento (siguiente consecutivo)
+      // Usamos el número de documentos en ganancias_eventos + 1
+      try {
+        const snapshotEventos = await db.collection("ganancias_eventos").get();
+        const nextEventoNumber = snapshotEventos.size + 1; // evento 1, 2, 3...
+
+        // Determinar la colección de registros correspondiente al evento:
+        // Por convención: evento 1 -> registroCollections[0] ('registros' => Bar Principal)
+        // evento N -> registroCollections[N-1] si existe, sino 'registros'
+        let collectionForEventId = 'registros';
+        let collectionForEventLabel = 'Registro Principal (Bar)';
+        if (registroCollections.length >= nextEventoNumber) {
+          collectionForEventId = registroCollections[nextEventoNumber - 1].id;
+          collectionForEventLabel = registroCollections[nextEventoNumber - 1].nombre;
+        } else {
+          // Si no existe un registro creado para ese número, usar 'registros' como fallback
+          collectionForEventId = 'registros';
+          collectionForEventLabel = registroCollections[0]?.nombre || 'Registro Principal (Bar)';
+        }
+
+        // Obtener total general del evento (colección: collectionForEventId)
+        // Se calcula como suma de unidadPrecio * unidades (mismo cálculo que en renderListaRegistro)
+        let totalInvertido = 0;
+        try {
+          const snapshotReg = await db.collection(collectionForEventId).get();
+          snapshotReg.docs.forEach(d => {
+            const r = d.data();
+            const unidadesR = parseFloat(r.unidades) || 0;
+            const precioUnidad = parseFloat(r.unidadPrecio) || 0;
+            totalInvertido += unidadesR * precioUnidad;
+          });
+        } catch (err) {
+          console.error("Error al leer registros del evento para calcular inversión:", err);
+          totalInvertido = 0;
+        }
+
+        // calcular ganancia del evento según tu fórmula
+        const gananciaEvento = cantidad - totalInvertido;
+
+        // confirmación al usuario
+        const confirmMsg = `Vas a registrar la ganancia del Evento ${nextEventoNumber} (${collectionForEventLabel}).\n\n` +
+                           `Cantidad obtenida: $${formatNumber(cantidad)}\n` +
+                           `Total invertido en el evento: $${formatNumber(totalInvertido)}\n` +
+                           `Ganancia resultante: $${formatNumber(gananciaEvento)}\n\n¿Confirmar?`;
+        if (!confirm(confirmMsg)) return;
+
+        // 1) Guardar documento en ganancias_eventos
+        await db.collection("ganancias_eventos").add({
+          eventoNumber: nextEventoNumber,
+          eventoLabel: `Evento ${nextEventoNumber} - ${collectionForEventLabel}`,
+          cantidadObtenida: cantidad,
+          totalInvertido: totalInvertido,
+          ganancia: gananciaEvento,
+          fecha: new Date()
+        });
+
+        // 2) Repartir entre socios y actualizar ganancias_socios acumuladas
+        // Aldo 60%, Ariel 20%, Axel 20%
+        const aldoShare = gananciaEvento * 0.6;
+        const arielShare = gananciaEvento * 0.2;
+        const axelShare = gananciaEvento * 0.2;
+
+        // Update each socio doc (create if not exists)
+        const sociosRef = db.collection("ganancias_socios");
+        // Aldo
+        const aldoDoc = await sociosRef.doc("Aldo").get();
+        if (aldoDoc.exists) {
+          const prev = parseFloat(aldoDoc.data().acumulado || 0);
+          await sociosRef.doc("Aldo").update({ acumulado: prev + aldoShare });
+        } else {
+          await sociosRef.doc("Aldo").set({ nombre: "Aldo", acumulado: aldoShare });
+        }
+        // Ariel
+        const arielDoc = await sociosRef.doc("Ariel").get();
+        if (arielDoc.exists) {
+          const prev = parseFloat(arielDoc.data().acumulado || 0);
+          await sociosRef.doc("Ariel").update({ acumulado: prev + arielShare });
+        } else {
+          await sociosRef.doc("Ariel").set({ nombre: "Ariel", acumulado: arielShare });
+        }
+        // Axel
+        const axelDoc = await sociosRef.doc("Axel").get();
+        if (axelDoc.exists) {
+          const prev = parseFloat(axelDoc.data().acumulado || 0);
+          await sociosRef.doc("Axel").update({ acumulado: prev + axelShare });
+        } else {
+          await sociosRef.doc("Axel").set({ nombre: "Axel", acumulado: axelShare });
+        }
+
+        // 3) Actualizar en pantalla ambas tablas sin recargar
+        await renderGananciasEventos();
+        await renderGananciasSocios();
+
+        alert("✅ Ganancia registrada correctamente.");
+        // limpiar input
+        input.value = "";
+
+      } catch (e) {
+        alert("❌ Error al registrar ganancia: " + e.message);
+      }
     }
 
     // ============================================================
