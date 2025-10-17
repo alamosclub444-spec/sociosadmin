@@ -163,13 +163,35 @@
       background: #444;
     }
 
-    /* === PANEL DE VENTAS COMO TABLA === */
-    #ventasPanel {
+    /* === PANEL DE VENTAS (EMPLEADO) Y VISUALIZACION DE VENTAS (SOCIO) === */
+    #ventasPanel, #visualizacionVentasPanel {
       display: none;
       padding: 20px;
       text-align: center;
+      max-width: 900px; /* Ancho para la tabla de visualización */
+      margin: 0 auto;
+    }
+    
+    /* Estilos para la tabla de visualización de ventas de Socios */
+    table.ventasVisualTable {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+        color: white;
     }
 
+    table.ventasVisualTable th, table.ventasVisualTable td {
+        border-bottom: 1px solid #333;
+        padding: 10px;
+        text-align: left;
+    }
+
+    table.ventasVisualTable th {
+        font-size: 16px;
+        color: #f1c40f;
+    }
+
+    /* === PANEL DE VENTAS COMO TABLA (EMPLEADO) === */
     table.ventasTable {
       width: 100%;
       max-width: 600px;
@@ -198,7 +220,7 @@
       word-wrap: break-word;
     }
 
-    #ventasPanel button.volver-btn {
+    #ventasPanel button.volver-btn, #visualizacionVentasPanel button.volver-btn {
       margin-top: 10px;
       padding: 14px 30px;
       font-size: 20px;
@@ -443,43 +465,37 @@
 </head>
 <body>
 
-  <!-- ANIMACIÓN INICIAL -->
   <div id="intro">
     <img src="LOGO.PNG" alt="Logo">
     <h1>Bienvenido</h1>
   </div>
 
-  <!-- LOGIN -->
   <div id="login">
     <img src="logotipo.png" alt="Logotipo">
     <input type="password" id="password" placeholder="Contraseña">
     <button onclick="login()">Ingresar</button>
   </div>
 
-  <!-- PANEL PRINCIPAL -->
   <div id="panel">
     <div class="header">
       <img src="LOGO.PNG" alt="Logo">
       <img src="logotipo.png" alt="Logotipo">
     </div>
 
-    <!-- MENU PRINCIPAL (empleados por defecto) -->
     <div class="content" id="menuPrincipal">
       <button class="menu-btn" onclick="mostrarVentas()">Barra de Bebidas</button>
       <button class="menu-btn" onclick="mostrarInvitados()">Lista de Invitados</button>
-      <!-- BOTÓN EXIT agregado SOLO para empleados (regresa a pantalla de login) -->
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
-    <!-- MENU SOCIOS (se muestra cuando password Aldoariel2) -->
     <div class="content" id="menuSocios">
       <button class="menu-btn" onclick="abrirRegistro()">Registro</button>
       <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
       <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
+      <button class="menu-btn" onclick="abrirVisualizacionVentas()">Ventas</button>
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
-    <!-- Panel de Ventas (empleados) -->
     <div id="ventasPanel">
       <h2 style="font-size: 36px;">Registro de Ventas</h2>
       <table class="ventasTable">
@@ -507,12 +523,20 @@
       <button onclick="pagar()">Pagar</button>
       <button class="volver-btn" onclick="volverMenu()">Volver</button>
     </div>
+    
+    <div id="visualizacionVentasPanel">
+        <h2 style="font-size: 32px;">Ventas por Barra de Bebidas</h2>
+        <div id="ventasContainer">
+            </div>
+        <div class="total-row" id="totalVentasGeneral">Total General: $0</div>
+        <div style="margin-top:12px;">
+            <button class="menu-btn socios-small" onclick="cerrarVisualizacionVentas()">Volver</button>
+        </div>
+    </div>
 
-    <!-- Lista de Invitados (empleados) -->
     <div id="invitadosPanel">
       <h2 style="font-size: 36px;">Lista de Invitados</h2>
 
-      <!-- Barra de progreso -->
       <div class="progress-container">
         <img src="LOGO.PNG" alt="Logo" class="progress-icon">
         <div class="progress-bar">
@@ -526,7 +550,6 @@
       <button onclick="volverMenu()">Volver</button>
     </div>
 
-    <!-- REGISTRO (SOCIOS) -->
     <div id="registroPanel">
       <h2 style="font-size: 32px;">Registro de Producto</h2>
       <div class="registro-row">
@@ -550,24 +573,20 @@
       </div>
     </div>
 
-    <!-- LISTA REGISTRO (SOCIOS) -->
     <div id="listaRegistroPanel">
       <h2 style="font-size: 32px;">Lista de Registros</h2>
       <div id="listaRegistrosContainer">
-        <!-- tabla generada por JS -->
-      </div>
+        </div>
       <div class="total-row" id="totalRegistros">Total General: $0</div>
       <div style="margin-top:12px;">
         <button class="menu-btn socios-small" onclick="cerrarListaRegistro()">Volver</button>
       </div>
     </div>
 
-    <!-- INVERSION (SOCIOS) -->
     <div id="inversionPanel">
       <h2 style="font-size: 32px;">Inversión por Socio</h2>
       <div id="inversionContainer">
-        <!-- tabla generada por JS -->
-      </div>
+        </div>
       <div style="margin-top:12px;">
         <button class="menu-btn socios-small" onclick="cerrarInversion()">Volver</button>
       </div>
@@ -575,7 +594,6 @@
 
   </div>
 
-  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
@@ -636,6 +654,7 @@
       document.getElementById("registroPanel").style.display = "none";
       document.getElementById("listaRegistroPanel").style.display = "none";
       document.getElementById("inversionPanel").style.display = "none";
+      document.getElementById("visualizacionVentasPanel").style.display = "none"; // NUEVO PANEL
       // mostrar menus por defecto ocultos
       document.getElementById("menuPrincipal").style.display = "none";
       document.getElementById("menuSocios").style.display = "none";
@@ -680,12 +699,9 @@
       }
     }
     function volverMenu() {
-      // devuelve al menú apropiado según lo que haya ingresado
+      // Usado para volver de 'Barra de Bebidas' o 'Lista de Invitados' (Empleado)
       document.getElementById("ventasPanel").style.display = "none";
       document.getElementById("invitadosPanel").style.display = "none";
-      // si contraseña actual fue la de socio se muestra menuSocios, si empleado menuPrincipal
-      // no mantenemos estado seguro del tipo de usuario — asumimos que el menú que queremos mostrar está visible.
-      // Para simplicidad, mostramos el menú de empleados (esto solo se usa en flujo empleado).
       document.getElementById("menuPrincipal").style.display = "flex";
     }
 
@@ -779,6 +795,18 @@
     function cerrarInversion() {
       document.getElementById("inversionPanel").style.display = "none";
       document.getElementById("menuSocios").style.display = "flex";
+    }
+    
+    // NUEVO: Funciones de navegación para el botón VENTAS (SOCIOS)
+    function abrirVisualizacionVentas() {
+        document.getElementById("menuSocios").style.display = "none";
+        document.getElementById("visualizacionVentasPanel").style.display = "block";
+        renderVisualizacionVentas();
+    }
+
+    function cerrarVisualizacionVentas() {
+        document.getElementById("visualizacionVentasPanel").style.display = "none";
+        document.getElementById("menuSocios").style.display = "flex";
     }
 
     // ============================================================
@@ -884,6 +912,116 @@
         container.innerHTML = "<div>Error al cargar registros: " + e.message + "</div>";
       }
     }
+    
+    // ============================================================
+    // NUEVO: VISUALIZACIÓN DE VENTAS (SOCIOS) - Muestra tabla de la colección 'ventas'
+    async function renderVisualizacionVentas() {
+        const container = document.getElementById("ventasContainer");
+        const totalDisplay = document.getElementById("totalVentasGeneral");
+        container.innerHTML = "<div>Cargando ventas...</div>";
+        totalDisplay.textContent = "Total General: $0";
+
+        try {
+            // Se asume que los registros en la colección 'ventas' contienen: promociones, unidades, total
+            const snapshot = await db.collection("ventas").orderBy("fecha", "desc").get();
+            const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+            if (docs.length === 0) {
+                container.innerHTML = "<div>No hay ventas registradas aún.</div>";
+                return;
+            }
+
+            // Agrupar ventas por tipo (Promoción/Unidad) y sumar cantidades y totales
+            // Esto es necesario porque el empleado registra ventas como un resumen (promociones: X, unidades: Y) en un solo documento
+            // La visualización solicita una fila por tipo de producto (Promoción, Unidad). 
+            
+            const agrupado = {
+                'Promoción ($250)': { cantidad: 0, total: 0, precioUnidad: 250 },
+                'Unidad ($150)': { cantidad: 0, total: 0, precioUnidad: 150 }
+            };
+
+            let totalVentasGeneral = 0;
+
+            docs.forEach(v => {
+                const promociones = parseInt(v.promociones) || 0;
+                const unidades = parseInt(v.unidades) || 0;
+                const totalVenta = parseFloat(v.total) || 0; // Usamos el total ya calculado por el empleado para cada venta
+
+                agrupado['Promoción ($250)'].cantidad += promociones;
+                // Como el campo 'total' ya trae la suma de promo y unidad, calculamos la parte de promo/unidad por separado
+                // A fin de ser más exactos, si tienes los totales, es mejor sumar el total de cada registro.
+                // Sin embargo, para cumplir con la estructura de 3 columnas (Nombre, Cantidad, Total de la compra), 
+                // vamos a sumar la cantidad y calcular su total individual.
+                agrupado['Promoción ($250)'].total += (promociones * agrupado['Promoción ($250)'].precioUnidad);
+                
+                agrupado['Unidad ($150)'].cantidad += unidades;
+                agrupado['Unidad ($150)'].total += (unidades * agrupado['Unidad ($150)'].precioUnidad);
+                
+                totalVentasGeneral += totalVenta;
+            });
+            
+            // Si el cliente quiere ver el detalle por venta, el código es más complejo.
+            // Para simplicidad y totalizar, mostramos la suma de todas las promos y unidades.
+            
+            let html = '<table class="ventasVisualTable"><thead><tr><th>Promoción o Unidad</th><th>Cantidad Total</th><th>Total Compra</th></tr></thead><tbody>';
+
+            // Agregamos las filas solo si hubo ventas de ese tipo
+            if (agrupado['Promoción ($250)'].cantidad > 0) {
+                html += `<tr><td>${escapeHtml('Promoción ($250)')}</td><td>${agrupado['Promoción ($250)'].cantidad}</td><td>$${formatNumber(agrupado['Promoción ($250)'].total)}</td></tr>`;
+            }
+            if (agrupado['Unidad ($150)'].cantidad > 0) {
+                 html += `<tr><td>${escapeHtml('Unidad ($150)')}</td><td>${agrupado['Unidad ($150)'].cantidad}</td><td>$${formatNumber(agrupado['Unidad ($150)'].total)}</td></tr>`;
+            }
+            
+            // Si agrupamos por producto:
+            let htmlFinal = '<table class="ventasVisualTable"><thead><tr><th>Promoción o Unidad</th><th>Cantidad</th><th>Total</th></tr></thead><tbody>';
+            let totalGeneral = 0;
+
+            docs.forEach(v => {
+                const promociones = parseInt(v.promociones) || 0;
+                const unidades = parseInt(v.unidades) || 0;
+                const totalVenta = parseFloat(v.total) || 0;
+                
+                // Si hay promociones en la venta, agregamos una fila
+                if (promociones > 0) {
+                    const totalPromo = promociones * 250;
+                    htmlFinal += `<tr><td>Promoción ($250)</td><td>${promociones}</td><td>$${formatNumber(totalPromo)}</td></tr>`;
+                }
+                
+                // Si hay unidades en la venta, agregamos una fila
+                if (unidades > 0) {
+                    const totalUnidad = unidades * 150;
+                    htmlFinal += `<tr><td>Unidad ($150)</td><td>${unidades}</td><td>$${formatNumber(totalUnidad)}</td></tr>`;
+                }
+
+                totalGeneral += totalVenta;
+            });
+
+            htmlFinal += '</tbody></table>';
+            
+            // El usuario pidió "la suma de cada fila que se fue agregando", lo que sugiere un total por tipo de producto (como en la primera opción)
+            // PERO el total general debe ser la suma de los campos 'total' de firebase, que ya incluye ambos.
+            // Usaremos la agrupación por producto, pero **mostrando el total general de la colección** para mayor exactitud.
+            
+            // Opción 1: Agrupado por tipo de producto (Promoción/Unidad)
+            let htmlAgrupado = '<table class="ventasVisualTable"><thead><tr><th>Bebida</th><th>Cantidad Total</th><th>Compra Estimada</th></tr></thead><tbody>';
+
+            if (agrupado['Promoción ($250)'].cantidad > 0) {
+                htmlAgrupado += `<tr><td>${escapeHtml('Promoción ($250)')}</td><td>${agrupado['Promoción ($250)'].cantidad}</td><td>$${formatNumber(agrupado['Promoción ($250)'].total)}</td></tr>`;
+            }
+            if (agrupado['Unidad ($150)'].cantidad > 0) {
+                 htmlAgrupado += `<tr><td>${escapeHtml('Unidad ($150)')}</td><td>${agrupado['Unidad ($150)'].cantidad}</td><td>$${formatNumber(agrupado['Unidad ($150)'].total)}</td></tr>`;
+            }
+            htmlAgrupado += '</tbody></table>';
+            
+            container.innerHTML = htmlAgrupado;
+            totalDisplay.textContent = "Total General: $" + formatNumber(totalVentasGeneral);
+            
+        } catch (e) {
+            container.innerHTML = "<div>Error al cargar las ventas: " + e.message + "</div>";
+            totalDisplay.textContent = "Total General: $0";
+        }
+    }
 
     // ============================================================
     // INVERSION - calcular según registros y mostrar por socio
@@ -936,7 +1074,7 @@
     function escapeHtml(text) {
       if (!text) return "";
       return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-                 .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+               .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
 
     // fin script
