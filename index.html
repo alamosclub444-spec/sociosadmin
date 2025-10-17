@@ -632,7 +632,7 @@
       <h2 style="font-size: 32px;">Registro de Producto</h2>
       
       <select id="eventoTarget">
-          <option value="registros">Registro Principal (Bar)</option>
+          <option value="registros">Registro Evento</option>
           <option value="nuevo_evento">➕ Crear Nuevo Evento</option>
       </select>
       <input type="text" id="nombreNuevoEvento" placeholder="Ej: Evento VIP" style="display:none; margin-bottom: 15px; padding: 12px; font-size: 18px; border-radius: 8px; border: none; width: 80%; max-width: 400px; text-align: center;">
@@ -1107,14 +1107,14 @@
         // Por convención: evento 1 -> registroCollections[0] ('registros' => Bar Principal)
         // evento N -> registroCollections[N-1] si existe, sino 'registros'
         let collectionForEventId = 'registros';
-        let collectionForEventLabel = 'Registro Principal (Bar)';
+        let collectionForEventLabel = 'Evento 1';
         if (registroCollections.length >= nextEventoNumber) {
           collectionForEventId = registroCollections[nextEventoNumber - 1].id;
           collectionForEventLabel = registroCollections[nextEventoNumber - 1].nombre;
         } else {
           // Si no existe un registro creado para ese número, usar 'registros' como fallback
           collectionForEventId = 'registros';
-          collectionForEventLabel = registroCollections[0]?.nombre || 'Registro Principal (Bar)';
+          collectionForEventLabel = registroCollections[0]?.nombre || 'Evento 1';
         }
 
         // Obtener total general del evento (colección: collectionForEventId)
