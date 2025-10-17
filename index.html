@@ -338,6 +338,18 @@
       margin-bottom: 12px;
       align-items: center;
     }
+    
+    /* Estilo para el SELECT del evento */
+    select#eventoTarget {
+        padding: 12px;
+        font-size: 18px;
+        border-radius: 8px;
+        border: none;
+        width: 80%;
+        max-width: 400px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
 
     input[type="text"].prod-name {
       padding: 12px;
@@ -409,6 +421,30 @@
       font-size: 18px;
       margin-top: 10px;
     }
+    
+    /* Estilo para la paginación de tablas */
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+        gap: 8px;
+    }
+    .pagination-btn {
+        padding: 10px 15px;
+        font-size: 16px;
+        border-radius: 8px;
+        background: #333;
+        color: white;
+        cursor: pointer;
+        border: 1px solid transparent;
+    }
+    .pagination-btn.active {
+        background: #f1c40f;
+        color: black;
+        font-weight: bold;
+    }
+
 
     /* === INVERSION === */
     #inversionPanel {
@@ -552,6 +588,13 @@
 
     <div id="registroPanel">
       <h2 style="font-size: 32px;">Registro de Producto</h2>
+      
+      <select id="eventoTarget">
+          <option value="registros">Registro Principal (Bar)</option>
+          <option value="nuevo_evento">➕ Crear Nuevo Evento</option>
+      </select>
+      <input type="text" id="nombreNuevoEvento" placeholder="Ej: Evento VIP" style="display:none; margin-bottom: 15px; padding: 12px; font-size: 18px; border-radius: 8px; border: none; width: 80%; max-width: 400px; text-align: center;">
+
       <div class="registro-row">
         <input type="text" id="prodNombre" class="prod-name" placeholder="Nombre del producto">
         <input type="number" id="prodPrecio" class="prod-price" placeholder="Precio" min="0" step="0.01">
@@ -575,6 +618,10 @@
 
     <div id="listaRegistroPanel">
       <h2 style="font-size: 32px;">Lista de Registros</h2>
+      
+      <div id="paginationContainer" class="pagination-container">
+          </div>
+      
       <div id="listaRegistrosContainer">
         </div>
       <div class="total-row" id="totalRegistros">Total General: $0</div>
@@ -609,6 +656,10 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    
+    // Lista global de colecciones de registro
+    let registroCollections = [{ id: 'registros', nombre: 'Bar Principal' }];
+    let currentRegistroCollection = 'registros'; // Colección activa por defecto
 
     // CONTROL DE INTRO (ocultar después)
     window.addEventListener('load', () => {
@@ -654,10 +705,58 @@
       document.getElementById("registroPanel").style.display = "none";
       document.getElementById("listaRegistroPanel").style.display = "none";
       document.getElementById("inversionPanel").style.display = "none";
-      document.getElementById("visualizacionVentasPanel").style.display = "none"; // NUEVO PANEL
+      document.getElementById("visualizacionVentasPanel").style.display = "none";
       // mostrar menus por defecto ocultos
       document.getElementById("menuPrincipal").style.display = "none";
       document.getElementById("menuSocios").style.display = "none";
+    }
+    
+    // ---------------------------------------------------------------------
+    // MANEJO DE EVENTOS (NUEVO)
+    async function loadEventCollections() {
+        try {
+            const snapshot = await db.collection("eventos").orderBy("fechaCreacion", "asc").get();
+            const eventos = snapshot.docs.map(doc => ({ id: doc.id, nombre: doc.data().nombre || doc.id }));
+            
+            // La colección 'registros' es la base (Bar Principal)
+            registroCollections = [{ id: 'registros', nombre: 'Bar Principal' }];
+            
+            // Agregar las colecciones de eventos
+            eventos.forEach((ev, index) => {
+                // Usamos el ID de Firebase como nombre de la colección real. El nombre es lo que ve el usuario.
+                // Aquí, para mantener el nombre Evento 1, Evento 2, usamos el nombre de la colección real como ev.id.
+                // Sin embargo, para cumplir con el requisito de "Evento 1", "Evento 2", etc., lo crearemos con un ID consecutivo
+                // Pero para mantener la flexibilidad de lo que ya tienes, asumiremos que la colección se llama "EventoX" y su nombre de despliegue es "Evento X"
+                registroCollections.push({
+                    id: ev.id, 
+                    nombre: ev.nombre 
+                });
+            });
+            // Si la colección actual no existe (ej. fue borrada), volvemos a la principal
+            if (!registroCollections.find(c => c.id === currentRegistroCollection)) {
+                currentRegistroCollection = 'registros';
+            }
+        } catch (e) {
+            console.error("Error al cargar colecciones de eventos:", e);
+        }
+    }
+    
+    function renderPagination() {
+        const container = document.getElementById("paginationContainer");
+        container.innerHTML = "";
+        
+        registroCollections.forEach(col => {
+            const button = document.createElement("button");
+            button.className = `pagination-btn ${col.id === currentRegistroCollection ? 'active' : ''}`;
+            button.textContent = col.nombre;
+            button.onclick = () => {
+                currentRegistroCollection = col.id;
+                // Vuelve a renderizar la lista con la colección seleccionada
+                renderListaRegistro(currentRegistroCollection); 
+                renderPagination(); // Actualiza el estado 'active' del botón
+            };
+            container.appendChild(button);
+        });
     }
 
     // ---------------------------------------------------------------------
@@ -757,10 +856,13 @@
 
     // ---------------------------------------------------------------------
     // SOCIOS - navegación
-    function abrirRegistro() {
-      // mostrar panel registro
+    async function abrirRegistro() {
       document.getElementById("menuSocios").style.display = "none";
       document.getElementById("registroPanel").style.display = "block";
+      
+      await loadEventCollections(); // Carga las colecciones de eventos existentes
+      renderEventSelector(); // Renderiza el selector de eventos
+
       // inicializar campos
       document.getElementById("prodNombre").value = "";
       document.getElementById("prodPrecio").value = "";
@@ -769,16 +871,53 @@
       document.getElementById("chkIguales").checked = true;
       document.getElementById("chkPorcentaje").checked = false;
     }
+    
+    // NUEVA FUNCIÓN para renderizar el selector de eventos
+    function renderEventSelector() {
+        const selector = document.getElementById("eventoTarget");
+        const inputNuevoEvento = document.getElementById("nombreNuevoEvento");
+        
+        // Limpiar opciones existentes
+        selector.innerHTML = "";
+        
+        // Agregar la opción principal
+        selector.innerHTML += `<option value="registros">Registro Principal</option>`;
+
+        // Agregar los eventos cargados
+        registroCollections.filter(c => c.id !== 'registros').forEach(col => {
+            selector.innerHTML += `<option value="${col.id}">${col.nombre}</option>`;
+        });
+
+        // Agregar la opción de crear nuevo
+        selector.innerHTML += `<option value="nuevo_evento">➕ Crear Nuevo Evento</option>`;
+
+        // Manejar visibilidad del input de nuevo evento
+        selector.onchange = () => {
+            if (selector.value === "nuevo_evento") {
+                inputNuevoEvento.style.display = "block";
+            } else {
+                inputNuevoEvento.style.display = "none";
+            }
+        };
+        
+        // Inicializar el estado de la lista
+        inputNuevoEvento.style.display = "none";
+        selector.value = "registros";
+    }
+
 
     function cerrarRegistro() {
       document.getElementById("registroPanel").style.display = "none";
       document.getElementById("menuSocios").style.display = "flex";
     }
 
-    function abrirListaRegistro() {
+    async function abrirListaRegistro() {
       document.getElementById("menuSocios").style.display = "none";
       document.getElementById("listaRegistroPanel").style.display = "block";
-      renderListaRegistro();
+      await loadEventCollections(); // Carga la lista de colecciones disponibles
+      renderPagination(); // Renderiza los botones de navegación
+      // Renderiza la lista con la colección activa por defecto (Bar Principal)
+      renderListaRegistro(currentRegistroCollection); 
     }
 
     function cerrarListaRegistro() {
@@ -797,7 +936,6 @@
       document.getElementById("menuSocios").style.display = "flex";
     }
     
-    // NUEVO: Funciones de navegación para el botón VENTAS (SOCIOS)
     function abrirVisualizacionVentas() {
         document.getElementById("menuSocios").style.display = "none";
         document.getElementById("visualizacionVentasPanel").style.display = "block";
@@ -810,7 +948,7 @@
     }
 
     // ============================================================
-    // REGISTRO - lógica
+    // REGISTRO - lógica (MODIFICADO para soportar Eventos)
     let unidades = 1;
     function cambiarUnidades(delta) {
       unidades = Math.max(1, unidades + delta);
@@ -828,58 +966,106 @@
     });
 
     async function registrarProducto() {
-      const nombre = (document.getElementById("prodNombre").value || "").trim();
-      const precioStr = document.getElementById("prodPrecio").value;
-      const precio = parseFloat(precioStr);
-      const chkIguales = document.getElementById("chkIguales").checked;
-      const chkPorcentaje = document.getElementById("chkPorcentaje").checked;
+        const selector = document.getElementById("eventoTarget");
+        let collectionName = selector.value;
+        const nombreNuevoEventoInput = document.getElementById("nombreNuevoEvento");
+        const nombreEventoUsuario = nombreNuevoEventoInput.value.trim();
 
-      if (!nombre) {
-        alert("Ingresa el nombre del producto.");
-        return;
-      }
-      if (isNaN(precio) || precio < 0) {
-        alert("Ingresa un precio válido.");
-        return;
-      }
-      if (!chkIguales && !chkPorcentaje) {
-        alert("Selecciona un método de reparto: Partes iguales o Porcentaje.");
-        return;
-      }
+        if (collectionName === "nuevo_evento") {
+            if (!nombreEventoUsuario) {
+                alert("Por favor, ingresa el nombre del nuevo evento.");
+                return;
+            }
+            
+            // Lógica para crear un nuevo evento/colección
+            
+            // 1. Obtener el número consecutivo (Ej. Evento 1, Evento 2)
+            const eventosSnapshot = await db.collection("eventos").get();
+            const nextEventNumber = eventosSnapshot.size + 1;
+            
+            // 2. Crear el nombre de la colección real y el nombre a mostrar
+            const newCollectionId = `evento_${nextEventNumber}`; // ID único en Firebase
+            const newEventName = `Evento ${nextEventNumber} (${nombreEventoUsuario})`;
+            
+            // 3. Registrar el evento en la colección de control 'eventos'
+            try {
+                await db.collection("eventos").doc(newCollectionId).set({
+                    nombre: newEventName,
+                    fechaCreacion: new Date()
+                });
+                collectionName = newCollectionId; // La colección de destino es la nueva
+                alert(`✅ Nuevo evento "${newEventName}" creado.`);
+            } catch (e) {
+                alert("❌ Error al crear nuevo evento: " + e.message);
+                return;
+            }
+        }
 
-      // confirmación
-      const confirmMsg = `Vas a registrar:\n\n${nombre}\nCantidad: ${unidades}\nPrecio por unidad: $${precio.toFixed(2)}\nTotal: $${(precio * unidades).toFixed(2)}\n\n¿Confirmar?`;
-      if (!confirm(confirmMsg)) return;
+        const nombre = (document.getElementById("prodNombre").value || "").trim();
+        const precioStr = document.getElementById("prodPrecio").value;
+        const precio = parseFloat(precioStr);
+        const chkIguales = document.getElementById("chkIguales").checked;
+        const chkPorcentaje = document.getElementById("chkPorcentaje").checked;
 
-      // guardar en Firestore colección 'registros'
-      try {
-        await db.collection("registros").add({
-          nombre: nombre,
-          unidadPrecio: precio,
-          unidades: unidades,
-          splitType: chkIguales ? "igual" : "porcentaje",
-          fecha: new Date()
-        });
-        alert("✅ Registro exitoso.");
-        // reset form
-        document.getElementById("prodNombre").value = "";
-        document.getElementById("prodPrecio").value = "";
-        unidades = 1;
-        document.getElementById("unidadesDisplay").textContent = unidades;
-        document.getElementById("chkIguales").checked = true;
-        document.getElementById("chkPorcentaje").checked = false;
-      } catch (e) {
-        alert("❌ Error al guardar registro: " + e.message);
-      }
+        if (!nombre) {
+            alert("Ingresa el nombre del producto.");
+            return;
+        }
+        if (isNaN(precio) || precio < 0) {
+            alert("Ingresa un precio válido.");
+            return;
+        }
+        if (!chkIguales && !chkPorcentaje) {
+            alert("Selecciona un método de reparto: Partes iguales o Porcentaje.");
+            return;
+        }
+
+        const targetName = registroCollections.find(c => c.id === collectionName)?.nombre || collectionName;
+        // confirmación
+        const confirmMsg = `Vas a registrar en la tabla: ${targetName}\n\n${nombre}\nCantidad: ${unidades}\nPrecio por unidad: $${precio.toFixed(2)}\nTotal: $${(precio * unidades).toFixed(2)}\n\n¿Confirmar?`;
+        if (!confirm(confirmMsg)) return;
+
+        // guardar en Firestore colección dinámica
+        try {
+            await db.collection(collectionName).add({
+                nombre: nombre,
+                unidadPrecio: precio,
+                unidades: unidades,
+                splitType: chkIguales ? "igual" : "porcentaje",
+                fecha: new Date()
+            });
+            alert("✅ Registro exitoso en " + targetName);
+            
+            // Si creamos un nuevo evento, volvemos a cargar el selector para que aparezca la opción
+            if (selector.value === "nuevo_evento") {
+                await loadEventCollections();
+                renderEventSelector();
+            }
+
+            // reset form
+            document.getElementById("prodNombre").value = "";
+            document.getElementById("prodPrecio").value = "";
+            nombreNuevoEventoInput.value = "";
+            unidades = 1;
+            document.getElementById("unidadesDisplay").textContent = unidades;
+            document.getElementById("chkIguales").checked = true;
+            document.getElementById("chkPorcentaje").checked = false;
+            selector.value = "registros";
+            nombreNuevoEventoInput.style.display = "none";
+        } catch (e) {
+            alert("❌ Error al guardar registro: " + e.message);
+        }
     }
 
     // ============================================================
-    // LISTA REGISTRO - renderiza tabla agrupada por nombre
-    async function renderListaRegistro() {
+    // LISTA REGISTRO - renderiza tabla agrupada por nombre (MODIFICADO para colección dinámica)
+    async function renderListaRegistro(collectionId) {
       const container = document.getElementById("listaRegistrosContainer");
-      container.innerHTML = "<div>Cargando...</div>";
+      const collectionName = registroCollections.find(c => c.id === collectionId)?.nombre || collectionId;
+      container.innerHTML = `<div>Cargando registros de ${collectionName}...</div>`;
+      
       try {
-        const snapshot = await db.collection("registros").orderBy("nombre").get();
+        const snapshot = await db.collection(collectionId).orderBy("nombre").get();
         const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
         // agrupar por nombre
         const mapa = {};
@@ -894,7 +1080,7 @@
         const items = Object.values(mapa);
         // armar tabla HTML
         if (items.length === 0) {
-          container.innerHTML = "<div>No hay registros aún.</div>";
+          container.innerHTML = `<div>No hay registros en ${collectionName} aún.</div>`;
           document.getElementById("totalRegistros").textContent = "Total General: $0";
           return;
         }
@@ -909,12 +1095,12 @@
         container.innerHTML = html;
         document.getElementById("totalRegistros").textContent = "Total General: $" + formatNumber(totalGeneral);
       } catch (e) {
-        container.innerHTML = "<div>Error al cargar registros: " + e.message + "</div>";
+        container.innerHTML = `<div>Error al cargar registros de ${collectionName}: ${e.message}</div>`;
       }
     }
-    
+
     // ============================================================
-    // NUEVO: VISUALIZACIÓN DE VENTAS (SOCIOS) - Muestra tabla de la colección 'ventas'
+    // VISUALIZACIÓN DE VENTAS (SOCIOS) - Muestra tabla de la colección 'ventas' (sin cambios)
     async function renderVisualizacionVentas() {
         const container = document.getElementById("ventasContainer");
         const totalDisplay = document.getElementById("totalVentasGeneral");
@@ -922,7 +1108,6 @@
         totalDisplay.textContent = "Total General: $0";
 
         try {
-            // Se asume que los registros en la colección 'ventas' contienen: promociones, unidades, total
             const snapshot = await db.collection("ventas").orderBy("fecha", "desc").get();
             const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 
@@ -931,10 +1116,6 @@
                 return;
             }
 
-            // Agrupar ventas por tipo (Promoción/Unidad) y sumar cantidades y totales
-            // Esto es necesario porque el empleado registra ventas como un resumen (promociones: X, unidades: Y) en un solo documento
-            // La visualización solicita una fila por tipo de producto (Promoción, Unidad). 
-            
             const agrupado = {
                 'Promoción ($250)': { cantidad: 0, total: 0, precioUnidad: 250 },
                 'Unidad ($150)': { cantidad: 0, total: 0, precioUnidad: 150 }
@@ -945,13 +1126,9 @@
             docs.forEach(v => {
                 const promociones = parseInt(v.promociones) || 0;
                 const unidades = parseInt(v.unidades) || 0;
-                const totalVenta = parseFloat(v.total) || 0; // Usamos el total ya calculado por el empleado para cada venta
-
+                const totalVenta = parseFloat(v.total) || 0;
+                
                 agrupado['Promoción ($250)'].cantidad += promociones;
-                // Como el campo 'total' ya trae la suma de promo y unidad, calculamos la parte de promo/unidad por separado
-                // A fin de ser más exactos, si tienes los totales, es mejor sumar el total de cada registro.
-                // Sin embargo, para cumplir con la estructura de 3 columnas (Nombre, Cantidad, Total de la compra), 
-                // vamos a sumar la cantidad y calcular su total individual.
                 agrupado['Promoción ($250)'].total += (promociones * agrupado['Promoción ($250)'].precioUnidad);
                 
                 agrupado['Unidad ($150)'].cantidad += unidades;
@@ -960,51 +1137,7 @@
                 totalVentasGeneral += totalVenta;
             });
             
-            // Si el cliente quiere ver el detalle por venta, el código es más complejo.
-            // Para simplicidad y totalizar, mostramos la suma de todas las promos y unidades.
-            
-            let html = '<table class="ventasVisualTable"><thead><tr><th>Promoción o Unidad</th><th>Cantidad Total</th><th>Total Compra</th></tr></thead><tbody>';
-
-            // Agregamos las filas solo si hubo ventas de ese tipo
-            if (agrupado['Promoción ($250)'].cantidad > 0) {
-                html += `<tr><td>${escapeHtml('Promoción ($250)')}</td><td>${agrupado['Promoción ($250)'].cantidad}</td><td>$${formatNumber(agrupado['Promoción ($250)'].total)}</td></tr>`;
-            }
-            if (agrupado['Unidad ($150)'].cantidad > 0) {
-                 html += `<tr><td>${escapeHtml('Unidad ($150)')}</td><td>${agrupado['Unidad ($150)'].cantidad}</td><td>$${formatNumber(agrupado['Unidad ($150)'].total)}</td></tr>`;
-            }
-            
-            // Si agrupamos por producto:
-            let htmlFinal = '<table class="ventasVisualTable"><thead><tr><th>Promoción o Unidad</th><th>Cantidad</th><th>Total</th></tr></thead><tbody>';
-            let totalGeneral = 0;
-
-            docs.forEach(v => {
-                const promociones = parseInt(v.promociones) || 0;
-                const unidades = parseInt(v.unidades) || 0;
-                const totalVenta = parseFloat(v.total) || 0;
-                
-                // Si hay promociones en la venta, agregamos una fila
-                if (promociones > 0) {
-                    const totalPromo = promociones * 250;
-                    htmlFinal += `<tr><td>Promoción ($250)</td><td>${promociones}</td><td>$${formatNumber(totalPromo)}</td></tr>`;
-                }
-                
-                // Si hay unidades en la venta, agregamos una fila
-                if (unidades > 0) {
-                    const totalUnidad = unidades * 150;
-                    htmlFinal += `<tr><td>Unidad ($150)</td><td>${unidades}</td><td>$${formatNumber(totalUnidad)}</td></tr>`;
-                }
-
-                totalGeneral += totalVenta;
-            });
-
-            htmlFinal += '</tbody></table>';
-            
-            // El usuario pidió "la suma de cada fila que se fue agregando", lo que sugiere un total por tipo de producto (como en la primera opción)
-            // PERO el total general debe ser la suma de los campos 'total' de firebase, que ya incluye ambos.
-            // Usaremos la agrupación por producto, pero **mostrando el total general de la colección** para mayor exactitud.
-            
-            // Opción 1: Agrupado por tipo de producto (Promoción/Unidad)
-            let htmlAgrupado = '<table class="ventasVisualTable"><thead><tr><th>Bebida</th><th>Cantidad Total</th><th>Compra Estimada</th></tr></thead><tbody>';
+            let htmlAgrupado = '<table class="ventasVisualTable"><thead><tr><th>Promoción o Unidad</th><th>Cantidad Total</th><th>Total Compra Estimado</th></tr></thead><tbody>';
 
             if (agrupado['Promoción ($250)'].cantidad > 0) {
                 htmlAgrupado += `<tr><td>${escapeHtml('Promoción ($250)')}</td><td>${agrupado['Promoción ($250)'].cantidad}</td><td>$${formatNumber(agrupado['Promoción ($250)'].total)}</td></tr>`;
@@ -1015,7 +1148,7 @@
             htmlAgrupado += '</tbody></table>';
             
             container.innerHTML = htmlAgrupado;
-            totalDisplay.textContent = "Total General: $" + formatNumber(totalVentasGeneral);
+            totalDisplay.textContent = "Total General (Registrado): $" + formatNumber(totalVentasGeneral);
             
         } catch (e) {
             container.innerHTML = "<div>Error al cargar las ventas: " + e.message + "</div>";
@@ -1023,13 +1156,16 @@
         }
     }
 
+
     // ============================================================
-    // INVERSION - calcular según registros y mostrar por socio
+    // INVERSION - calcular según registros y mostrar por socio (sin cambios)
     async function renderInversion() {
       const container = document.getElementById("inversionContainer");
       container.innerHTML = "<div>Cargando...</div>";
       try {
-        const snapshot = await db.collection("registros").get();
+        // NOTA: Esta función DEBE ser actualizada si se desea incluir la inversión de los eventos. 
+        // Por ahora, solo incluye la colección 'registros' (Bar Principal).
+        const snapshot = await db.collection("registros").get(); 
         const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 
         // inicializar totales
@@ -1063,9 +1199,8 @@
     }
 
     // ============================================================
-    // UTILIDADES
+    // UTILIDADES (sin cambios)
     function formatNumber(n) {
-      // sin forzar locales para evitar comas raras: dos decimales si necesario, quitar .00 si entero
       const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
       if (Number.isInteger(rounded)) return rounded.toString();
       return rounded.toFixed(2);
