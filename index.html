@@ -10,8 +10,8 @@
     body {
       margin: 0;
       background-color: #000;
-      color: white;
-      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFontSans, sans-serif;
       overflow-x: hidden;
       text-align: center;
     }
@@ -20,7 +20,7 @@
     #intro {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: black;
+      background: #000;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -42,8 +42,10 @@
       margin-top: 15px;
       opacity: 0;
       animation: showText 2s ease forwards 1.4s;
-      color: #f1c40f;
+      color: #fff;
       word-wrap: break-word;
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
 
     @keyframes zoomLogo {
@@ -61,7 +63,7 @@
       to { opacity: 0; visibility: hidden; }
     }
 
-    /* === LOGIN === */
+    /* === LOGIN / REGISTRO === */
     #login {
       display: flex;
       flex-direction: column;
@@ -70,7 +72,7 @@
       height: 100vh;
       background: radial-gradient(circle at center, #111 0%, #000 100%);
       transition: opacity 0.8s;
-      padding: 10px;
+      padding: 20px 10px;
     }
 
     #login img {
@@ -78,39 +80,118 @@
       max-width: 40%;
       margin-bottom: 20px;
       border-radius: 50%;
+      border: 1px solid #444;
     }
 
-    input[type="password"] {
-      padding: 16px;
-      border-radius: 8px;
-      border: none;
-      width: 70%;
-      max-width: 400px;
-      font-size: 20px;
+    .auth-tabs {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #444;
+      overflow: hidden;
       margin-bottom: 20px;
+    }
+
+    .auth-tab-btn {
+      padding: 10px 24px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: none;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .auth-tab-btn.active {
+      background: #fff;
+      color: #000;
+    }
+
+    .auth-form {
+      width: 100%;
+      max-width: 420px;
+      text-align: left;
+    }
+
+    .auth-field {
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .auth-field label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #bbb;
+    }
+
+    .auth-input,
+    .auth-select {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #000;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .auth-input::placeholder {
+      color: #777;
+    }
+
+    .auth-select option {
+      background: #000;
+      color: #fff;
+    }
+
+    .auth-actions {
+      margin-top: 10px;
       text-align: center;
     }
 
     button {
-      background: #e91e63;
-      border: none;
-      color: white;
-      font-weight: bold;
+      background: #fff;
+      border: 1px solid #fff;
+      color: #000;
+      font-weight: 600;
       border-radius: 10px;
-      padding: 16px 32px;
+      padding: 14px 30px;
       cursor: pointer;
-      font-size: 20px;
-      transition: 0.3s;
+      font-size: 16px;
+      transition: 0.25s;
       word-wrap: break-word;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
-    button:hover { background: #ff4081; }
+    button:hover {
+      background: #000;
+      color: #fff;
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #ddd;
+      border-color: #555;
+    }
+
+    .btn-secondary:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
 
     /* === PANEL PRINCIPAL === */
     #panel {
       display: none;
       height: 100vh;
-      background-color: #111;
+      background-color: #050505;
       flex-direction: column;
       overflow-x: hidden;
     }
@@ -122,6 +203,8 @@
       padding: 15px 25px;
       flex-wrap: wrap;
       gap: 10px;
+      border-bottom: 1px solid #222;
+      background: #000;
     }
 
     .header img {
@@ -130,6 +213,7 @@
       height: 100px;
       object-fit: cover;
       border-radius: 50%;
+      border: 1px solid #333;
     }
 
     .content {
@@ -139,92 +223,237 @@
       align-items: center;
       flex-direction: column;
       gap: 20px;
-      padding: 10px;
+      padding: 20px 10px 30px;
     }
 
     .menu-btn {
       width: 80%;
-      max-width: 300px;
-      padding: 20px;
-      font-size: 24px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #e91e63, #f1c40f);
-      color: black;
-      font-weight: bold;
-      transition: 0.3s;
+      max-width: 320px;
+      padding: 18px;
+      font-size: 20px;
+      border-radius: 18px;
+      background: #111;
+      border: 1px solid #444;
+      color: #fff;
+      font-weight: 500;
+      transition: 0.25s;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
-    .menu-btn:hover { transform: scale(1.05); }
+    .menu-btn:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
 
     .small-btn {
-      padding: 8px 12px;
-      font-size: 14px;
-      border-radius: 8px;
-      background: #444;
+      padding: 10px 18px;
+      font-size: 13px;
+      border-radius: 999px;
+      background: transparent;
+      border: 1px solid #555;
+      color: #ddd;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
     }
 
-    /* === PANEL DE VENTAS (EMPLEADO) Y VISUALIZACION DE VENTAS (SOCIO) === */
+    .small-btn:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    /* === PANEL VENTAS & VISUALIZACIÓN === */
     #ventasPanel, #visualizacionVentasPanel {
       display: none;
       padding: 20px;
       text-align: center;
-      max-width: 900px; /* Ancho para la tabla de visualización */
+      max-width: 1200px;
       margin: 0 auto;
     }
-    
-    /* Estilos para la tabla de visualización de ventas de Socios */
-    table.ventasVisualTable {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 12px;
-        color: white;
+
+    .ventas-layout {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 24px;
+      align-items: flex-start;
+      justify-content: center;
+      margin-bottom: 18px;
     }
 
-    table.ventasVisualTable th, table.ventasVisualTable td {
-        border-bottom: 1px solid #333;
-        padding: 10px;
-        text-align: left;
+    .ventas-left {
+      flex: 3;
+      min-width: 400px;
     }
 
-    table.ventasVisualTable th {
-        font-size: 16px;
-        color: #f1c40f;
+    .ventas-right {
+      flex: 1.4;
+      min-width: 260px;
+      max-width: 320px;
+      background: #050505;
+      border-radius: 16px;
+      border: 1px solid #222;
+      padding: 16px 14px;
+      text-align: left;
     }
 
-    /* === PANEL DE VENTAS COMO TABLA (EMPLEADO) === */
-    table.ventasTable {
+    #bebidasVentaContainer {
       width: 100%;
-      max-width: 600px;
+      max-width: 780px;
       margin: 0 auto 20px;
-      border-collapse: separate;
-      border-spacing: 15px 10px;
     }
 
-    table.ventasTable td {
-      vertical-align: middle;
-      font-size: 22px;
+    .bebidas-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 16px;
+    }
+
+    .bebida-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 14px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 120px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .bebida-card:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .bebida-nombre {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
       text-align: center;
     }
 
-    table.ventasTable td button {
-      width: 50px;
-      height: 50px;
-      font-size: 24px;
-      border-radius: 10px;
-      margin: 0 5px;
+    .bebida-precio {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+
+    .bebida-count {
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid #444;
+      background: #000;
+      color: #fff;
+    }
+
+    .ticket-header {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    #ticketContainer {
+      font-size: 14px;
+      max-height: 260px;
+      overflow-y: auto;
+      border-top: 1px solid #222;
+      border-bottom: 1px solid #222;
+      padding: 8px 0;
+      margin-bottom: 8px;
+    }
+
+    .ticket-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .ticket-line-delete {
+      border-radius: 6px;
+      border: 1px dashed #555;
+      padding: 2px 4px;
+      cursor: pointer;
+    }
+
+    .ticket-empty {
+      font-size: 13px;
+      color: #777;
+    }
+
+    .ticket-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .ticket-total-label {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #aaa;
+    }
+
+    .ticket-total-amount {
+      font-size: 22px;
     }
 
     #total {
-      font-size: 28px;
-      margin-bottom: 20px;
+      font-size: 26px;
       word-wrap: break-word;
     }
 
-    #ventasPanel button.volver-btn, #visualizacionVentasPanel button.volver-btn {
+    .ventas-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+      margin-bottom: 0;
+    }
+
+    .ventas-actions button {
+      flex: 1;
+      min-width: 90px;
+    }
+
+    table.ventasVisualTable {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+      color: #fff;
+      background: #050505;
+    }
+
+    table.ventasVisualTable th,
+    table.ventasVisualTable td {
+      border-bottom: 1px solid #222;
+      padding: 10px;
+      text-align: left;
+    }
+
+    table.ventasVisualTable th {
+      font-size: 14px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    #ventasPanel button.volver-btn,
+    #visualizacionVentasPanel button.volver-btn {
       margin-top: 10px;
       padding: 14px 30px;
-      font-size: 20px;
-      border-radius: 12px;
+      font-size: 16px;
+      border-radius: 999px;
     }
 
     /* === LISTA DE INVITADOS === */
@@ -240,33 +469,56 @@
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
-      background: #222;
+      background: #111;
       padding: 15px;
       border-radius: 12px;
       margin: 8px 0;
-      font-size: 20px;
+      font-size: 18px;
       align-items: center;
       gap: 10px;
+      border: 1px solid #222;
     }
 
     .nombre button {
-      background: #27ae60;
-      font-size: 18px;
-      padding: 10px 20px;
-      border-radius: 10px;
-      word-wrap: break-word;
+      background: #fff;
+      font-size: 15px;
+      padding: 8px 18px;
+      border-radius: 999px;
+      color: #000;
+      border: 1px solid #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
-    .nombre button:disabled { background: gray; }
+    .nombre button:hover {
+      background: #000;
+      color: #fff;
+      border-color: #fff;
+    }
+
+    .nombre button:disabled {
+      background: #333;
+      border-color: #333;
+      color: #aaa;
+      cursor: default;
+    }
 
     input#buscar {
-      font-size: 18px;
+      font-size: 16px;
       padding: 10px;
       margin-bottom: 15px;
       border-radius: 8px;
-      border: none;
+      border: 1px solid #444;
       width: 80%;
       max-width: 400px;
+      background: #000;
+      color: #fff;
+      outline: none;
+      text-align: center;
+    }
+
+    input#buscar::placeholder {
+      color: #777;
     }
 
     /* === BARRA DE PROGRESO === */
@@ -287,25 +539,27 @@
       height: 50px;
       object-fit: contain;
       flex-shrink: 0;
+      filter: grayscale(100%);
     }
 
     .progress-bar {
       flex: 1;
-      height: 20px;
-      background: #333;
+      height: 18px;
+      background: #111;
       border-radius: 15px;
       overflow: hidden;
       position: relative;
+      border: 1px solid #333;
     }
 
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #f1c40f, #e91e63);
+      background: #fff;
       transition: width 0.5s ease;
     }
 
-    /* === SOCIOS: MENU Y SUBPANELS === */
+    /* === MENÚ ADMIN / SOCIOS === */
     #menuSocios {
       display: none;
       flex-direction: column;
@@ -315,10 +569,10 @@
     }
 
     .socios-small {
-      width: 160px;
+      width: 180px;
       padding: 12px;
-      font-size: 18px;
-      border-radius: 12px;
+      font-size: 14px;
+      border-radius: 16px;
     }
 
     /* === REGISTRO PRODUCTO === */
@@ -338,36 +592,60 @@
       margin-bottom: 12px;
       align-items: center;
     }
-    
-    /* Estilo para el SELECT del evento */
+
     select#eventoTarget {
-        padding: 12px;
-        font-size: 18px;
-        border-radius: 8px;
-        border: none;
-        width: 80%;
-        max-width: 400px;
-        margin-bottom: 15px;
-        text-align: center;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      width: 80%;
+      max-width: 400px;
+      margin-bottom: 15px;
+      text-align: center;
+      background: #000;
+      color: #fff;
+      outline: none;
+    }
+
+    #nombreNuevoEvento {
+      background: #000;
+      color: #fff;
+      border: 1px solid #444;
+    }
+
+    select#eventoTarget option {
+      background: #000;
+      color: #fff;
     }
 
     input[type="text"].prod-name {
       padding: 12px;
-      font-size: 18px;
+      font-size: 16px;
       border-radius: 8px;
-      border: none;
+      border: 1px solid #444;
       width: 40%;
       min-width: 160px;
+      background: #000;
+      color: #fff;
+      outline: none;
     }
 
     input[type="number"].prod-price {
       padding: 12px;
-      font-size: 18px;
+      font-size: 16px;
       border-radius: 8px;
-      border: none;
+      border: 1px solid #444;
       width: 20%;
       min-width: 120px;
       text-align: center;
+      background: #000;
+      color: #fff;
+      outline: none;
+    }
+
+    input[type="text"].prod-name::placeholder,
+    input[type="number"].prod-price::placeholder {
+      color: #777;
     }
 
     .qty-controls {
@@ -379,8 +657,19 @@
     .qty-controls button {
       width: 44px;
       height: 44px;
-      font-size: 22px;
+      font-size: 20px;
       border-radius: 8px;
+      background: #111;
+      border: 1px solid #555;
+      color: #fff;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    .qty-controls button:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
     }
 
     .checkbox-row {
@@ -389,6 +678,20 @@
       justify-content: center;
       margin-bottom: 12px;
       align-items: center;
+      font-size: 14px;
+    }
+
+    .checkbox-row label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #fff;
     }
 
     /* === LISTA REGISTRO === */
@@ -403,17 +706,21 @@
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 12px;
+      background: #050505;
     }
 
-    table.registrosTable th, table.registrosTable td {
-      border-bottom: 1px solid #333;
+    table.registrosTable th,
+    table.registrosTable td {
+      border-bottom: 1px solid #222;
       padding: 10px;
       text-align: left;
     }
 
     table.registrosTable th {
-      font-size: 16px;
-      color: #f1c40f;
+      font-size: 14px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
     }
 
     .total-row {
@@ -421,31 +728,41 @@
       font-size: 18px;
       margin-top: 10px;
     }
-    
-    /* Estilo para la paginación de tablas */
+
     .pagination-container {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-bottom: 20px;
-        gap: 8px;
-    }
-    .pagination-btn {
-        padding: 10px 15px;
-        font-size: 16px;
-        border-radius: 8px;
-        background: #333;
-        color: white;
-        cursor: pointer;
-        border: 1px solid transparent;
-    }
-    .pagination-btn.active {
-        background: #f1c40f;
-        color: black;
-        font-weight: bold;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      gap: 8px;
     }
 
-    /* === PANEL GANANCIA (NUEVO) === */
+    .pagination-btn {
+      padding: 8px 14px;
+      font-size: 13px;
+      border-radius: 999px;
+      background: #111;
+      color: #ddd;
+      cursor: pointer;
+      border: 1px solid #444;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pagination-btn:hover {
+      background: #fff;
+      color: #000;
+      border-color: #fff;
+    }
+
+    .pagination-btn.active {
+      background: #fff;
+      color: #000;
+      font-weight: 600;
+      border-color: #fff;
+    }
+
+    /* === PANEL GANANCIA === */
     #gananciaPanel {
       display: none;
       padding: 20px;
@@ -453,6 +770,7 @@
       margin: 0 auto;
       text-align: center;
     }
+
     #gananciaPanel .input-row {
       display:flex;
       gap:12px;
@@ -461,30 +779,54 @@
       margin-bottom:12px;
       flex-wrap:wrap;
     }
+
     #gananciaPanel input[type="number"] {
       padding:12px;
-      font-size:18px;
+      font-size:16px;
       border-radius:8px;
-      border:none;
+      border:1px solid #444;
       width: 60%;
       max-width:400px;
       text-align:center;
+      background:#000;
+      color:#fff;
+      outline:none;
     }
-    #gananciaPanel .btn-row { display:flex; gap:12px; justify-content:center; margin-top:12px; flex-wrap:wrap; }
 
-    table.gananciasEventosTable, table.gananciasSociosTable {
+    #gananciaPanel input[type="number"]::placeholder {
+      color:#777;
+    }
+
+    #gananciaPanel .btn-row {
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+
+    table.gananciasEventosTable,
+    table.gananciasSociosTable {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 12px;
-      color: white;
+      color: #fff;
+      background:#050505;
     }
+
     table.gananciasEventosTable th, table.gananciasEventosTable td,
     table.gananciasSociosTable th, table.gananciasSociosTable td {
-      border-bottom:1px solid #333;
+      border-bottom:1px solid #222;
       padding:10px;
       text-align:left;
     }
-    table.gananciasEventosTable th, table.gananciasSociosTable th { color:#f1c40f; font-size:16px; }
+
+    table.gananciasEventosTable th,
+    table.gananciasSociosTable th {
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+    }
 
     /* === INVERSION === */
     #inversionPanel {
@@ -497,137 +839,271 @@
     table.inversionTable {
       width: 100%;
       border-collapse: collapse;
+      background:#050505;
     }
 
     table.inversionTable th, table.inversionTable td {
       padding: 10px;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #222;
       text-align: left;
     }
 
     table.inversionTable th {
-      color: #f1c40f;
+      color: #fff;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
     }
 
-    /* === MEDIA QUERIES PARA RESPONSIVE === */
+    /* === PANEL EXTRAS EVENTO (NUEVO) === */
+    #extrasPanel {
+      display: none;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* === PANEL BEBIDAS (ADMIN) === */
+    #bebidasPanel {
+      display: none;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #bebidasAdminLista {
+      margin-bottom: 18px;
+    }
+
+    table.bebidasTable {
+      width: 100%;
+      border-collapse: collapse;
+      background:#050505;
+    }
+
+    table.bebidasTable th, table.bebidasTable td {
+      padding: 10px;
+      border-bottom: 1px solid #222;
+      text-align: left;
+    }
+
+    table.bebidasTable th {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .bebidas-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .bebidas-form input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #000;
+      color: #fff;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .bebidas-form input::placeholder {
+      color:#777;
+    }
+
+    /* === MEDIA QUERIES === */
+    @media (max-width: 1200px) {
+      .bebidas-grid {
+        grid-template-columns: repeat(4, minmax(120px, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .ventas-layout {
+        flex-direction: column;
+      }
+      .ventas-left {
+        min-width: 100%;
+      }
+      .bebidas-grid {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+    }
+
     @media (max-width: 768px) {
-      .menu-btn { font-size: 20px; padding: 16px; }
-      table.ventasTable td { font-size: 20px; }
-      table.ventasTable td button { width: 45px; height: 45px; font-size: 20px; }
-      #total { font-size: 24px; }
-      .nombre { font-size: 18px; padding: 12px; }
-      .nombre button { font-size: 16px; padding: 8px 16px; }
-      input#buscar { font-size: 16px; }
-      .progress-bar { height: 15px; }
+      .menu-btn { font-size: 18px; padding: 16px; }
+      #total { font-size: 22px; }
+      .nombre { font-size: 16px; padding: 12px; }
+      .nombre button { font-size: 14px; padding: 6px 14px; }
+      input#buscar { font-size: 14px; }
+      .progress-bar { height: 14px; }
       .progress-icon { width: 40px; height: 40px; }
       input[type="text"].prod-name { width: 100%; }
     }
 
     @media (max-width: 480px) {
-      .menu-btn { font-size: 18px; padding: 12px; }
-      table.ventasTable td { font-size: 18px; }
-      table.ventasTable td button { width: 40px; height: 40px; font-size: 18px; }
+      .menu-btn { font-size: 16px; padding: 12px; }
       #total { font-size: 20px; }
-      .nombre { font-size: 16px; padding: 10px; flex-direction: column; gap: 5px; }
-      .nombre button { font-size: 14px; padding: 6px 12px; }
-      input#buscar { font-size: 14px; }
+      .nombre {
+        font-size: 15px;
+        padding: 10px;
+        flex-direction: column;
+        gap: 5px;
+        align-items: flex-start;
+      }
+      .nombre button { font-size: 13px; padding: 6px 12px; align-self:flex-end; }
+      input#buscar { font-size: 13px; }
       .progress-bar { height: 12px; }
       .progress-icon { width: 30px; height: 30px; }
       .registro-row { flex-direction: column; }
       input[type="text"].prod-name { width: 100%; }
-      input[type="number"].prod-price { width: 48%; }
+      input[type="number"].prod-price { width: 60%; }
+      .bebidas-form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .bebidas-form input {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- INTRO -->
   <div id="intro">
     <img src="LOGO.PNG" alt="Logo">
     <h1>Bienvenido</h1>
   </div>
 
+  <!-- LOGIN / REGISTRO -->
   <div id="login">
     <img src="logotipo.png" alt="Logotipo">
-    <input type="password" id="password" placeholder="Contraseña">
-    <button onclick="login()">Ingresar</button>
+
+    <div class="auth-tabs">
+      <button class="auth-tab-btn active" id="tabLogin" onclick="showLoginForm()">Iniciar sesión</button>
+      <button class="auth-tab-btn" id="tabRegister" onclick="showRegisterForm()">Registro</button>
+    </div>
+
+    <!-- FORMULARIO LOGIN -->
+    <div id="loginForm" class="auth-form">
+      <div class="auth-field">
+        <label for="loginUsuario">Usuario</label>
+        <input class="auth-input" type="text" id="loginUsuario" placeholder="Ej: aldo_admin">
+      </div>
+      <div class="auth-field">
+        <label for="loginPassword">Contraseña</label>
+        <input class="auth-input" type="password" id="loginPassword" placeholder="Tu contraseña">
+      </div>
+      <div class="auth-actions">
+        <button onclick="login()">Ingresar</button>
+      </div>
+    </div>
+
+    <!-- FORMULARIO REGISTRO -->
+    <div id="registerForm" class="auth-form" style="display:none;">
+      <div class="auth-field">
+        <label for="regNombre">Nombre</label>
+        <input class="auth-input" type="text" id="regNombre" placeholder="Nombre completo">
+      </div>
+      <div class="auth-field">
+        <label for="regUsuario">Usuario</label>
+        <input class="auth-input" type="text" id="regUsuario" placeholder="Usuario para iniciar sesión">
+      </div>
+      <div class="auth-field">
+        <label for="regPassword">Contraseña</label>
+        <input class="auth-input" type="password" id="regPassword" placeholder="Elige una contraseña">
+      </div>
+      <div class="auth-field">
+        <label for="regArea">Área</label>
+        <select class="auth-select" id="regArea">
+          <option value="">Selecciona un área</option>
+          <option value="administrador">Administrador</option>
+          <option value="barra">Barra</option>
+          <option value="seguridad">Seguridad</option>
+        </select>
+      </div>
+      <div class="auth-actions">
+        <button onclick="registerUser()">Registrar</button>
+      </div>
+    </div>
   </div>
 
+  <!-- PANEL PRINCIPAL -->
   <div id="panel">
     <div class="header">
       <img src="LOGO.PNG" alt="Logo">
       <img src="logotipo.png" alt="Logotipo">
     </div>
 
+    <!-- MENU EMPLEADOS (barra / seguridad) -->
     <div class="content" id="menuPrincipal">
-      <button class="menu-btn" onclick="mostrarVentas()">Barra de Bebidas</button>
-      <button class="menu-btn" onclick="mostrarInvitados()">Lista de Invitados</button>
+      <button class="menu-btn" id="btnBarra" onclick="mostrarVentas()">Barra de Bebidas</button>
+      <button class="menu-btn" id="btnInvitados" onclick="mostrarInvitados()">Lista de Invitados</button>
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
+    <!-- MENU ADMIN / SOCIOS -->
     <div class="content" id="menuSocios">
       <button class="menu-btn" onclick="abrirRegistro()">Registro</button>
+      <button class="menu-btn" onclick="abrirBebidas()">Bebidas</button>
       <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
       <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
       <button class="menu-btn" onclick="abrirVisualizacionVentas()">Ventas</button>
-      <!-- NUEVO BOTON GANANCIA -->
+      <!-- NUEVO BOTÓN: ventas de productos sobrantes por evento -->
+      <button class="menu-btn" onclick="abrirExtras()">Extras evento</button>
       <button class="menu-btn" onclick="abrirGanancia()">Ganancia</button>
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
+    <!-- PANEL VENTAS (BARRA) -->
     <div id="ventasPanel">
-      <h2 style="font-size: 36px;">Registro de Ventas</h2>
-      <table class="ventasTable">
-        <tr>
-          <td>Promoción ($250)</td>
-          <td>
-            <button onclick="modificar('promo', -1)">−</button>
-            <span id="promoCount">0</span>
-            <button onclick="modificar('promo', 1)">+</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Unidad ($150)</td>
-          <td>
-            <button onclick="modificar('unidad', -1)">−</button>
-            <span id="unidadCount">0</span>
-            <button onclick="modificar('unidad', 1)">+</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Promo Cerveza ($80)</td>
-          <td>
-            <button onclick="modificar('cerveza', -1)">−</button>
-            <span id="cervezaCount">0</span>
-            <button onclick="modificar('cerveza', 1)">+</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Cerveza ($45)</td>
-          <td>
-            <button onclick="modificar('ucerveza', -1)">−</button>
-            <span id="ucervezaCount">0</span>
-            <button onclick="modificar('ucerveza', 1)">+</button>
-          </td>
-        </tr>
-        <tr>
-          <td>Total:</td>
-          <td><span id="total">$0</span></td>
-        </tr>
-      </table>
-      <button onclick="pagar()">Pagar</button>
-      <button class="volver-btn" onclick="volverMenu()">Volver</button>
-    </div>
-    
-    <div id="visualizacionVentasPanel">
-        <h2 style="font-size: 32px;">Ventas por Barra de Bebidas</h2>
-        <div id="ventasContainer">
-            </div>
-        <div class="total-row" id="totalVentasGeneral">Total General: $0</div>
-        <div style="margin-top:12px;">
-            <button class="menu-btn socios-small" onclick="cerrarVisualizacionVentas()">Volver</button>
+      <h2 style="font-size: 32px;">Registro de Ventas</h2>
+
+      <div class="ventas-layout">
+        <!-- IZQUIERDA: BOTONES BEBIDAS -->
+        <div class="ventas-left">
+          <div id="bebidasVentaContainer"></div>
         </div>
+
+        <!-- DERECHA: TICKET -->
+        <div class="ventas-right">
+          <div class="ticket-header">Ticket</div>
+          <div id="ticketContainer"></div>
+          <div class="ticket-total">
+            <div class="ticket-total-label">Total</div>
+            <div id="total" class="ticket-total-amount">$0.00</div>
+          </div>
+
+          <div class="ventas-actions">
+            <button onclick="pagar()">Pagar</button>
+            <button class="btn-secondary" id="btnEliminarVenta" onclick="toggleEliminar()">
+              Eliminar producto
+            </button>
+            <button class="volver-btn" onclick="volverMenu()">Volver</button>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- VISUALIZACIÓN VENTAS (ADMIN) -->
+    <div id="visualizacionVentasPanel">
+      <h2 style="font-size: 32px;">Ventas por Barra de Bebidas</h2>
+      <div id="ventasContainer"></div>
+      <div class="total-row" id="totalVentasGeneral">Total General: $0</div>
+      <div style="margin-top:12px;">
+        <button class="menu-btn socios-small volver-btn" onclick="cerrarVisualizacionVentas()">Volver</button>
+      </div>
+    </div>
+
+    <!-- LISTA INVITADOS (SEGURIDAD) -->
     <div id="invitadosPanel">
       <h2 style="font-size: 36px;">Lista de Invitados</h2>
 
@@ -644,14 +1120,20 @@
       <button onclick="volverMenu()">Volver</button>
     </div>
 
+    <!-- REGISTRO PRODUCTO (ADMIN) -->
     <div id="registroPanel">
       <h2 style="font-size: 32px;">Registro de Producto</h2>
       
       <select id="eventoTarget">
-          <option value="registros">Registro Evento</option>
-          <option value="nuevo_evento">➕ Crear Nuevo Evento</option>
+        <option value="registros">Evento 1</option>
+        <option value="nuevo_evento">➕ Crear Nuevo Evento</option>
       </select>
-      <input type="text" id="nombreNuevoEvento" placeholder="Ej: Evento VIP" style="display:none; margin-bottom: 15px; padding: 12px; font-size: 18px; border-radius: 8px; border: none; width: 80%; max-width: 400px; text-align: center;">
+      <input
+        type="text"
+        id="nombreNuevoEvento"
+        placeholder="Ej: Evento VIP"
+        style="display:none; margin-bottom: 15px; padding: 12px; font-size: 18px; border-radius: 8px; border: 1px solid #444; width: 80%; max-width: 400px; text-align: center; background:#000; color:#fff;"
+      >
 
       <div class="registro-row">
         <input type="text" id="prodNombre" class="prod-name" placeholder="Nombre del producto">
@@ -664,7 +1146,7 @@
       </div>
 
       <div class="checkbox-row">
-        <label><input type="checkbox" id="chkIguales"> Partes iguales</label>
+        <label><input type="checkbox" id="chkIguales" checked> Partes iguales</label>
         <label><input type="checkbox" id="chkPorcentaje"> Porcentaje</label>
       </div>
 
@@ -674,30 +1156,65 @@
       </div>
     </div>
 
+    <!-- LISTA REGISTROS (ADMIN) -->
     <div id="listaRegistroPanel">
       <h2 style="font-size: 32px;">Lista de Registros</h2>
-      
-      <div id="paginationContainer" class="pagination-container">
-          </div>
-      
-      <div id="listaRegistrosContainer">
-        </div>
+      <div id="paginationContainer" class="pagination-container"></div>
+      <div id="listaRegistrosContainer"></div>
       <div class="total-row" id="totalRegistros">Total General: $0</div>
       <div style="margin-top:12px;">
         <button class="menu-btn socios-small" onclick="cerrarListaRegistro()">Volver</button>
       </div>
     </div>
 
+    <!-- INVERSION (ADMIN) -->
     <div id="inversionPanel">
       <h2 style="font-size: 32px;">Inversión por Socio</h2>
-      <div id="inversionContainer">
-        </div>
+      <div id="inversionContainer"></div>
       <div style="margin-top:12px;">
         <button class="menu-btn socios-small" onclick="cerrarInversion()">Volver</button>
       </div>
     </div>
 
-    <!-- NUEVO PANEL GANANCIA -->
+    <!-- EXTRAS EVENTO (ADMIN - NUEVO) -->
+    <div id="extrasPanel">
+      <h2 style="font-size: 32px;">Ventas de productos sobrantes</h2>
+      <p style="font-size:14px;color:#ccc;max-width:600px;margin:0 auto 16px;">
+        Registra las ventas de productos que sobraron de un evento. Se sumarán a la ganancia de ese evento
+        y se repartirán 60/20/20 entre Aldo, Ariel y Axel.
+      </p>
+
+      <div style="margin-bottom:12px;">
+        <select id="extraEventoSelect"
+          style="padding:12px;font-size:16px;border-radius:8px;border:1px solid #444;width:80%;max-width:400px;background:#000;color:#fff;outline:none;text-align:center;">
+          <option value="">Cargando eventos...</option>
+        </select>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto 10px;">
+        <input
+          type="text"
+          id="extraDescripcion"
+          placeholder="Descripción del producto / nota (opcional)"
+          style="padding:12px;font-size:15px;border-radius:8px;border:1px solid #444;background:#000;color:#fff;outline:none;">
+        <input
+          type="number"
+          id="extraMonto"
+          placeholder="Monto vendido ($)"
+          min="0"
+          step="0.01"
+          style="padding:12px;font-size:15px;border-radius:8px;border:1px solid #444;background:#000;color:#fff;outline:none;">
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="menu-btn socios-small" onclick="guardarExtraEvento()">Registrar venta</button>
+        <button class="menu-btn socios-small" onclick="cerrarExtras()">Volver</button>
+      </div>
+
+      <div id="extrasInfoLabel" style="margin-top:10px;font-size:13px;color:#aaa;"></div>
+    </div>
+
+    <!-- GANANCIA (ADMIN) -->
     <div id="gananciaPanel">
       <h2 style="font-size:32px;">Ganancias por Evento</h2>
 
@@ -719,11 +1236,28 @@
       <div id="gananciasSociosContainer">Cargando...</div>
     </div>
 
+    <!-- BEBIDAS (ADMIN) -->
+    <div id="bebidasPanel">
+      <h2 style="font-size:32px;">Catálogo de Bebidas</h2>
+      <div id="bebidasAdminLista">Cargando bebidas...</div>
+
+      <h3 style="font-size:18px;margin-top:16px;">Agregar nueva bebida</h3>
+      <div class="bebidas-form">
+        <input type="text" id="bebidaNombre" placeholder="Nombre de la bebida">
+        <input type="number" id="bebidaPrecio" placeholder="Precio" min="0" step="0.01">
+        <button class="menu-btn socios-small" onclick="agregarBebida()">+ Agregar</button>
+      </div>
+
+      <div style="margin-top:16px;">
+        <button class="menu-btn socios-small" onclick="cerrarBebidas()">Volver</button>
+      </div>
+    </div>
+
   </div>
 
+  <!-- FIREBASE -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDLW12w5ZznypXJYMrTNouttdX0vrG6Bzg",
@@ -736,12 +1270,21 @@
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    
-    // Lista global de colecciones de registro
-    let registroCollections = [{ id: 'registros', nombre: 'Evento 1' }];
-    let currentRegistroCollection = 'registros'; // Colección activa por defecto
 
-    // CONTROL DE INTRO (ocultar después)
+    // Usuario actual
+    let currentUser = null;
+
+    // Colecciones de registro (eventos)
+    let registroCollections = [{ id: 'registros', nombre: 'Evento 1' }];
+    let currentRegistroCollection = 'registros';
+    let lastClosedEventNumber = 0; // último evento con ganancia
+
+    // Bebidas (catálogo y carrito)
+    let bebidasCatalogo = [];
+    let carritoBebidas = {};
+    let deleteMode = false; // modo eliminar en ticket
+
+    // INTRO
     window.addEventListener('load', () => {
       setTimeout(() => {
         const intro = document.getElementById('intro');
@@ -749,146 +1292,399 @@
       }, 3200);
     });
 
-    // LOGIN
-    function login() {
-      const pass = document.getElementById("password").value;
-      if (pass === "12345") {
-        // empleado
-        document.getElementById("login").style.display = "none";
-        document.getElementById("panel").style.display = "flex";
-        document.getElementById("menuPrincipal").style.display = "flex";
-        document.getElementById("menuSocios").style.display = "none";
-      } else if (pass === "Aldoariel2") {
-        // SOCIO
-        document.getElementById("login").style.display = "none";
-        document.getElementById("panel").style.display = "flex";
-        document.getElementById("menuPrincipal").style.display = "none";
-        document.getElementById("menuSocios").style.display = "flex";
+    // ========= TABS LOGIN / REGISTRO =========
+    function showLoginForm() {
+      document.getElementById('loginForm').style.display = 'block';
+      document.getElementById('registerForm').style.display = 'none';
+      document.getElementById('tabLogin').classList.add('active');
+      document.getElementById('tabRegister').classList.remove('active');
+    }
+
+    function showRegisterForm() {
+      document.getElementById('loginForm').style.display = 'none';
+      document.getElementById('registerForm').style.display = 'block';
+      document.getElementById('tabLogin').classList.remove('active');
+      document.getElementById('tabRegister').classList.add('active');
+    }
+
+    // ========= REGISTRO DE USUARIO =========
+    async function registerUser() {
+      const nombre = (document.getElementById('regNombre').value || '').trim();
+      const usuario = (document.getElementById('regUsuario').value || '').trim();
+      const password = document.getElementById('regPassword').value;
+      const area = document.getElementById('regArea').value;
+
+      if (!nombre || !usuario || !password || !area) {
+        alert('Completa todos los campos del registro.');
+        return;
+      }
+
+      if (!['administrador', 'barra', 'seguridad'].includes(area)) {
+        alert('Selecciona un área válida.');
+        return;
+      }
+
+      try {
+        const existente = await db.collection('usuarios')
+          .where('usuario', '==', usuario)
+          .limit(1)
+          .get();
+
+        if (!existente.empty) {
+          alert('Ese usuario ya está registrado. Elige otro nombre de usuario.');
+          return;
+        }
+
+        await db.collection('usuarios').add({
+          nombre,
+          usuario,
+          password, // (en producción se encripta)
+          area,
+          creado: new Date()
+        });
+
+        alert('✅ Usuario registrado correctamente. Ahora puedes iniciar sesión.');
+        document.getElementById('regNombre').value = '';
+        document.getElementById('regUsuario').value = '';
+        document.getElementById('regPassword').value = '';
+        document.getElementById('regArea').value = '';
+        showLoginForm();
+      } catch (e) {
+        alert('❌ Error al registrar usuario: ' + e.message);
+      }
+    }
+
+    // ========= LOGIN =========
+    async function login() {
+      const usuario = (document.getElementById('loginUsuario').value || '').trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!usuario || !password) {
+        alert('Ingresa usuario y contraseña.');
+        return;
+      }
+
+      try {
+        const snapshot = await db.collection('usuarios')
+          .where('usuario', '==', usuario)
+          .where('password', '==', password)
+          .limit(1)
+          .get();
+
+        if (snapshot.empty) {
+          alert('❌ Usuario o contraseña incorrectos.');
+          return;
+        }
+
+        const doc = snapshot.docs[0];
+        const data = doc.data();
+        currentUser = {
+          id: doc.id,
+          nombre: data.nombre,
+          usuario: data.usuario,
+          area: data.area
+        };
+
+        configurarMenuPorArea(currentUser.area);
+
+        document.getElementById('login').style.display = 'none';
+        document.getElementById('panel').style.display = 'flex';
+      } catch (e) {
+        alert('❌ Error al iniciar sesión: ' + e.message);
+      }
+    }
+
+    // ========= MENÚ POR ÁREA =========
+    function configurarMenuPorArea(area) {
+      const menuPrincipal = document.getElementById('menuPrincipal');
+      const menuSocios = document.getElementById('menuSocios');
+      const btnBarra = document.getElementById('btnBarra');
+      const btnInvitados = document.getElementById('btnInvitados');
+
+      menuPrincipal.style.display = 'none';
+      menuSocios.style.display = 'none';
+      btnBarra.style.display = 'none';
+      btnInvitados.style.display = 'none';
+
+      if (area === 'administrador') {
+        menuSocios.style.display = 'flex';
+      } else if (area === 'barra') {
+        menuPrincipal.style.display = 'flex';
+        btnBarra.style.display = 'block';
+        btnInvitados.style.display = 'none';
+      } else if (area === 'seguridad') {
+        menuPrincipal.style.display = 'flex';
+        btnBarra.style.display = 'none';
+        btnInvitados.style.display = 'block';
       } else {
-        alert("❌ Contraseña incorrecta");
+        menuPrincipal.style.display = 'flex';
+        btnBarra.style.display = 'none';
+        btnInvitados.style.display = 'none';
       }
     }
 
     function salirAInicio() {
-      // regresa a pantalla de login (empleado exit)
-      document.getElementById("panel").style.display = "none";
-      document.getElementById("login").style.display = "flex";
-      document.getElementById("password").value = "";
-      // ocultar subpanels por si acaso
+      document.getElementById('panel').style.display = 'none';
+      document.getElementById('login').style.display = 'flex';
+      document.getElementById('loginUsuario').value = '';
+      document.getElementById('loginPassword').value = '';
       hideAllPanels();
+      currentUser = null;
+      showLoginForm();
     }
 
     function hideAllPanels() {
-      // ocultar todos los subpanels
-      document.getElementById("ventasPanel").style.display = "none";
-      document.getElementById("invitadosPanel").style.display = "none";
-      document.getElementById("registroPanel").style.display = "none";
-      document.getElementById("listaRegistroPanel").style.display = "none";
-      document.getElementById("inversionPanel").style.display = "none";
-      document.getElementById("visualizacionVentasPanel").style.display = "none";
-      document.getElementById("gananciaPanel").style.display = "none";
-      // mostrar menus por defecto ocultos
-      document.getElementById("menuPrincipal").style.display = "none";
-      document.getElementById("menuSocios").style.display = "none";
-    }
-    
-    // ---------------------------------------------------------------------
-    // MANEJO DE EVENTOS (NUEVO)
-    async function loadEventCollections() {
-        try {
-            // Cargar los eventos registrados en la colección de control 'eventos'
-            const snapshot = await db.collection("eventos").orderBy("fechaCreacion", "asc").get();
-            const eventos = snapshot.docs.map(doc => ({ id: doc.id, nombre: doc.data().nombre || doc.id }));
-            
-            // La colección 'registros' es la base (Bar Principal)
-            registroCollections = [{ id: 'registros', nombre: 'Evento 1' }];
-            
-            // Agregar las colecciones de eventos
-            eventos.forEach((ev) => {
-                registroCollections.push({
-                    id: ev.id, 
-                    nombre: ev.nombre 
-                });
-            });
-            // Si la colección actual no existe (ej. fue borrada), volvemos a la principal
-            if (!registroCollections.find(c => c.id === currentRegistroCollection)) {
-                currentRegistroCollection = 'registros';
-            }
-        } catch (e) {
-            console.error("Error al cargar colecciones de eventos:", e);
-        }
-    }
-    
-    function renderPagination() {
-        const container = document.getElementById("paginationContainer");
-        container.innerHTML = "";
-        
-        registroCollections.forEach(col => {
-            const button = document.createElement("button");
-            button.className = `pagination-btn ${col.id === currentRegistroCollection ? 'active' : ''}`;
-            button.textContent = col.nombre;
-            button.onclick = () => {
-                currentRegistroCollection = col.id;
-                // Vuelve a renderizar la lista con la colección seleccionada
-                renderListaRegistro(currentRegistroCollection); 
-                renderPagination(); // Actualiza el estado 'active' del botón
-            };
-            container.appendChild(button);
-        });
+      document.getElementById('ventasPanel').style.display = 'none';
+      document.getElementById('invitadosPanel').style.display = 'none';
+      document.getElementById('registroPanel').style.display = 'none';
+      document.getElementById('listaRegistroPanel').style.display = 'none';
+      document.getElementById('inversionPanel').style.display = 'none';
+      document.getElementById('visualizacionVentasPanel').style.display = 'none';
+      document.getElementById('gananciaPanel').style.display = 'none';
+      document.getElementById('bebidasPanel').style.display = 'none';
+      document.getElementById('extrasPanel').style.display = 'none'; // NUEVO
+      document.getElementById('menuPrincipal').style.display = 'none';
+      document.getElementById('menuSocios').style.display = 'none';
     }
 
-    // ---------------------------------------------------------------------
-    // PANEL DE VENTAS (empleado) - sin cambios lógicos
-    let promo = 0, unidad = 0, cerveza = 0, ucerveza = 0;
+    // ========= EVENTOS (COLECCIONES REGISTRO) =========
+    async function loadEventCollections() {
+      try {
+        const snapshot = await db.collection("eventos").orderBy("fechaCreacion", "asc").get();
+        const eventos = snapshot.docs.map(doc => ({ id: doc.id, nombre: doc.data().nombre || doc.id }));
+        registroCollections = [{ id: 'registros', nombre: 'Evento 1' }];
+        eventos.forEach(ev => registroCollections.push({ id: ev.id, nombre: ev.nombre }));
+        if (!registroCollections.find(c => c.id === currentRegistroCollection)) {
+          currentRegistroCollection = 'registros';
+        }
+      } catch (e) {
+        console.error("Error al cargar colecciones de eventos:", e);
+      }
+    }
+
+    async function getLastClosedEventNumber() {
+      try {
+        const snap = await db.collection("ganancias_eventos")
+          .orderBy("eventoNumber", "desc")
+          .limit(1)
+          .get();
+        if (snap.empty) return 0;
+        const data = snap.docs[0].data();
+        const n = parseInt(data.eventoNumber);
+        return isNaN(n) ? 0 : n;
+      } catch (e) {
+        console.error("Error al obtener último evento cerrado:", e);
+        return 0;
+      }
+    }
+
+    function getEventNumberForCollectionId(id) {
+      const idx = registroCollections.findIndex(c => c.id === id);
+      if (idx === -1) return null;
+      return idx + 1; // idx 0 => Evento 1 (registros)
+    }
+
+    function renderPagination() {
+      const container = document.getElementById("paginationContainer");
+      container.innerHTML = "";
+      registroCollections.forEach(col => {
+        const button = document.createElement("button");
+        button.className = `pagination-btn ${col.id === currentRegistroCollection ? 'active' : ''}`;
+        button.textContent = col.nombre;
+        button.onclick = () => {
+          currentRegistroCollection = col.id;
+          renderListaRegistro(currentRegistroCollection);
+          renderPagination();
+        };
+        container.appendChild(button);
+      });
+    }
+
+    // ========= VENTAS (BARRA) =========
     function mostrarVentas() {
       document.getElementById("menuPrincipal").style.display = "none";
       document.getElementById("ventasPanel").style.display = "block";
+
+      carritoBebidas = {};
+      bebidasCatalogo = [];
+      deleteMode = false;
+
+      const btnEliminar = document.getElementById("btnEliminarVenta");
+      if (btnEliminar) btnEliminar.textContent = "Eliminar producto";
+
+      cargarBebidasParaVenta();
     }
-    function modificar(tipo, valor) {
-      if (tipo === "promo") promo = Math.max(0, promo + valor);
-      if (tipo === "unidad") unidad = Math.max(0, unidad + valor);
-      if (tipo === "cerveza") cerveza = Math.max(0, cerveza + valor);
-      if (tipo === "ucerveza") ucerveza = Math.max(0, ucerveza + valor);
-      actualizarTotal();
+
+    async function cargarBebidasParaVenta() {
+      const container = document.getElementById("bebidasVentaContainer");
+      container.innerHTML = "Cargando bebidas...";
+      try {
+        const snapshot = await db.collection("bebidas").orderBy("nombre").get();
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        bebidasCatalogo = docs;
+        carritoBebidas = {};
+        if (docs.length === 0) {
+          container.innerHTML = "<div>No hay bebidas registradas. Pídele al administrador que agregue bebidas en el menú Bebidas.</div>";
+          actualizarResumenVenta();
+          return;
+        }
+        let html = '<div class="bebidas-grid">';
+        docs.forEach(b => {
+          const precioNum = parseFloat(b.precio) || 0;
+          html += `
+            <button class="bebida-card" onclick="agregarBebidaVenta('${b.id}')">
+              <div class="bebida-nombre">${escapeHtml(b.nombre)}</div>
+              <div class="bebida-precio">$${formatNumber(precioNum)}</div>
+              <div class="bebida-count" id="count_${b.id}">0</div>
+            </button>
+          `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+        actualizarResumenVenta();
+      } catch (e) {
+        container.innerHTML = "❌ Error al cargar bebidas: " + e.message;
+        actualizarResumenVenta();
+      }
     }
-    function actualizarTotal() {
-      const total = promo * 250 + unidad * 150 + cerveza * 80 + ucerveza * 45;
-      document.getElementById("promoCount").textContent = promo;
-      document.getElementById("unidadCount").textContent = unidad;
-      document.getElementById("cervezaCount").textContent = cerveza;
-      document.getElementById("ucervezaCount").textContent = ucerveza;
-      document.getElementById("total").textContent = "$" + total;
+
+    function agregarBebidaVenta(id) {
+      const actual = carritoBebidas[id] || 0;
+      carritoBebidas[id] = actual + 1;
+
+      const span = document.getElementById("count_" + id);
+      if (span) span.textContent = carritoBebidas[id];
+
+      actualizarResumenVenta();
     }
-    async function pagar() {
-      const total = promo * 250 + unidad * 150 + cerveza * 80 + ucerveza * 45;
-      if (total === 0) {
-        alert("⚠️ No hay productos en la venta");
+
+    function actualizarResumenVenta() {
+      let total = 0;
+      const ticket = document.getElementById("ticketContainer");
+      if (!ticket) return;
+
+      ticket.innerHTML = "";
+      let hay = false;
+
+      bebidasCatalogo.forEach(b => {
+        const cant = carritoBebidas[b.id] || 0;
+        if (cant > 0) {
+          hay = true;
+          const precio = parseFloat(b.precio) || 0;
+          const sub = cant * precio;
+          total += sub;
+
+          const div = document.createElement("div");
+          div.className = "ticket-line";
+          if (deleteMode) div.classList.add("ticket-line-delete");
+          div.dataset.bebidaId = b.id;
+          div.innerHTML = `<span>${escapeHtml(b.nombre)} x${cant}</span><span>$${formatNumber(sub)}</span>`;
+          ticket.appendChild(div);
+        }
+      });
+
+      if (!hay) {
+        ticket.innerHTML = "<div class='ticket-empty'>No hay productos en el ticket.</div>";
+      }
+
+      const totalNode = document.getElementById("total");
+      if (totalNode) totalNode.textContent = "$" + formatNumber(total);
+    }
+
+    function toggleEliminar() {
+      const hayItems = Object.values(carritoBebidas).some(v => v > 0);
+      if (!hayItems) {
+        alert("No hay productos agregados todavía.");
         return;
       }
+
+      deleteMode = !deleteMode;
+      const btn = document.getElementById("btnEliminarVenta");
+      if (btn) {
+        btn.textContent = deleteMode ? "Cancelar eliminar" : "Eliminar producto";
+      }
+      actualizarResumenVenta();
+    }
+
+    function eliminarUnaUnidad(id) {
+      const actual = carritoBebidas[id] || 0;
+      if (actual <= 0) return;
+
+      carritoBebidas[id] = actual - 1;
+      const span = document.getElementById("count_" + id);
+      if (span) span.textContent = carritoBebidas[id];
+
+      actualizarResumenVenta();
+    }
+
+    // Click en el ticket para eliminar en modo eliminar
+    document.addEventListener("DOMContentLoaded", () => {
+      const ticketDiv = document.getElementById("ticketContainer");
+      if (ticketDiv) {
+        ticketDiv.addEventListener("click", function (e) {
+          if (!deleteMode) return;
+          const line = e.target.closest(".ticket-line");
+          if (!line) return;
+          const id = line.dataset.bebidaId;
+          if (!id) return;
+          eliminarUnaUnidad(id);
+        });
+      }
+    });
+
+    async function pagar() {
+      let items = [];
+      let total = 0;
+      bebidasCatalogo.forEach(b => {
+        const cantidad = carritoBebidas[b.id] || 0;
+        if (cantidad > 0) {
+          const precio = parseFloat(b.precio) || 0;
+          const subtotal = cantidad * precio;
+          total += subtotal;
+          items.push({
+            bebidaId: b.id,
+            nombre: b.nombre,
+            precio: precio,
+            cantidad: cantidad,
+            subtotal: subtotal
+          });
+        }
+      });
+
+      if (items.length === 0) {
+        alert("⚠️ No hay bebidas en la venta");
+        return;
+      }
+
       try {
         await db.collection("ventas").add({
           fecha: new Date(),
-          promociones: promo,
-          unidades: unidad,
-          cervezas: cerveza,
-          ucervezas: ucerveza, 
+          items: items,
           total: total
         });
         alert("✅ Venta registrada correctamente.");
-        promo = 0; unidad = 0; cerveza = 0; ucerveza = 0;
-        actualizarTotal();
+        carritoBebidas = {};
+        bebidasCatalogo.forEach(b => {
+          const span = document.getElementById("count_" + b.id);
+          if (span) span.textContent = "0";
+        });
+        deleteMode = false;
+        const btnEliminar = document.getElementById("btnEliminarVenta");
+        if (btnEliminar) btnEliminar.textContent = "Eliminar producto";
+        actualizarResumenVenta();
       } catch (e) {
         alert("❌ Error al registrar venta: " + e.message);
       }
     }
+
     function volverMenu() {
-      // Usado para volver de 'Barra de Bebidas' o 'Lista de Invitados' (Empleado)
       document.getElementById("ventasPanel").style.display = "none";
       document.getElementById("invitadosPanel").style.display = "none";
-      document.getElementById("menuPrincipal").style.display = "flex";
+      if (!currentUser) return;
+      configurarMenuPorArea(currentUser.area);
     }
 
-    // LISTA DE INVITADOS (empleado) - sin cambios lógicos
+    // ========= LISTA DE INVITADOS =========
     async function mostrarInvitados() {
       document.getElementById("menuPrincipal").style.display = "none";
       document.getElementById("invitadosPanel").style.display = "block";
@@ -938,16 +1734,15 @@
       buscar.addEventListener("input", e => render(e.target.value));
     }
 
-    // ---------------------------------------------------------------------
-    // SOCIOS - navegación
+    // ========= ADMIN / NAV =========
     async function abrirRegistro() {
       document.getElementById("menuSocios").style.display = "none";
       document.getElementById("registroPanel").style.display = "block";
       
-      await loadEventCollections(); // Carga las colecciones de eventos existentes
-      renderEventSelector(); // Renderiza el selector de eventos
+      lastClosedEventNumber = await getLastClosedEventNumber();
+      await loadEventCollections();
+      renderEventSelector(lastClosedEventNumber);
 
-      // inicializar campos
       document.getElementById("prodNombre").value = "";
       document.getElementById("prodPrecio").value = "";
       unidades = 1;
@@ -955,40 +1750,44 @@
       document.getElementById("chkIguales").checked = true;
       document.getElementById("chkPorcentaje").checked = false;
     }
-    
-    // NUEVA FUNCIÓN para renderizar el selector de eventos
-    function renderEventSelector() {
-        const selector = document.getElementById("eventoTarget");
-        const inputNuevoEvento = document.getElementById("nombreNuevoEvento");
-        
-        // Limpiar opciones existentes
-        selector.innerHTML = "";
-        
-        // Agregar la opción principal
-        selector.innerHTML += `<option value="registros">Evento 1</option>`;
 
-        // Agregar los eventos cargados
-        registroCollections.filter(c => c.id !== 'registros').forEach(col => {
-            selector.innerHTML += `<option value="${col.id}">${col.nombre}</option>`;
-        });
+    function renderEventSelector(closedLimit = 0) {
+      const selector = document.getElementById("eventoTarget");
+      const inputNuevoEvento = document.getElementById("nombreNuevoEvento");
+      selector.innerHTML = "";
+      let anyOpen = false;
 
-        // Agregar la opción de crear nuevo
-        selector.innerHTML += `<option value="nuevo_evento">➕ Crear Nuevo Evento</option>`;
+      registroCollections.forEach((col, index) => {
+        const eventNumber = index + 1;
+        if (eventNumber <= closedLimit) return; // evento cerrado
+        const opt = document.createElement("option");
+        opt.value = col.id;
+        opt.textContent = col.nombre;
+        selector.appendChild(opt);
+        if (!anyOpen) anyOpen = true;
+      });
 
-        // Manejar visibilidad del input de nuevo evento
-        selector.onchange = () => {
-            if (selector.value === "nuevo_evento") {
-                inputNuevoEvento.style.display = "block";
-            } else {
-                inputNuevoEvento.style.display = "none";
-            }
-        };
-        
-        // Inicializar el estado de la lista
+      const optNew = document.createElement("option");
+      optNew.value = "nuevo_evento";
+      optNew.textContent = "➕ Crear Nuevo Evento";
+      selector.appendChild(optNew);
+
+      selector.onchange = () => {
+        if (selector.value === "nuevo_evento") {
+          inputNuevoEvento.style.display = "block";
+        } else {
+          inputNuevoEvento.style.display = "none";
+        }
+      };
+
+      if (anyOpen) {
+        selector.value = selector.options[0].value;
         inputNuevoEvento.style.display = "none";
-        selector.value = "registros";
+      } else {
+        selector.value = "nuevo_evento";
+        inputNuevoEvento.style.display = "block";
+      }
     }
-
 
     function cerrarRegistro() {
       document.getElementById("registroPanel").style.display = "none";
@@ -998,10 +1797,10 @@
     async function abrirListaRegistro() {
       document.getElementById("menuSocios").style.display = "none";
       document.getElementById("listaRegistroPanel").style.display = "block";
-      await loadEventCollections(); // Carga la lista de colecciones disponibles
-      renderPagination(); // Renderiza los botones de navegación
-      // Renderiza la lista con la colección activa por defecto (Bar Principal)
-      renderListaRegistro(currentRegistroCollection); 
+      lastClosedEventNumber = await getLastClosedEventNumber();
+      await loadEventCollections();
+      renderPagination();
+      renderListaRegistro(currentRegistroCollection);
     }
 
     function cerrarListaRegistro() {
@@ -1012,8 +1811,8 @@
     async function abrirInversion() {
       document.getElementById("menuSocios").style.display = "none";
       document.getElementById("inversionPanel").style.display = "block";
-      await loadEventCollections(); // Asegurar que tenemos la lista de colecciones
-      renderInversion(); // Renderizar la inversión
+      await loadEventCollections();
+      renderInversion();
     }
 
     function cerrarInversion() {
@@ -1022,26 +1821,20 @@
     }
     
     function abrirVisualizacionVentas() {
-        document.getElementById("menuSocios").style.display = "none";
-        document.getElementById("visualizacionVentasPanel").style.display = "block";
-        renderVisualizacionVentas();
+      document.getElementById("menuSocios").style.display = "none";
+      document.getElementById("visualizacionVentasPanel").style.display = "block";
+      renderVisualizacionVentas();
     }
 
     function cerrarVisualizacionVentas() {
-        document.getElementById("visualizacionVentasPanel").style.display = "none";
-        document.getElementById("menuSocios").style.display = "flex";
+      document.getElementById("visualizacionVentasPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
     }
 
-    // ============================================================
-    // NUEVO: GANANCIA - abrir/cerrar / renderizado / guardar
     async function abrirGanancia() {
       document.getElementById("menuSocios").style.display = "none";
       document.getElementById("gananciaPanel").style.display = "block";
-
-      // asegurarse de tener las colecciones de registros (registros + eventos)
       await loadEventCollections();
-
-      // cargar y renderizar tablas de ganancias
       await renderGananciasEventos();
       await renderGananciasSocios();
     }
@@ -1049,13 +1842,235 @@
     function cerrarGanancia() {
       document.getElementById("gananciaPanel").style.display = "none";
       document.getElementById("menuSocios").style.display = "flex";
-      // limpiar input
       document.getElementById("cantidadObtenida").value = "";
     }
 
-    // Render tabla de eventos (colección: ganancias_eventos)
+    // ========= PANEL EXTRAS EVENTO (NUEVO) =========
+    async function abrirExtras() {
+      document.getElementById("menuSocios").style.display = "none";
+      document.getElementById("extrasPanel").style.display = "block";
+      const descInput = document.getElementById("extraDescripcion");
+      const montoInput = document.getElementById("extraMonto");
+      if (descInput) descInput.value = "";
+      if (montoInput) montoInput.value = "";
+      await loadEventosGananciaParaExtras();
+    }
+
+    function cerrarExtras() {
+      document.getElementById("extrasPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
+    }
+
+    async function loadEventosGananciaParaExtras() {
+      const select = document.getElementById("extraEventoSelect");
+      const label = document.getElementById("extrasInfoLabel");
+      if (!select) return;
+
+      select.innerHTML = "<option value=''>Cargando eventos...</option>";
+      if (label) label.textContent = "";
+
+      try {
+        const snapshot = await db.collection("ganancias_eventos").orderBy("eventoNumber", "asc").get();
+        if (snapshot.empty) {
+          select.innerHTML = "<option value='' disabled>No hay eventos con ganancia registrada</option>";
+          if (label) {
+            label.textContent = "Primero registra la ganancia de al menos un evento en el panel Ganancia.";
+          }
+          return;
+        }
+
+        select.innerHTML = "";
+        snapshot.docs.forEach(doc => {
+          const data = doc.data();
+          const opt = document.createElement("option");
+          opt.value = doc.id;
+          opt.textContent = data.eventoLabel || ("Evento " + data.eventoNumber);
+          select.appendChild(opt);
+        });
+
+        if (label) {
+          label.textContent = "Selecciona el evento al que pertenece esta venta extra.";
+        }
+      } catch (e) {
+        select.innerHTML = "<option value='' disabled>Error al cargar eventos</option>";
+        if (label) {
+          label.textContent = "Error al cargar eventos: " + e.message;
+        }
+      }
+    }
+
+    async function guardarExtraEvento() {
+      const select = document.getElementById("extraEventoSelect");
+      const descInput = document.getElementById("extraDescripcion");
+      const montoInput = document.getElementById("extraMonto");
+
+      const eventoDocId = select ? select.value : "";
+      const descripcion = (descInput?.value || "").trim();
+      const montoStr = montoInput ? montoInput.value : "";
+      const monto = parseFloat(montoStr);
+
+      if (!eventoDocId) {
+        alert("Selecciona un evento.");
+        return;
+      }
+      if (isNaN(monto) || monto <= 0) {
+        alert("Ingresa un monto válido mayor a 0.");
+        return;
+      }
+
+      try {
+        const evRef = db.collection("ganancias_eventos").doc(eventoDocId);
+        const evDoc = await evRef.get();
+        if (!evDoc.exists) {
+          alert("El evento seleccionado ya no existe.");
+          return;
+        }
+
+        const evData = evDoc.data();
+        const gananciaActual = parseFloat(evData.ganancia || 0);
+        const cantidadObtenidaActual = parseFloat(evData.cantidadObtenida || 0);
+
+        const nuevaGanancia = gananciaActual + monto;
+        const nuevaCantidadObtenida = cantidadObtenidaActual + monto;
+
+        const confirmMsg =
+          `Vas a sumar esta venta extra al:\n` +
+          `${evData.eventoLabel || ("Evento " + evData.eventoNumber)}\n\n` +
+          `Monto extra: $${formatNumber(monto)}\n` +
+          `Ganancia previa: $${formatNumber(gananciaActual)}\n` +
+          `Ganancia nueva: $${formatNumber(nuevaGanancia)}\n\n` +
+          `¿Confirmar?`;
+
+        if (!confirm(confirmMsg)) return;
+
+        // 1) Actualizar doc de ganancias_eventos
+        await evRef.update({
+          ganancia: nuevaGanancia,
+          cantidadObtenida: nuevaCantidadObtenida,
+          ultimaActualizacion: new Date()
+        });
+
+        // 2) Registrar detalle en colección de extras (histórico)
+        await db.collection("extras_eventos").add({
+          eventoId: eventoDocId,
+          eventoNumber: evData.eventoNumber,
+          eventoLabel: evData.eventoLabel,
+          monto: monto,
+          descripcion: descripcion,
+          fecha: new Date()
+        });
+
+        // 3) Actualizar ganancias de socios (60/20/20)
+        const sociosRef = db.collection("ganancias_socios");
+        const aldoShare = monto * 0.6;
+        const arielShare = monto * 0.2;
+        const axelShare = monto * 0.2;
+
+        const aldoDoc = await sociosRef.doc("Aldo").get();
+        const aldoPrev = aldoDoc.exists ? parseFloat(aldoDoc.data().acumulado || 0) : 0;
+        if (aldoDoc.exists) {
+          await sociosRef.doc("Aldo").update({ acumulado: aldoPrev + aldoShare });
+        } else {
+          await sociosRef.doc("Aldo").set({ nombre: "Aldo", acumulado: aldoShare });
+        }
+
+        const arielDoc = await sociosRef.doc("Ariel").get();
+        const arielPrev = arielDoc.exists ? parseFloat(arielDoc.data().acumulado || 0) : 0;
+        if (arielDoc.exists) {
+          await sociosRef.doc("Ariel").update({ acumulado: arielPrev + arielShare });
+        } else {
+          await sociosRef.doc("Ariel").set({ nombre: "Ariel", acumulado: arielShare });
+        }
+
+        const axelDoc = await sociosRef.doc("Axel").get();
+        const axelPrev = axelDoc.exists ? parseFloat(axelDoc.data().acumulado || 0) : 0;
+        if (axelDoc.exists) {
+          await sociosRef.doc("Axel").update({ acumulado: axelPrev + axelShare });
+        } else {
+          await sociosRef.doc("Axel").set({ nombre: "Axel", acumulado: axelShare });
+        }
+
+        // 4) Refrescar tablas de ganancias (por si el panel de Ganancia está abierto)
+        await renderGananciasEventos();
+        await renderGananciasSocios();
+
+        // Limpiar campos
+        if (montoInput) montoInput.value = "";
+        if (descInput) descInput.value = "";
+
+        alert("✅ Venta extra registrada y sumada a la ganancia del evento.");
+      } catch (e) {
+        alert("❌ Error al registrar venta extra: " + e.message);
+      }
+    }
+
+    // ========= PANEL BEBIDAS (ADMIN) =========
+    async function abrirBebidas() {
+      document.getElementById("menuSocios").style.display = "none";
+      document.getElementById("bebidasPanel").style.display = "block";
+      await renderBebidasAdmin();
+    }
+
+    function cerrarBebidas() {
+      document.getElementById("bebidasPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
+    }
+
+    async function renderBebidasAdmin() {
+      const container = document.getElementById("bebidasAdminLista");
+      container.innerHTML = "Cargando bebidas...";
+      try {
+        const snapshot = await db.collection("bebidas").orderBy("nombre").get();
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        if (docs.length === 0) {
+          container.innerHTML = "<div>Todavía no hay bebidas registradas.</div>";
+          return;
+        }
+        let html = '<table class="bebidasTable"><thead><tr><th>Bebida</th><th>Precio</th></tr></thead><tbody>';
+        docs.forEach(b => {
+          const precioNum = parseFloat(b.precio) || 0;
+          html += `<tr><td>${escapeHtml(b.nombre)}</td><td>$${formatNumber(precioNum)}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = "❌ Error al cargar bebidas: " + e.message;
+      }
+    }
+
+    async function agregarBebida() {
+      const nombre = (document.getElementById("bebidaNombre").value || "").trim();
+      const precioStr = document.getElementById("bebidaPrecio").value;
+      const precio = parseFloat(precioStr);
+
+      if (!nombre) {
+        alert("Ingresa el nombre de la bebida.");
+        return;
+      }
+      if (isNaN(precio) || precio < 0) {
+        alert("Ingresa un precio válido para la bebida.");
+        return;
+      }
+
+      try {
+        await db.collection("bebidas").add({
+          nombre: nombre,
+          precio: precio,
+          creado: new Date()
+        });
+        alert("✅ Bebida agregada correctamente.");
+        document.getElementById("bebidaNombre").value = "";
+        document.getElementById("bebidaPrecio").value = "";
+        await renderBebidasAdmin();
+      } catch (e) {
+        alert("❌ Error al agregar bebida: " + e.message);
+      }
+    }
+
+    // ========= GANANCIAS =========
     async function renderGananciasEventos() {
       const container = document.getElementById("gananciasEventosContainer");
+      if (!container) return;
       container.innerHTML = "Cargando eventos...";
       try {
         const snapshot = await db.collection("ganancias_eventos").orderBy("eventoNumber", "asc").get();
@@ -1076,16 +2091,14 @@
       }
     }
 
-    // Render tabla de socios (colección: ganancias_socios)
     async function renderGananciasSocios() {
       const container = document.getElementById("gananciasSociosContainer");
+      if (!container) return;
       container.innerHTML = "Cargando socios...";
       try {
         const snapshot = await db.collection("ganancias_socios").get();
         const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        // si no existen, crear los tres socios con 0 (solo la primera vez)
         if (docs.length === 0) {
-          // crear documentos Aldo, Ariel, Axel
           const batch = db.batch();
           const aldoRef = db.collection("ganancias_socios").doc("Aldo");
           const arielRef = db.collection("ganancias_socios").doc("Ariel");
@@ -1094,10 +2107,8 @@
           batch.set(arielRef, { nombre: "Ariel", acumulado: 0 });
           batch.set(axelRef, { nombre: "Axel", acumulado: 0 });
           await batch.commit();
-          // volver a llamar para renderizar
           return renderGananciasSocios();
         }
-        // armar tabla
         let html = '<table class="gananciasSociosTable"><thead><tr><th>Nombre del socio</th><th>Ganancia acumulada</th></tr></thead><tbody>';
         docs.forEach(d => {
           html += `<tr><td>${escapeHtml(d.nombre || d.id)}</td><td>$${formatNumber(parseFloat(d.acumulado || 0))}</td></tr>`;
@@ -1109,7 +2120,6 @@
       }
     }
 
-    // Guardar nueva ganancia: calcula ganancia del evento y reparte entre socios
     async function guardarGanancia() {
       const input = document.getElementById("cantidadObtenida");
       const cantidadStr = input.value;
@@ -1119,28 +2129,20 @@
         return;
       }
 
-      // Determinar número de evento (siguiente consecutivo)
-      // Usamos el número de documentos en ganancias_eventos + 1
       try {
         const snapshotEventos = await db.collection("ganancias_eventos").get();
-        const nextEventoNumber = snapshotEventos.size + 1; // evento 1, 2, 3...
+        const nextEventoNumber = snapshotEventos.size + 1;
 
-        // Determinar la colección de registros correspondiente al evento:
-        // Por convención: evento 1 -> registroCollections[0] ('registros' => Bar Principal)
-        // evento N -> registroCollections[N-1] si existe, sino 'registros'
         let collectionForEventId = 'registros';
         let collectionForEventLabel = 'Evento 1';
         if (registroCollections.length >= nextEventoNumber) {
           collectionForEventId = registroCollections[nextEventoNumber - 1].id;
           collectionForEventLabel = registroCollections[nextEventoNumber - 1].nombre;
         } else {
-          // Si no existe un registro creado para ese número, usar 'registros' como fallback
           collectionForEventId = 'registros';
           collectionForEventLabel = registroCollections[0]?.nombre || 'Evento 1';
         }
 
-        // Obtener total general del evento (colección: collectionForEventId)
-        // Se calcula como suma de unidadPrecio * unidades (mismo cálculo que en renderListaRegistro)
         let totalInvertido = 0;
         try {
           const snapshotReg = await db.collection(collectionForEventId).get();
@@ -1155,17 +2157,15 @@
           totalInvertido = 0;
         }
 
-        // calcular ganancia del evento según tu fórmula
         const gananciaEvento = cantidad - totalInvertido;
 
-        // confirmación al usuario
-        const confirmMsg = `Vas a registrar la ganancia del Evento ${nextEventoNumber} (${collectionForEventLabel}).\n\n` +
-                           `Cantidad obtenida: $${formatNumber(cantidad)}\n` +
-                           `Total invertido en el evento: $${formatNumber(totalInvertido)}\n` +
-                           `Ganancia resultante: $${formatNumber(gananciaEvento)}\n\n¿Confirmar?`;
+        const confirmMsg =
+          `Vas a registrar la ganancia del Evento ${nextEventoNumber} (${collectionForEventLabel}).\n\n` +
+          `Cantidad obtenida: $${formatNumber(cantidad)}\n` +
+          `Total invertido en el evento: $${formatNumber(totalInvertido)}\n` +
+          `Ganancia resultante: $${formatNumber(gananciaEvento)}\n\n¿Confirmar?`;
         if (!confirm(confirmMsg)) return;
 
-        // 1) Guardar documento en ganancias_eventos
         await db.collection("ganancias_eventos").add({
           eventoNumber: nextEventoNumber,
           eventoLabel: `Evento ${nextEventoNumber} - ${collectionForEventLabel}`,
@@ -1175,15 +2175,11 @@
           fecha: new Date()
         });
 
-        // 2) Repartir entre socios y actualizar ganancias_socios acumuladas
-        // Aldo 60%, Ariel 20%, Axel 20%
         const aldoShare = gananciaEvento * 0.6;
         const arielShare = gananciaEvento * 0.2;
         const axelShare = gananciaEvento * 0.2;
 
-        // Update each socio doc (create if not exists)
         const sociosRef = db.collection("ganancias_socios");
-        // Aldo
         const aldoDoc = await sociosRef.doc("Aldo").get();
         if (aldoDoc.exists) {
           const prev = parseFloat(aldoDoc.data().acumulado || 0);
@@ -1191,7 +2187,6 @@
         } else {
           await sociosRef.doc("Aldo").set({ nombre: "Aldo", acumulado: aldoShare });
         }
-        // Ariel
         const arielDoc = await sociosRef.doc("Ariel").get();
         if (arielDoc.exists) {
           const prev = parseFloat(arielDoc.data().acumulado || 0);
@@ -1199,7 +2194,6 @@
         } else {
           await sociosRef.doc("Ariel").set({ nombre: "Ariel", acumulado: arielShare });
         }
-        // Axel
         const axelDoc = await sociosRef.doc("Axel").get();
         if (axelDoc.exists) {
           const prev = parseFloat(axelDoc.data().acumulado || 0);
@@ -1208,12 +2202,12 @@
           await sociosRef.doc("Axel").set({ nombre: "Axel", acumulado: axelShare });
         }
 
-        // 3) Actualizar en pantalla ambas tablas sin recargar
         await renderGananciasEventos();
         await renderGananciasSocios();
 
+        lastClosedEventNumber = nextEventoNumber;
+
         alert("✅ Ganancia registrada correctamente.");
-        // limpiar input
         input.value = "";
 
       } catch (e) {
@@ -1221,15 +2215,14 @@
       }
     }
 
-    // ============================================================
-    // REGISTRO - lógica (MODIFICADO para soportar Eventos)
+    // ========= REGISTRO PRODUCTO (EVENTOS) =========
     let unidades = 1;
+
     function cambiarUnidades(delta) {
       unidades = Math.max(1, unidades + delta);
       document.getElementById("unidadesDisplay").textContent = unidades;
     }
 
-    // hacer los checkboxes mutualmente excluyentes
     document.addEventListener('change', (e) => {
       if (e.target && e.target.id === 'chkIguales' && e.target.checked) {
         document.getElementById('chkPorcentaje').checked = false;
@@ -1240,99 +2233,97 @@
     });
 
     async function registrarProducto() {
-        const selector = document.getElementById("eventoTarget");
-        let collectionName = selector.value;
-        const nombreNuevoEventoInput = document.getElementById("nombreNuevoEvento");
-        const nombreEventoUsuario = nombreNuevoEventoInput.value.trim();
+      const selector = document.getElementById("eventoTarget");
+      let collectionName = selector.value;
+      const nombreNuevoEventoInput = document.getElementById("nombreNuevoEvento");
+      const nombreEventoUsuario = nombreNuevoEventoInput.value.trim();
 
-        if (collectionName === "nuevo_evento") {
-            if (!nombreEventoUsuario) {
-                alert("Por favor, ingresa el nombre del nuevo evento.");
-                return;
-            }
-            
-            // Lógica para crear un nuevo evento/colección
-            
-            // 1. Obtener el número consecutivo (Ej. Evento 1, Evento 2)
-            const eventosSnapshot = await db.collection("eventos").get();
-            const nextEventNumber = eventosSnapshot.size + 1;
-            
-            // 2. Crear el nombre de la colección real y el nombre a mostrar
-            const newCollectionId = `evento_${nextEventNumber}`; // ID único en Firebase (nombre de la colección)
-            const newEventName = `Evento ${nextEventNumber} (${nombreEventoUsuario})`; // Nombre de despliegue
-            
-            // 3. Registrar el evento en la colección de control 'eventos'
-            try {
-                await db.collection("eventos").doc(newCollectionId).set({
-                    nombre: newEventName,
-                    fechaCreacion: new Date()
-                });
-                collectionName = newCollectionId; // La colección de destino es la nueva
-                alert(`✅ Nuevo evento "${newEventName}" creado.`);
-            } catch (e) {
-                alert("❌ Error al crear nuevo evento: " + e.message);
-                return;
-            }
+      if (collectionName === "nuevo_evento") {
+        if (!nombreEventoUsuario) {
+          alert("Por favor, ingresa el nombre del nuevo evento.");
+          return;
         }
-
-        const nombre = (document.getElementById("prodNombre").value || "").trim();
-        const precioStr = document.getElementById("prodPrecio").value;
-        const precio = parseFloat(precioStr);
-        const chkIguales = document.getElementById("chkIguales").checked;
-        const chkPorcentaje = document.getElementById("chkPorcentaje").checked;
-
-        if (!nombre) {
-            alert("Ingresa el nombre del producto.");
-            return;
-        }
-        if (isNaN(precio) || precio < 0) {
-            alert("Ingresa un precio válido.");
-            return;
-        }
-        if (!chkIguales && !chkPorcentaje) {
-            alert("Selecciona un método de reparto: Partes iguales o Porcentaje.");
-            return;
-        }
-
-        const targetName = registroCollections.find(c => c.id === collectionName)?.nombre || collectionName;
-        // confirmación
-        const confirmMsg = `Vas a registrar en la tabla: ${targetName}\n\n${nombre}\nCantidad: ${unidades}\nPrecio por unidad: $${precio.toFixed(2)}\nTotal: $${(precio * unidades).toFixed(2)}\n\nReparto: ${chkIguales ? 'Partes Iguales (1/3)' : 'Porcentaje (60/20/20)'}\n\n¿Confirmar?`;
-        if (!confirm(confirmMsg)) return;
-
-        // guardar en Firestore colección dinámica
+        const eventosSnapshot = await db.collection("eventos").get();
+        const nextEventNumber = eventosSnapshot.size + 1;
+        const newCollectionId = `evento_${nextEventNumber}`;
+        const newEventName = `Evento ${nextEventNumber} (${nombreEventoUsuario})`;
         try {
-            await db.collection(collectionName).add({
-                nombre: nombre,
-                unidadPrecio: precio,
-                unidades: unidades,
-                splitType: chkIguales ? "igual" : "porcentaje",
-                fecha: new Date()
-            });
-            alert("✅ Registro exitoso en " + targetName);
-            
-            // Si creamos un nuevo evento, volvemos a cargar el selector para que aparezca la opción
-            if (selector.value === "nuevo_evento") {
-                await loadEventCollections();
-                renderEventSelector();
-            }
-
-            // reset form
-            document.getElementById("prodNombre").value = "";
-            document.getElementById("prodPrecio").value = "";
-            nombreNuevoEventoInput.value = "";
-            unidades = 1;
-            document.getElementById("unidadesDisplay").textContent = unidades;
-            document.getElementById("chkIguales").checked = true;
-            document.getElementById("chkPorcentaje").checked = false;
-            selector.value = "registros";
-            nombreNuevoEventoInput.style.display = "none";
+          await db.collection("eventos").doc(newCollectionId).set({
+            nombre: newEventName,
+            fechaCreacion: new Date()
+          });
+          collectionName = newCollectionId;
+          alert(`✅ Nuevo evento "${newEventName}" creado.`);
         } catch (e) {
-            alert("❌ Error al guardar registro: " + e.message);
+          alert("❌ Error al crear nuevo evento: " + e.message);
+          return;
         }
+      }
+
+      lastClosedEventNumber = await getLastClosedEventNumber();
+      await loadEventCollections();
+      const eventNumber = getEventNumberForCollectionId(collectionName);
+      if (eventNumber !== null && eventNumber <= lastClosedEventNumber) {
+        alert("Este evento ya está cerrado. No es posible agregar más productos.");
+        return;
+      }
+
+      const nombre = (document.getElementById("prodNombre").value || "").trim();
+      const precioStr = document.getElementById("prodPrecio").value;
+      const precio = parseFloat(precioStr);
+      const chkIguales = document.getElementById("chkIguales").checked;
+      const chkPorcentaje = document.getElementById("chkPorcentaje").checked;
+
+      if (!nombre) {
+        alert("Ingresa el nombre del producto.");
+        return;
+      }
+      if (isNaN(precio) || precio < 0) {
+        alert("Ingresa un precio válido.");
+        return;
+      }
+      if (!chkIguales && !chkPorcentaje) {
+        alert("Selecciona un método de reparto: Partes iguales o Porcentaje.");
+        return;
+      }
+
+      const targetName = registroCollections.find(c => c.id === collectionName)?.nombre || collectionName;
+      const confirmMsg =
+        `Vas a registrar en la tabla: ${targetName}\n\n` +
+        `${nombre}\nCantidad: ${unidades}\nPrecio por unidad: $${precio.toFixed(2)}\nTotal: $${(precio * unidades).toFixed(2)}\n\n` +
+        `Reparto: ${chkIguales ? 'Partes Iguales (1/3)' : 'Porcentaje (60/20/20)'}\n\n¿Confirmar?`;
+      if (!confirm(confirmMsg)) return;
+
+      try {
+        await db.collection(collectionName).add({
+          nombre: nombre,
+          unidadPrecio: precio,
+          unidades: unidades,
+          splitType: chkIguales ? "igual" : "porcentaje",
+          fecha: new Date()
+        });
+        alert("✅ Registro exitoso en " + targetName);
+
+        const limitAgain = await getLastClosedEventNumber();
+        lastClosedEventNumber = limitAgain;
+        await loadEventCollections();
+        renderEventSelector(limitAgain);
+
+        document.getElementById("prodNombre").value = "";
+        document.getElementById("prodPrecio").value = "";
+        nombreNuevoEventoInput.value = "";
+        unidades = 1;
+        document.getElementById("unidadesDisplay").textContent = unidades;
+        document.getElementById("chkIguales").checked = true;
+        document.getElementById("chkPorcentaje").checked = false;
+        selector.value = "registros";
+        nombreNuevoEventoInput.style.display = "none";
+      } catch (e) {
+        alert("❌ Error al guardar registro: " + e.message);
+      }
     }
 
-    // ============================================================
-    // LISTA REGISTRO - renderiza tabla agrupada por nombre (MODIFICADO para colección dinámica)
+    // ========= LISTA REGISTRO =========
     async function renderListaRegistro(collectionId) {
       const container = document.getElementById("listaRegistrosContainer");
       const collectionName = registroCollections.find(c => c.id === collectionId)?.nombre || collectionId;
@@ -1341,30 +2332,50 @@
       try {
         const snapshot = await db.collection(collectionId).orderBy("nombre").get();
         const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        // agrupar por nombre
-        const mapa = {};
-        docs.forEach(r => {
-          const key = r.nombre.trim();
-          const total = (parseFloat(r.unidadPrecio) || 0) * (parseFloat(r.unidades) || 0);
-          if (!mapa[key]) mapa[key] = { nombre: key, unidades: 0, total: 0 };
-          mapa[key].unidades += (parseInt(r.unidades) || 0);
-          mapa[key].total += total;
-        });
 
-        const items = Object.values(mapa);
-        // armar tabla HTML
-        if (items.length === 0) {
+        const eventNumber = getEventNumberForCollectionId(collectionId);
+        const editable = !eventNumber || eventNumber > lastClosedEventNumber;
+
+        if (docs.length === 0) {
           container.innerHTML = `<div>No hay registros en ${collectionName} aún.</div>`;
           document.getElementById("totalRegistros").textContent = "Total General: $0";
           return;
         }
 
-        let html = '<table class="registrosTable"><thead><tr><th>Producto</th><th>Unidades</th><th>Precio (Total)</th></tr></thead><tbody>';
+        let html = '<table class="registrosTable"><thead><tr><th>Producto</th><th>Unidades</th><th>Precio unidad</th><th>Total</th><th>Acciones</th></tr></thead><tbody>';
         let totalGeneral = 0;
-        items.forEach(it => {
-          html += `<tr><td>${escapeHtml(it.nombre)}</td><td>${it.unidades}</td><td>$${formatNumber(it.total)}</td></tr>`;
-          totalGeneral += it.total;
+
+        docs.forEach(r => {
+          const unidadesR = parseFloat(r.unidades) || 0;
+          const precioUnidad = parseFloat(r.unidadPrecio) || 0;
+          const total = unidadesR * precioUnidad;
+          totalGeneral += total;
+
+          if (editable) {
+            html += `<tr>
+              <td>${escapeHtml(r.nombre)}</td>
+              <td>
+                <input type="number" min="1" value="${unidadesR}"
+                  style="width:70px;background:#000;color:#fff;border:1px solid #444;border-radius:6px;padding:4px 6px;"
+                  onchange="cambiarUnidadesRegistro('${collectionId}','${r.id}',this.value)">
+              </td>
+              <td>$${formatNumber(precioUnidad)}</td>
+              <td>$${formatNumber(total)}</td>
+              <td>
+                <button class="small-btn" onclick="eliminarRegistro('${collectionId}','${r.id}')">Eliminar</button>
+              </td>
+            </tr>`;
+          } else {
+            html += `<tr>
+              <td>${escapeHtml(r.nombre)}</td>
+              <td>${unidadesR}</td>
+              <td>$${formatNumber(precioUnidad)}</td>
+              <td>$${formatNumber(total)}</td>
+              <td><span style="font-size:12px;color:#777;">Bloqueado</span></td>
+            </tr>`;
+          }
         });
+
         html += '</tbody></table>';
         container.innerHTML = html;
         document.getElementById("totalRegistros").textContent = "Total General: $" + formatNumber(totalGeneral);
@@ -1373,151 +2384,131 @@
       }
     }
 
-    // ============================================================
-    // VISUALIZACIÓN DE VENTAS (SOCIOS) - Muestra tabla de la colección 'ventas' (sin cambios)
-    async function renderVisualizacionVentas() {
-        const container = document.getElementById("ventasContainer");
-        const totalDisplay = document.getElementById("totalVentasGeneral");
-        container.innerHTML = "<div>Cargando ventas...</div>";
-        totalDisplay.textContent = "Total General: $0";
-
-        try {
-            const snapshot = await db.collection("ventas").orderBy("fecha", "desc").get();
-            const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-
-            if (docs.length === 0) {
-                container.innerHTML = "<div>No hay ventas registradas aún.</div>";
-                return;
-            }
-
-            const agrupado = {
-                'Promoción ($250)': { cantidad: 0, total: 0, precioUnidad: 250 },
-                'Unidad ($150)': { cantidad: 0, total: 0, precioUnidad: 150 },
-                'Cerveza ($80)': { cantidad: 0, total: 0, precioUnidad: 80 },
-                'UCerveza ($45)': { cantidad: 0, total: 0, precioUnidad: 45 },
-            };
-
-            let totalVentasGeneral = 0;
-
-            docs.forEach(v => {
-                const promociones = parseInt(v.promociones) || 0;
-                const unidades = parseInt(v.unidades) || 0;
-                const cervezas = parseInt(v.cervezas) || 0;
-                const ucervezas = parseInt(v.ucervezas) || 0;
-                const totalVenta = parseFloat(v.total) || 0;
-                
-                agrupado['Promoción ($250)'].cantidad += promociones;
-                agrupado['Promoción ($250)'].total += (promociones * agrupado['Promoción ($250)'].precioUnidad);
-                
-                agrupado['Unidad ($150)'].cantidad += unidades;
-                agrupado['Unidad ($150)'].total += (unidades * agrupado['Unidad ($150)'].precioUnidad);
-
-                agrupado['Cerveza ($80)'].cantidad += cervezas;
-                agrupado['Cerveza ($80)'].total += (cervezas * agrupado['Cerveza ($80)'].precioUnidad);
-                
-                agrupado['UCerveza ($45)'].cantidad += ucervezas;
-                agrupado['UCerveza ($45)'].total += (ucervezas * agrupado['UCerveza ($45)'].precioUnidad);
-                
-                totalVentasGeneral += totalVenta;
-            });
-            
-            let htmlAgrupado = '<table class="ventasVisualTable"><thead><tr><th>Promoción, Unidad , Cerveza, UCerveza</th><th>Cantidad Total</th><th>Total Compra Estimado</th></tr></thead><tbody>';
-
-            if (agrupado['Promoción ($250)'].cantidad > 0) {
-                htmlAgrupado += `<tr><td>${escapeHtml('Promoción ($250)')}</td><td>${agrupado['Promoción ($250)'].cantidad}</td><td>$${formatNumber(agrupado['Promoción ($250)'].total)}</td></tr>`;
-            }
-            if (agrupado['Unidad ($150)'].cantidad > 0) {
-                 htmlAgrupado += `<tr><td>${escapeHtml('Unidad ($150)')}</td><td>${agrupado['Unidad ($150)'].cantidad}</td><td>$${formatNumber(agrupado['Unidad ($150)'].total)}</td></tr>`;
-            }
-             if (agrupado['Cerveza ($80)'].cantidad > 0) {
-                 htmlAgrupado += `<tr><td>${escapeHtml('Cerveza ($80)')}</td><td>${agrupado['Cerveza ($80)'].cantidad}</td><td>$${formatNumber(agrupado['Cerveza ($80)'].total)}</td></tr>`;
-            }
-            if (agrupado['UCerveza ($45)'].cantidad > 0) {
-                 htmlAgrupado += `<tr><td>${escapeHtml('UCerveza ($45)')}</td><td>${agrupado['UCerveza ($45)'].cantidad}</td><td>$${formatNumber(agrupado['UCerveza ($45)'].total)}</td></tr>`;
-            }
-            htmlAgrupado += '</tbody></table>';
-            
-            container.innerHTML = htmlAgrupado;
-            totalDisplay.textContent = "Total General (Registrado): $" + formatNumber(totalVentasGeneral);
-            
-        } catch (e) {
-            container.innerHTML = "<div>Error al cargar las ventas: " + e.message + "</div>";
-            totalDisplay.textContent = "Total General: $0";
-        }
-    }
-
-
-    // ============================================================
-    // INVERSION - (ACTUALIZADO para incluir todos los eventos)
-    async function renderInversion() {
-      const container = document.getElementById("inversionContainer");
-      container.innerHTML = "<div>Cargando inversión total de todos los registros (Bar y Eventos)...</div>";
-      
+    async function cambiarUnidadesRegistro(collectionId, docId, nuevaCantidad) {
+      let n = parseInt(nuevaCantidad, 10);
+      if (isNaN(n) || n < 1) {
+        alert("Cantidad inválida. Debe ser un número mayor o igual a 1.");
+        renderListaRegistro(collectionId);
+        return;
+      }
       try {
-        // 1. Asegurarse de tener la lista completa de colecciones de registro
-        await loadEventCollections(); 
-
-        // 2. Inicializar totales por socio
-        let aldo = 0, ariel = 0, axel = 0;
-
-        // 3. Iterar sobre CADA colección de registro (Bar Principal + Eventos)
-        for (const collection of registroCollections) {
-            const collectionId = collection.id;
-            
-            // Obtener todos los documentos de esa colección
-            const snapshot = await db.collection(collectionId).get(); 
-            const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-
-            // 4. Calcular la inversión por documento y sumarla
-            docs.forEach(r => {
-                const unidadesR = parseFloat(r.unidades) || 0;
-                const precioUnidad = parseFloat(r.unidadPrecio) || 0;
-                const total = unidadesR * precioUnidad;
-                const split = (r.splitType || 'igual').toString();
-
-                if (split === 'igual') {
-                    // Partes iguales (1/3)
-                    const part = total / 3;
-                    aldo += part; 
-                    ariel += part; 
-                    axel += part;
-                } else {
-                    // Porcentaje: 60% Aldo, 20% Ariel, 20% Axel
-                    aldo += total * 0.6;
-                    ariel += total * 0.2;
-                    axel += total * 0.2;
-                }
-            });
-        }
-
-
-        // 5. armar tabla HTML
-        let html = '<table class="inversionTable"><thead><tr><th>Nombre Socio</th><th>Inversión Acumulada</th></tr></thead><tbody>';
-        html += `<tr><td>Aldo</td><td>$${formatNumber(aldo)}</td></tr>`;
-        html += `<tr><td>Ariel</td><td>$${formatNumber(ariel)}</td></tr>`;
-        html += `<tr><td>Axel</td><td>$${formatNumber(axel)}</td></tr>`;
-        html += '</tbody></table>';
-        container.innerHTML = html;
+        await db.collection(collectionId).doc(docId).update({ unidades: n });
+        renderListaRegistro(collectionId);
       } catch (e) {
-        container.innerHTML = "<div>❌ Error al calcular inversiones de todos los eventos: " + e.message + "</div>";
+        alert("❌ Error al actualizar unidades: " + e.message);
       }
     }
 
-    // ============================================================
-    // UTILIDADES (sin cambios)
-    function formatNumber(n) {
-      const rounded = Math.round((n + Number.EPSILON) * 100) / 100;
-      if (Number.isInteger(rounded)) return rounded.toString();
-      return rounded.toFixed(2);
+    async function eliminarRegistro(collectionId, docId) {
+      if (!confirm("¿Seguro que deseas eliminar este registro?")) return;
+      try {
+        await db.collection(collectionId).doc(docId).delete();
+        alert("Registro eliminado.");
+        renderListaRegistro(collectionId);
+      } catch (e) {
+        alert("❌ Error al eliminar registro: " + e.message);
+      }
     }
 
+    // ========= VISUALIZACIÓN VENTAS =========
+    async function renderVisualizacionVentas() {
+      const container = document.getElementById("ventasContainer");
+      container.innerHTML = "Cargando ventas...";
+      try {
+        const snapshot = await db.collection("ventas").orderBy("fecha", "desc").get();
+        const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        if (docs.length === 0) {
+          container.innerHTML = "<div>No hay ventas registradas aún.</div>";
+          document.getElementById("totalVentasGeneral").textContent = "Total General: $0";
+          return;
+        }
+
+        let totalGeneral = 0;
+        let html = '<table class="ventasVisualTable"><thead><tr><th>Fecha</th><th>Detalle</th><th>Total</th></tr></thead><tbody>';
+
+        docs.forEach(v => {
+          const fecha = v.fecha?.toDate ? v.fecha.toDate() : new Date(v.fecha);
+          const fechaStr = fecha.toLocaleString();
+          totalGeneral += parseFloat(v.total || 0);
+
+          let detalle = "";
+          (v.items || []).forEach(item => {
+            detalle += `${item.nombre} x${item.cantidad} ($${formatNumber(item.subtotal)})<br>`;
+          });
+
+          html += `<tr>
+            <td>${escapeHtml(fechaStr)}</td>
+            <td>${detalle}</td>
+            <td>$${formatNumber(parseFloat(v.total || 0))}</td>
+          </tr>`;
+        });
+
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        document.getElementById("totalVentasGeneral").textContent =
+          "Total General: $" + formatNumber(totalGeneral);
+      } catch (e) {
+        container.innerHTML = "<div>Error al cargar ventas: " + e.message + "</div>";
+      }
+    }
+
+    // ========= INVERSION =========
+    async function renderInversion() {
+      const container = document.getElementById("inversionContainer");
+      container.innerHTML = "Calculando inversión...";
+      try {
+        const socios = ["Aldo", "Ariel", "Axel"];
+        const acumulado = { Aldo: 0, Ariel: 0, Axel: 0 };
+
+        for (let i = 0; i < registroCollections.length; i++) {
+          const col = registroCollections[i];
+          const snap = await db.collection(col.id).get();
+          snap.docs.forEach(doc => {
+            const r = doc.data();
+            const unidadesR = parseFloat(r.unidades) || 0;
+            const precio = parseFloat(r.unidadPrecio) || 0;
+            const total = unidadesR * precio;
+            if (total <= 0) return;
+            if (r.splitType === "igual") {
+              const parte = total / 3;
+              acumulado.Aldo += parte;
+              acumulado.Ariel += parte;
+              acumulado.Axel += parte;
+            } else {
+              acumulado.Aldo += total * 0.6;
+              acumulado.Ariel += total * 0.2;
+              acumulado.Axel += total * 0.2;
+            }
+          });
+        }
+
+        let html = '<table class="inversionTable"><thead><tr><th>Socio</th><th>Inversión acumulada</th></tr></thead><tbody>';
+        socios.forEach(s => {
+          html += `<tr><td>${s}</td><td>$${formatNumber(acumulado[s])}</td></tr>`;
+        });
+        html += '</tbody></table>';
+
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = "<div>Error al calcular inversión: " + e.message + "</div>";
+      }
+    }
+
+    // ========= HELPERS =========
     function escapeHtml(text) {
-      if (!text) return "";
-      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-               .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+      if (text === undefined || text === null) return "";
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     }
 
-    // fin script
+    function formatNumber(num) {
+      const n = parseFloat(num) || 0;
+      return n.toFixed(2);
+    }
   </script>
 </body>
 </html>
