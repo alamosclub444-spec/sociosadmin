@@ -977,13 +977,11 @@
 </head>
 <body>
 
-  <!-- INTRO -->
   <div id="intro">
     <img src="LOGO.PNG" alt="Logo">
     <h1>Bienvenido</h1>
   </div>
 
-  <!-- LOGIN / REGISTRO -->
   <div id="login">
     <img src="logotipo.png" alt="Logotipo">
 
@@ -992,11 +990,10 @@
       <button class="auth-tab-btn" id="tabRegister" onclick="showRegisterForm()">Registro</button>
     </div>
 
-    <!-- FORMULARIO LOGIN -->
     <div id="loginForm" class="auth-form">
       <div class="auth-field">
         <label for="loginUsuario">Usuario</label>
-        <input class="auth-input" type="text" id="loginUsuario" placeholder="Usuario">
+        <input class="auth-input" type="text" id="loginUsuario" placeholder="Ej: aldo_admin">
       </div>
       <div class="auth-field">
         <label for="loginPassword">Contraseña</label>
@@ -1007,7 +1004,6 @@
       </div>
     </div>
 
-    <!-- FORMULARIO REGISTRO -->
     <div id="registerForm" class="auth-form" style="display:none;">
       <div class="auth-field">
         <label for="regNombre">Nombre</label>
@@ -1036,44 +1032,37 @@
     </div>
   </div>
 
-  <!-- PANEL PRINCIPAL -->
   <div id="panel">
     <div class="header">
       <img src="LOGO.PNG" alt="Logo">
       <img src="logotipo.png" alt="Logotipo">
     </div>
 
-    <!-- MENU EMPLEADOS (barra / seguridad) -->
     <div class="content" id="menuPrincipal">
       <button class="menu-btn" id="btnBarra" onclick="mostrarVentas()">Barra de Bebidas</button>
       <button class="menu-btn" id="btnInvitados" onclick="mostrarInvitados()">Lista de Invitados</button>
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
-    <!-- MENU ADMIN / SOCIOS -->
     <div class="content" id="menuSocios">
       <button class="menu-btn" onclick="abrirRegistro()">Registro</button>
       <button class="menu-btn" onclick="abrirBebidas()">Bebidas</button>
       <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
       <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
       <button class="menu-btn" onclick="abrirVisualizacionVentas()">Ventas</button>
-      <!-- NUEVO BOTÓN: ventas de productos sobrantes por evento -->
       <button class="menu-btn" onclick="abrirExtras()">Extras evento</button>
       <button class="menu-btn" onclick="abrirGanancia()">Ganancia</button>
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
 
-    <!-- PANEL VENTAS (BARRA) -->
     <div id="ventasPanel">
       <h2 style="font-size: 32px;">Registro de Ventas</h2>
 
       <div class="ventas-layout">
-        <!-- IZQUIERDA: BOTONES BEBIDAS -->
         <div class="ventas-left">
           <div id="bebidasVentaContainer"></div>
         </div>
 
-        <!-- DERECHA: TICKET -->
         <div class="ventas-right">
           <div class="ticket-header">Ticket</div>
           <div id="ticketContainer"></div>
@@ -1093,7 +1082,6 @@
       </div>
     </div>
 
-    <!-- VISUALIZACIÓN VENTAS (ADMIN) -->
     <div id="visualizacionVentasPanel">
       <h2 style="font-size: 32px;">Ventas por Barra de Bebidas</h2>
       <div id="ventasContainer"></div>
@@ -1103,7 +1091,6 @@
       </div>
     </div>
 
-    <!-- LISTA INVITADOS (SEGURIDAD) -->
     <div id="invitadosPanel">
       <h2 style="font-size: 36px;">Lista de Invitados</h2>
 
@@ -1120,7 +1107,6 @@
       <button onclick="volverMenu()">Volver</button>
     </div>
 
-    <!-- REGISTRO PRODUCTO (ADMIN) -->
     <div id="registroPanel">
       <h2 style="font-size: 32px;">Registro de Producto</h2>
       
@@ -1156,7 +1142,6 @@
       </div>
     </div>
 
-    <!-- LISTA REGISTROS (ADMIN) -->
     <div id="listaRegistroPanel">
       <h2 style="font-size: 32px;">Lista de Registros</h2>
       <div id="paginationContainer" class="pagination-container"></div>
@@ -1167,7 +1152,6 @@
       </div>
     </div>
 
-    <!-- INVERSION (ADMIN) -->
     <div id="inversionPanel">
       <h2 style="font-size: 32px;">Inversión por Socio</h2>
       <div id="inversionContainer"></div>
@@ -1176,7 +1160,6 @@
       </div>
     </div>
 
-    <!-- EXTRAS EVENTO (ADMIN - NUEVO) -->
     <div id="extrasPanel">
       <h2 style="font-size: 32px;">Ventas de productos sobrantes</h2>
       <p style="font-size:14px;color:#ccc;max-width:600px;margin:0 auto 16px;">
@@ -1214,7 +1197,6 @@
       <div id="extrasInfoLabel" style="margin-top:10px;font-size:13px;color:#aaa;"></div>
     </div>
 
-    <!-- GANANCIA (ADMIN) -->
     <div id="gananciaPanel">
       <h2 style="font-size:32px;">Ganancias por Evento</h2>
 
@@ -1236,7 +1218,6 @@
       <div id="gananciasSociosContainer">Cargando...</div>
     </div>
 
-    <!-- BEBIDAS (ADMIN) -->
     <div id="bebidasPanel">
       <h2 style="font-size:32px;">Catálogo de Bebidas</h2>
       <div id="bebidasAdminLista">Cargando bebidas...</div>
@@ -1255,7 +1236,33 @@
 
   </div>
 
-  <!-- FIREBASE -->
+  <div id="pagoModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#050505; padding:25px; border-radius:16px; border:1px solid #333; width:90%; max-width:400px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+      <h3 style="margin-top:0; font-size:22px; text-transform:uppercase; letter-spacing:0.08em;">Método de Pago</h3>
+      <h2 id="pagoTotalText" style="color:#fff; font-size:36px; margin: 15px 0; word-wrap:break-word;">$0.00</h2>
+
+      <div id="pagoOpciones">
+        <button class="menu-btn" style="width:100%; margin-bottom:12px; padding: 14px;" onclick="seleccionarPago('Efectivo')">💵 Efectivo</button>
+        <button class="menu-btn" style="width:100%; margin-bottom:12px; padding: 14px;" onclick="seleccionarPago('Tarjeta')">💳 Tarjeta</button>
+        <button class="small-btn" style="margin-top:10px;" onclick="cerrarModalPago()">Cancelar</button>
+      </div>
+
+      <div id="pagoEfectivoDiv" style="display:none; margin-top:15px;">
+        <label style="font-size:14px; color:#aaa; display:block; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.06em;">¿Cuánto recibe?</label>
+        <input type="number" id="pagoRecibido" placeholder="Ej: 500" style="padding:15px; font-size:20px; border-radius:12px; border:1px solid #444; background:#000; color:#fff; width:100%; margin-bottom:15px; text-align:center; outline:none;" oninput="calcularCambio()">
+        <h3 id="pagoCambioText" style="color:#aaa; font-size:24px; margin: 15px 0;">Cambio: $0.00</h3>
+        <button class="menu-btn" style="width:100%; background:#fff; color:#000; margin-bottom:12px; padding: 14px;" onclick="confirmarPagoFinal('Efectivo')">Confirmar Pago</button>
+        <button class="small-btn" onclick="reiniciarModalPago()">Volver</button>
+      </div>
+
+      <div id="pagoTarjetaDiv" style="display:none; margin-top:15px;">
+        <p style="color:#aaa; font-size:16px; margin-bottom:20px;">Cobra el total en la terminal.</p>
+        <button class="menu-btn" style="width:100%; background:#fff; color:#000; margin-bottom:12px; padding: 14px;" onclick="confirmarPagoFinal('Tarjeta')">Confirmar Pago</button>
+        <button class="small-btn" onclick="reiniciarModalPago()">Volver</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <script>
@@ -1283,6 +1290,10 @@
     let bebidasCatalogo = [];
     let carritoBebidas = {};
     let deleteMode = false; // modo eliminar en ticket
+
+    // Variables globales para el proceso de pago (NUEVO)
+    let ventaActualItems = [];
+    let ventaActualTotal = 0;
 
     // INTRO
     window.addEventListener('load', () => {
@@ -1632,16 +1643,18 @@
       }
     });
 
+    // ========= PROCESO DE PAGO (MODIFICADO Y NUEVAS FUNCIONES) =========
     async function pagar() {
-      let items = [];
-      let total = 0;
+      ventaActualItems = [];
+      ventaActualTotal = 0;
+
       bebidasCatalogo.forEach(b => {
         const cantidad = carritoBebidas[b.id] || 0;
         if (cantidad > 0) {
           const precio = parseFloat(b.precio) || 0;
           const subtotal = cantidad * precio;
-          total += subtotal;
-          items.push({
+          ventaActualTotal += subtotal;
+          ventaActualItems.push({
             bebidaId: b.id,
             nombre: b.nombre,
             precio: precio,
@@ -1651,18 +1664,81 @@
         }
       });
 
-      if (items.length === 0) {
+      if (ventaActualItems.length === 0) {
         alert("⚠️ No hay bebidas en la venta");
         return;
+      }
+
+      // Mostrar modal de pago
+      document.getElementById("pagoTotalText").textContent = "$" + formatNumber(ventaActualTotal);
+      document.getElementById("pagoModal").style.display = "flex";
+      reiniciarModalPago();
+    }
+
+    function seleccionarPago(metodo) {
+      document.getElementById("pagoOpciones").style.display = "none";
+      if (metodo === 'Efectivo') {
+        document.getElementById("pagoEfectivoDiv").style.display = "block";
+        document.getElementById("pagoRecibido").value = "";
+        document.getElementById("pagoCambioText").textContent = "Cambio: $0.00";
+        document.getElementById("pagoCambioText").style.color = "#aaa";
+        setTimeout(() => document.getElementById("pagoRecibido").focus(), 100);
+      } else {
+        document.getElementById("pagoTarjetaDiv").style.display = "block";
+      }
+    }
+
+    function calcularCambio() {
+      const recibido = parseFloat(document.getElementById("pagoRecibido").value) || 0;
+      const cambio = recibido - ventaActualTotal;
+      if (recibido === 0 || document.getElementById("pagoRecibido").value === "") {
+         document.getElementById("pagoCambioText").textContent = "Cambio: $0.00";
+         document.getElementById("pagoCambioText").style.color = "#aaa";
+      } else if (cambio >= 0) {
+        document.getElementById("pagoCambioText").textContent = "Cambio: $" + formatNumber(cambio);
+        document.getElementById("pagoCambioText").style.color = "#4ade80"; // verde
+      } else {
+        document.getElementById("pagoCambioText").textContent = "Faltan: $" + formatNumber(Math.abs(cambio));
+        document.getElementById("pagoCambioText").style.color = "#f87171"; // rojo
+      }
+    }
+
+    function reiniciarModalPago() {
+      document.getElementById("pagoOpciones").style.display = "block";
+      document.getElementById("pagoEfectivoDiv").style.display = "none";
+      document.getElementById("pagoTarjetaDiv").style.display = "none";
+    }
+
+    function cerrarModalPago() {
+      document.getElementById("pagoModal").style.display = "none";
+    }
+
+    async function confirmarPagoFinal(metodo) {
+      let recibido = ventaActualTotal;
+      let cambio = 0;
+
+      if (metodo === 'Efectivo') {
+        recibido = parseFloat(document.getElementById("pagoRecibido").value) || 0;
+        if (recibido < ventaActualTotal) {
+          alert("⚠️ El monto recibido es menor al total de la cuenta.");
+          return;
+        }
+        cambio = recibido - ventaActualTotal;
       }
 
       try {
         await db.collection("ventas").add({
           fecha: new Date(),
-          items: items,
-          total: total
+          items: ventaActualItems,
+          total: ventaActualTotal,
+          metodoPago: metodo,         // NUEVO
+          montoRecibido: recibido,    // NUEVO
+          cambio: cambio              // NUEVO
         });
+
         alert("✅ Venta registrada correctamente.");
+        cerrarModalPago();
+
         carritoBebidas = {};
         bebidasCatalogo.forEach(b => {
           const span = document.getElementById("count_" + b.id);
@@ -1676,6 +1752,7 @@
         alert("❌ Error al registrar venta: " + e.message);
       }
     }
+    // ===================================================================
 
     function volverMenu() {
       document.getElementById("ventasPanel").style.display = "none";
@@ -1990,7 +2067,7 @@
           await sociosRef.doc("Axel").set({ nombre: "Axel", acumulado: axelShare });
         }
 
-        // 4) Refrescar tablas de ganancias (por si el panel de Ganancia está abierto)
+        // 4) Refrescar tablas de ganancias
         await renderGananciasEventos();
         await renderGananciasSocios();
 
