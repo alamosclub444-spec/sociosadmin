@@ -1016,7 +1016,7 @@
       .ticket-table th { border-bottom: 1px solid #000; text-align: left; }
       .text-right { text-align: right; }
       
-      /* Asegurar que las imágenes (el logo) se impriman */
+      /* Asegurar que las imágenes se impriman (el logo está con el nuevo filtro CSS abajo en el HTML) */
       img { max-width: 100% !important; }
     }
   </style>
@@ -1311,7 +1311,7 @@
 
   <div id="ticketImpresion">
     <div class="ticket-center">
-      <img src="LOGO.PNG" style="width: 120px; max-width: 100%; margin-bottom: 5px; filter: grayscale(100%) contrast(1.2);">
+      <img src="LOGO.PNG" style="width: 120px; max-width: 100%; margin-bottom: 5px; filter: invert(100%) grayscale(100%);">
       <div class="ticket-bold" style="font-size: 16px;">ALAMO'S CLUB</div>
       <div>Ticket de Venta</div>
       <div id="ticketFecha"></div>
