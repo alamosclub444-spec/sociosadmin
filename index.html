@@ -982,69 +982,42 @@
     }
 
     @media print {
-      /* 1. Ocultar todo el diseño de la página web */
-      body * {
-        visibility: hidden;
+      /* 1. Apagamos por completo toda la interfaz de la app */
+      #intro, #login, #panel, #pagoModal {
+        display: none !important;
       }
       
-      /* Quitar márgenes, fondos oscuros y forzar fondo blanco para ahorrar tinta térmica */
+      /* Forzar fondo blanco de la página para no gastar tinta térmica */
       body, html {
         margin: 0 !important;
         padding: 0 !important;
         background-color: #fff !important;
-        color: #000 !important;
       }
 
-      /* 2. Mostrar SOLAMENTE el contenedor del ticket de impresión */
-      #ticketImpresion, #ticketImpresion * {
-        visibility: visible;
-      }
-
-      /* 3. Darle formato de impresora térmica de 58mm */
+      /* 2. Encendemos únicamente el ticket */
       #ticketImpresion {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 58mm; /* Ancho exacto del papel de la Goojprt */
-        max-width: 58mm;
+        display: block !important;
+        position: relative;
+        width: 58mm !important; /* Ancho exacto de tu Goojprt */
         margin: 0;
-        padding: 5mm; /* Un poco de respiro en los bordes */
-        font-family: 'Courier New', Courier, monospace; /* Fuente de recibo clásica */
-        font-size: 12px; /* Tamaño legible */
+        padding: 2mm;
+        font-family: 'Courier New', Courier, monospace !important;
+        font-size: 12px !important;
         color: #000 !important; /* Texto negro forzoso */
-        text-align: left;
       }
 
-      .ticket-center {
-        text-align: center;
-      }
-
-      .ticket-bold {
-        font-weight: bold;
-      }
-
-      .ticket-divider {
-        border-top: 1px dashed #000;
-        margin: 5px 0;
-      }
-
-      .ticket-table {
-        width: 100%;
-        border-collapse: collapse;
-      }
-
-      .ticket-table th, .ticket-table td {
-        padding: 2px 0;
-      }
-
-      .ticket-table th {
-        border-bottom: 1px solid #000;
-        text-align: left;
-      }
-
-      .text-right {
-        text-align: right;
-      }
+      /* Estilos internos del ticket */
+      .ticket-center { text-align: center; }
+      .ticket-bold { font-weight: bold; }
+      .ticket-divider { border-top: 1px dashed #000; margin: 5px 0; }
+      
+      .ticket-table { width: 100%; border-collapse: collapse; color: #000 !important; }
+      .ticket-table th, .ticket-table td { padding: 2px 0; }
+      .ticket-table th { border-bottom: 1px solid #000; text-align: left; }
+      .text-right { text-align: right; }
+      
+      /* Asegurar que las imágenes (el logo) se impriman */
+      img { max-width: 100% !important; }
     }
   </style>
 </head>
@@ -1861,7 +1834,7 @@
         }
         document.getElementById('ticketImpresionMetodo').innerHTML = textoMetodo;
 
-        // LANZAR VENTANA DE IMPRESIÓN (El CSS hará su magia aquí)
+        // LANZAR VENTANA DE IMPRESIÓN
         window.print();
 
         // ==========================================
