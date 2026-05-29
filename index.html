@@ -448,12 +448,58 @@
       letter-spacing: 0.06em;
     }
 
-    #ventasPanel button.volver-btn,
-    #visualizacionVentasPanel button.volver-btn {
+    /* === NUEVOS ESTILOS PARA MESAS === */
+    #adminMesasPanel, #barraMesasPanel {
+      display: none;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .mesas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .mesa-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .mesa-card h3 {
+      margin: 0 0 10px 0;
+      font-size: 22px;
+      color: #fff;
+    }
+
+    .mesa-card p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .mesa-card .resta {
+      font-size: 20px;
+      color: #4ade80;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .mesa-card button {
+      width: 100%;
       margin-top: 10px;
-      padding: 14px 30px;
-      font-size: 16px;
-      border-radius: 999px;
+      padding: 12px;
+      font-size: 14px;
     }
 
     /* === LISTA DE INVITADOS === */
@@ -855,7 +901,7 @@
       letter-spacing:0.06em;
     }
 
-    /* === PANEL EXTRAS EVENTO (NUEVO) === */
+    /* === PANEL EXTRAS EVENTO === */
     #extrasPanel {
       display: none;
       padding: 20px;
@@ -975,48 +1021,30 @@
     }
 
     /* =========================================================================
-       NUEVO: ESTILOS EXCLUSIVOS PARA LA IMPRESIÓN DEL TICKET (Goojprt 58mm)
+       ESTILOS EXCLUSIVOS PARA LA IMPRESIÓN DEL TICKET (Goojprt 58mm)
        ========================================================================= */
     #ticketImpresion {
       display: none; /* Oculto en pantalla normal */
     }
 
     @media print {
-      /* 1. Apagamos por completo toda la interfaz de la app */
-      #intro, #login, #panel, #pagoModal {
-        display: none !important;
-      }
-      
-      /* Forzar fondo blanco de la página para no gastar tinta térmica */
-      body, html {
-        margin: 0 !important;
-        padding: 0 !important;
-        background-color: #fff !important;
-      }
+      body * { visibility: hidden; }
+      body, html { margin: 0 !important; padding: 0 !important; background-color: #fff !important; }
 
-      /* 2. Encendemos únicamente el ticket */
+      #ticketImpresion, #ticketImpresion * { visibility: visible; }
+
       #ticketImpresion {
         display: block !important;
-        position: relative;
-        width: 58mm !important; /* Ancho exacto de tu Goojprt */
-        margin: 0;
-        padding: 2mm;
-        font-family: 'Courier New', Courier, monospace !important;
-        font-size: 12px !important;
-        color: #000 !important; /* Texto negro forzoso */
+        position: absolute; left: 0; top: 0; width: 58mm !important; margin: 0; padding: 2mm;
+        font-family: 'Courier New', Courier, monospace !important; font-size: 12px !important; color: #000 !important;
       }
-
-      /* Estilos internos del ticket */
       .ticket-center { text-align: center; }
       .ticket-bold { font-weight: bold; }
       .ticket-divider { border-top: 1px dashed #000; margin: 5px 0; }
-      
       .ticket-table { width: 100%; border-collapse: collapse; color: #000 !important; }
       .ticket-table th, .ticket-table td { padding: 2px 0; }
       .ticket-table th { border-bottom: 1px solid #000; text-align: left; }
       .text-right { text-align: right; }
-      
-      /* Asegurar que las imágenes se impriman (el logo está con el nuevo filtro CSS abajo en el HTML) */
       img { max-width: 100% !important; }
     }
   </style>
@@ -1086,6 +1114,7 @@
 
     <div class="content" id="menuPrincipal">
       <button class="menu-btn" id="btnBarra" onclick="mostrarVentas()">Barra de Bebidas</button>
+      <button class="menu-btn" id="btnBarraMesas" onclick="abrirBarraMesas()">Mesas Reservadas</button>
       <button class="menu-btn" id="btnInvitados" onclick="mostrarInvitados()">Lista de Invitados</button>
       <button class="small-btn" style="margin-top:12px;" onclick="salirAInicio()">Exit</button>
     </div>
@@ -1093,6 +1122,7 @@
     <div class="content" id="menuSocios">
       <button class="menu-btn" onclick="abrirRegistro()">Registro</button>
       <button class="menu-btn" onclick="abrirBebidas()">Bebidas</button>
+      <button class="menu-btn" onclick="abrirAdminMesas()">Mesas (Reservas)</button>
       <button class="menu-btn" onclick="abrirListaRegistro()">Lista Registro</button>
       <button class="menu-btn" onclick="abrirInversion()">Inversión</button>
       <button class="menu-btn" onclick="abrirVisualizacionVentas()">Ventas</button>
@@ -1119,13 +1149,51 @@
 
           <div class="ventas-actions">
             <button onclick="pagar()">Pagar</button>
-            <button class="btn-secondary" id="btnEliminarVenta" onclick="toggleEliminar()">
-              Eliminar producto
-            </button>
+            <button class="btn-secondary" id="btnEliminarVenta" onclick="toggleEliminar()">Eliminar producto</button>
             <button class="volver-btn" onclick="volverMenu()">Volver</button>
           </div>
         </div>
       </div>
+    </div>
+
+    <div id="adminMesasPanel">
+      <h2 style="font-size: 32px;">Gestión de Mesas</h2>
+      <p style="color:#aaa; font-size:14px; max-width:600px; margin:0 auto 20px;">
+        Asigna una mesa, selecciona la botella del catálogo y pon cuánto dejaron de anticipo. El sistema calculará el resto.
+      </p>
+
+      <div class="bebidas-form" style="flex-direction:column; max-width:400px; margin:0 auto; background:#111; padding:20px; border-radius:18px; border:1px solid #333;">
+        <input type="text" id="mesaNumero" placeholder="No. de Mesa o VIP" style="width:100%;">
+        <input type="text" id="mesaCliente" placeholder="Nombre del Cliente" style="width:100%;">
+        
+        <label style="color:#aaa; font-size:12px; align-self:flex-start; margin-top:10px;">Selecciona Botella:</label>
+        <select id="mesaBebida" class="auth-select" style="width:100%;" onchange="actualizarRestanteMesa()">
+          </select>
+        
+        <label style="color:#aaa; font-size:12px; align-self:flex-start; margin-top:10px;">Adelanto dejado ($):</label>
+        <input type="number" id="mesaAdelanto" placeholder="Adelanto en $" min="0" step="0.01" style="width:100%;" oninput="actualizarRestanteMesa()">
+        
+        <div style="font-size: 18px; margin: 15px 0 5px; color:#aaa;">Resta a pagar en puerta: <br><strong style="font-size:28px; color:#fff;">$<span id="mesaRestaVisual">0.00</span></strong></div>
+        
+        <button class="menu-btn socios-small" style="width:100%;" onclick="guardarMesaAdmin()">+ Guardar Mesa</button>
+      </div>
+
+      <hr style="width:90%; margin:30px auto; border-color:#333;">
+      <h3 style="font-size:22px;">Mesas Actuales</h3>
+      <div id="listaMesasAdmin" class="mesas-grid"></div>
+
+      <button class="menu-btn socios-small" style="margin-top:30px;" onclick="cerrarAdminMesas()">Volver</button>
+    </div>
+
+    <div id="barraMesasPanel">
+      <h2 style="font-size: 32px;">Mesas por Cobrar</h2>
+      <p style="color:#aaa; font-size:14px; max-width:600px; margin:0 auto 20px;">
+        Selecciona la mesa que acaba de llegar para cobrarle el resto de su botella.
+      </p>
+
+      <div id="listaMesasBarra" class="mesas-grid"></div>
+
+      <button class="volver-btn" style="margin-top:30px; padding: 14px 30px; border-radius: 999px; background:transparent; color:#fff; border:1px solid #444;" onclick="volverMenu()">Volver</button>
     </div>
 
     <div id="visualizacionVentasPanel">
@@ -1155,18 +1223,11 @@
 
     <div id="registroPanel">
       <h2 style="font-size: 32px;">Registro de Producto</h2>
-      
       <select id="eventoTarget">
         <option value="registros">Evento 1</option>
         <option value="nuevo_evento">➕ Crear Nuevo Evento</option>
       </select>
-      <input
-        type="text"
-        id="nombreNuevoEvento"
-        placeholder="Ej: Evento VIP"
-        style="display:none; margin-bottom: 15px; padding: 12px; font-size: 18px; border-radius: 8px; border: 1px solid #444; width: 80%; max-width: 400px; text-align: center; background:#000; color:#fff;"
-      >
-
+      <input type="text" id="nombreNuevoEvento" placeholder="Ej: Evento VIP" style="display:none; margin-bottom: 15px; padding: 12px; font-size: 18px; border-radius: 8px; border: 1px solid #444; width: 80%; max-width: 400px; text-align: center; background:#000; color:#fff;">
       <div class="registro-row">
         <input type="text" id="prodNombre" class="prod-name" placeholder="Nombre del producto">
         <input type="number" id="prodPrecio" class="prod-price" placeholder="Precio" min="0" step="0.01">
@@ -1176,12 +1237,10 @@
           <button onclick="cambiarUnidades(1)">+</button>
         </div>
       </div>
-
       <div class="checkbox-row">
         <label><input type="checkbox" id="chkIguales" checked> Partes iguales</label>
         <label><input type="checkbox" id="chkPorcentaje"> Porcentaje</label>
       </div>
-
       <div style="display:flex;gap:12px;justify-content:center;margin-top:12px;">
         <button class="menu-btn socios-small" onclick="registrarProducto()">Registrar</button>
         <button class="menu-btn socios-small" onclick="cerrarRegistro()">Volver</button>
@@ -1209,57 +1268,36 @@
     <div id="extrasPanel">
       <h2 style="font-size: 32px;">Ventas de productos sobrantes</h2>
       <p style="font-size:14px;color:#ccc;max-width:600px;margin:0 auto 16px;">
-        Registra las ventas de productos que sobraron de un evento. Se sumarán a la ganancia de ese evento
-        y se repartirán 60/20/20 entre Aldo, Ariel y Axel.
+        Registra las ventas de productos que sobraron de un evento. Se sumarán a la ganancia de ese evento y se repartirán 60/20/20 entre Aldo, Ariel y Axel.
       </p>
-
       <div style="margin-bottom:12px;">
-        <select id="extraEventoSelect"
-          style="padding:12px;font-size:16px;border-radius:8px;border:1px solid #444;width:80%;max-width:400px;background:#000;color:#fff;outline:none;text-align:center;">
+        <select id="extraEventoSelect" style="padding:12px;font-size:16px;border-radius:8px;border:1px solid #444;width:80%;max-width:400px;background:#000;color:#fff;outline:none;text-align:center;">
           <option value="">Cargando eventos...</option>
         </select>
       </div>
-
       <div style="display:flex;flex-direction:column;gap:10px;max-width:400px;margin:0 auto 10px;">
-        <input
-          type="text"
-          id="extraDescripcion"
-          placeholder="Descripción del producto / nota (opcional)"
-          style="padding:12px;font-size:15px;border-radius:8px;border:1px solid #444;background:#000;color:#fff;outline:none;">
-        <input
-          type="number"
-          id="extraMonto"
-          placeholder="Monto vendido ($)"
-          min="0"
-          step="0.01"
-          style="padding:12px;font-size:15px;border-radius:8px;border:1px solid #444;background:#000;color:#fff;outline:none;">
+        <input type="text" id="extraDescripcion" placeholder="Descripción del producto / nota (opcional)" style="padding:12px;font-size:15px;border-radius:8px;border:1px solid #444;background:#000;color:#fff;outline:none;">
+        <input type="number" id="extraMonto" placeholder="Monto vendido ($)" min="0" step="0.01" style="padding:12px;font-size:15px;border-radius:8px;border:1px solid #444;background:#000;color:#fff;outline:none;">
       </div>
-
       <div style="margin-top:12px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
         <button class="menu-btn socios-small" onclick="guardarExtraEvento()">Registrar venta</button>
         <button class="menu-btn socios-small" onclick="cerrarExtras()">Volver</button>
       </div>
-
       <div id="extrasInfoLabel" style="margin-top:10px;font-size:13px;color:#aaa;"></div>
     </div>
 
     <div id="gananciaPanel">
       <h2 style="font-size:32px;">Ganancias por Evento</h2>
-
       <div class="input-row">
         <input type="number" id="cantidadObtenida" placeholder="Cantidad obtenida (solo números)" min="0" step="0.01">
       </div>
-
       <div class="btn-row">
         <button class="menu-btn socios-small" onclick="guardarGanancia()">Ganancia total</button>
         <button class="menu-btn socios-small" onclick="cerrarGanancia()">Volver</button>
       </div>
-
       <hr style="width:90%; margin:18px auto; border-color:#333;">
-
       <h3 style="font-size:20px; margin-top:10px;">Eventos (Evento | Ganancia)</h3>
       <div id="gananciasEventosContainer">Cargando...</div>
-
       <h3 style="font-size:20px; margin-top:10px;">Ganancias por Socio</h3>
       <div id="gananciasSociosContainer">Cargando...</div>
     </div>
@@ -1267,14 +1305,12 @@
     <div id="bebidasPanel">
       <h2 style="font-size:32px;">Catálogo de Bebidas</h2>
       <div id="bebidasAdminLista">Cargando bebidas...</div>
-
       <h3 style="font-size:18px;margin-top:16px;">Agregar nueva bebida</h3>
       <div class="bebidas-form">
         <input type="text" id="bebidaNombre" placeholder="Nombre de la bebida">
         <input type="number" id="bebidaPrecio" placeholder="Precio" min="0" step="0.01">
         <button class="menu-btn socios-small" onclick="agregarBebida()">+ Agregar</button>
       </div>
-
       <div style="margin-top:16px;">
         <button class="menu-btn socios-small" onclick="cerrarBebidas()">Volver</button>
       </div>
@@ -1351,24 +1387,19 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Usuario actual
     let currentUser = null;
-
-    // Colecciones de registro (eventos)
     let registroCollections = [{ id: 'registros', nombre: 'Evento 1' }];
     let currentRegistroCollection = 'registros';
-    let lastClosedEventNumber = 0; // último evento con ganancia
-
-    // Bebidas (catálogo y carrito)
+    let lastClosedEventNumber = 0; 
     let bebidasCatalogo = [];
     let carritoBebidas = {};
-    let deleteMode = false; // modo eliminar en ticket
+    let deleteMode = false; 
 
-    // Variables globales para el proceso de pago
+    // VARIABLES DE PAGO
     let ventaActualItems = [];
     let ventaActualTotal = 0;
+    let mesaPagandoId = null; // NUEVO: Saber si estamos cobrando una mesa
 
-    // INTRO
     window.addEventListener('load', () => {
       setTimeout(() => {
         const intro = document.getElementById('intro');
@@ -1391,7 +1422,6 @@
       document.getElementById('tabRegister').classList.add('active');
     }
 
-    // ========= REGISTRO DE USUARIO =========
     async function registerUser() {
       const nombre = (document.getElementById('regNombre').value || '').trim();
       const usuario = (document.getElementById('regUsuario').value || '').trim();
@@ -1402,31 +1432,20 @@
         alert('Completa todos los campos del registro.');
         return;
       }
-
       if (!['administrador', 'barra', 'seguridad'].includes(area)) {
         alert('Selecciona un área válida.');
         return;
       }
 
       try {
-        const existente = await db.collection('usuarios')
-          .where('usuario', '==', usuario)
-          .limit(1)
-          .get();
-
+        const existente = await db.collection('usuarios').where('usuario', '==', usuario).limit(1).get();
         if (!existente.empty) {
           alert('Ese usuario ya está registrado. Elige otro nombre de usuario.');
           return;
         }
-
         await db.collection('usuarios').add({
-          nombre,
-          usuario,
-          password, // (en producción se encripta)
-          area,
-          creado: new Date()
+          nombre, usuario, password, area, creado: new Date()
         });
-
         alert('✅ Usuario registrado correctamente. Ahora puedes iniciar sesión.');
         document.getElementById('regNombre').value = '';
         document.getElementById('regUsuario').value = '';
@@ -1438,7 +1457,6 @@
       }
     }
 
-    // ========= LOGIN =========
     async function login() {
       const usuario = (document.getElementById('loginUsuario').value || '').trim();
       const password = document.getElementById('loginPassword').value;
@@ -1450,27 +1468,16 @@
 
       try {
         const snapshot = await db.collection('usuarios')
-          .where('usuario', '==', usuario)
-          .where('password', '==', password)
-          .limit(1)
-          .get();
-
+          .where('usuario', '==', usuario).where('password', '==', password).limit(1).get();
         if (snapshot.empty) {
           alert('❌ Usuario o contraseña incorrectos.');
           return;
         }
-
         const doc = snapshot.docs[0];
         const data = doc.data();
-        currentUser = {
-          id: doc.id,
-          nombre: data.nombre,
-          usuario: data.usuario,
-          area: data.area
-        };
+        currentUser = { id: doc.id, nombre: data.nombre, usuario: data.usuario, area: data.area };
 
         configurarMenuPorArea(currentUser.area);
-
         document.getElementById('login').style.display = 'none';
         document.getElementById('panel').style.display = 'flex';
       } catch (e) {
@@ -1478,16 +1485,17 @@
       }
     }
 
-    // ========= MENÚ POR ÁREA =========
     function configurarMenuPorArea(area) {
       const menuPrincipal = document.getElementById('menuPrincipal');
       const menuSocios = document.getElementById('menuSocios');
       const btnBarra = document.getElementById('btnBarra');
+      const btnBarraMesas = document.getElementById('btnBarraMesas'); // NUEVO
       const btnInvitados = document.getElementById('btnInvitados');
 
       menuPrincipal.style.display = 'none';
       menuSocios.style.display = 'none';
       btnBarra.style.display = 'none';
+      btnBarraMesas.style.display = 'none'; // NUEVO
       btnInvitados.style.display = 'none';
 
       if (area === 'administrador') {
@@ -1495,15 +1503,13 @@
       } else if (area === 'barra') {
         menuPrincipal.style.display = 'flex';
         btnBarra.style.display = 'block';
+        btnBarraMesas.style.display = 'block'; // NUEVO
         btnInvitados.style.display = 'none';
       } else if (area === 'seguridad') {
         menuPrincipal.style.display = 'flex';
         btnBarra.style.display = 'none';
+        btnBarraMesas.style.display = 'none'; // NUEVO
         btnInvitados.style.display = 'block';
-      } else {
-        menuPrincipal.style.display = 'flex';
-        btnBarra.style.display = 'none';
-        btnInvitados.style.display = 'none';
       }
     }
 
@@ -1519,6 +1525,8 @@
 
     function hideAllPanels() {
       document.getElementById('ventasPanel').style.display = 'none';
+      document.getElementById('adminMesasPanel').style.display = 'none'; // NUEVO
+      document.getElementById('barraMesasPanel').style.display = 'none'; // NUEVO
       document.getElementById('invitadosPanel').style.display = 'none';
       document.getElementById('registroPanel').style.display = 'none';
       document.getElementById('listaRegistroPanel').style.display = 'none';
@@ -1529,6 +1537,201 @@
       document.getElementById('extrasPanel').style.display = 'none';
       document.getElementById('menuPrincipal').style.display = 'none';
       document.getElementById('menuSocios').style.display = 'none';
+    }
+
+    // ========= NUEVA LÓGICA DE MESAS (ADMINISTRADOR) =========
+    async function abrirAdminMesas() {
+      hideAllPanels();
+      document.getElementById("adminMesasPanel").style.display = "block";
+      await cargarBebidasParaSelect();
+      cargarMesasAdmin();
+    }
+
+    function cerrarAdminMesas() {
+      document.getElementById("adminMesasPanel").style.display = "none";
+      document.getElementById("menuSocios").style.display = "flex";
+    }
+
+    async function cargarBebidasParaSelect() {
+      const select = document.getElementById("mesaBebida");
+      select.innerHTML = "<option value=''>Cargando...</option>";
+      try {
+        const snapshot = await db.collection("bebidas").orderBy("nombre").get();
+        if (snapshot.empty) {
+          select.innerHTML = "<option value=''>No hay bebidas dadas de alta</option>";
+          return;
+        }
+        select.innerHTML = "<option value='' data-precio='0'>Selecciona una Botella</option>";
+        snapshot.docs.forEach(doc => {
+          const d = doc.data();
+          const option = document.createElement("option");
+          option.value = doc.id;
+          option.dataset.precio = d.precio;
+          option.textContent = `${d.nombre} ($${d.precio})`;
+          select.appendChild(option);
+        });
+      } catch (e) {
+        select.innerHTML = "<option value=''>Error al cargar bebidas</option>";
+      }
+    }
+
+    function actualizarRestanteMesa() {
+      const select = document.getElementById("mesaBebida");
+      if(select.selectedIndex <= 0) {
+        document.getElementById("mesaRestaVisual").textContent = "0.00";
+        return;
+      }
+      const precio = parseFloat(select.options[select.selectedIndex].dataset.precio) || 0;
+      const adelanto = parseFloat(document.getElementById("mesaAdelanto").value) || 0;
+      const resta = precio - adelanto;
+      document.getElementById("mesaRestaVisual").textContent = resta > 0 ? formatNumber(resta) : "0.00";
+    }
+
+    async function guardarMesaAdmin() {
+      const numero = document.getElementById("mesaNumero").value.trim();
+      const cliente = document.getElementById("mesaCliente").value.trim();
+      const select = document.getElementById("mesaBebida");
+      const bebidaId = select.value;
+      const adelanto = parseFloat(document.getElementById("mesaAdelanto").value) || 0;
+
+      if (!numero || !cliente || !bebidaId) {
+        alert("Llena el número de mesa, nombre del cliente y elige una botella.");
+        return;
+      }
+
+      const bebidaNombre = select.options[select.selectedIndex].text.split(' ($')[0]; // Agarrar solo el nombre sin el precio
+      const precioTotal = parseFloat(select.options[select.selectedIndex].dataset.precio) || 0;
+      const resta = precioTotal - adelanto;
+
+      if (resta < 0) {
+        alert("El adelanto no puede ser mayor al precio de la botella.");
+        return;
+      }
+
+      try {
+        await db.collection("mesas").add({
+          numero,
+          cliente,
+          bebidaId,
+          bebidaNombre,
+          precioTotal,
+          adelanto,
+          resta,
+          estado: 'pendiente',
+          fechaCreacion: new Date()
+        });
+        alert("✅ Reserva de Mesa agregada con éxito.");
+        
+        // Limpiar
+        document.getElementById("mesaNumero").value = "";
+        document.getElementById("mesaCliente").value = "";
+        document.getElementById("mesaAdelanto").value = "";
+        select.selectedIndex = 0;
+        actualizarRestanteMesa();
+        
+        cargarMesasAdmin();
+      } catch (e) {
+        alert("❌ Error al guardar reserva: " + e.message);
+      }
+    }
+
+    async function cargarMesasAdmin() {
+      const container = document.getElementById("listaMesasAdmin");
+      container.innerHTML = "Cargando reservas...";
+      try {
+        const snapshot = await db.collection("mesas").where("estado", "==", "pendiente").get();
+        if (snapshot.empty) {
+          container.innerHTML = "<div style='grid-column: 1/-1;'>No hay reservas pendientes.</div>";
+          return;
+        }
+        let html = "";
+        snapshot.docs.forEach(doc => {
+          const m = doc.data();
+          html += `
+            <div class="mesa-card">
+              <h3>Mesa ${escapeHtml(m.numero)}</h3>
+              <p><strong>A nombre de:</strong> ${escapeHtml(m.cliente)}</p>
+              <p><strong>Botella:</strong> ${escapeHtml(m.bebidaNombre)}</p>
+              <p><strong>Anticipo dado:</strong> $${formatNumber(m.adelanto)}</p>
+              <div class="resta">Resta: $${formatNumber(m.resta)}</div>
+              <button class="small-btn" style="color:#f87171; border-color:#f87171;" onclick="eliminarMesaAdmin('${doc.id}')">❌ Eliminar Reserva</button>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = "Error al cargar mesas: " + e.message;
+      }
+    }
+
+    async function eliminarMesaAdmin(id) {
+      if(!confirm("¿Seguro que deseas eliminar esta reserva?")) return;
+      try {
+        await db.collection("mesas").doc(id).delete();
+        cargarMesasAdmin();
+      } catch (e) {
+        alert("Error al eliminar: " + e.message);
+      }
+    }
+
+    // ========= NUEVA LÓGICA DE MESAS (BARRA) =========
+    function abrirBarraMesas() {
+      hideAllPanels();
+      document.getElementById("barraMesasPanel").style.display = "block";
+      cargarMesasBarra();
+    }
+
+    async function cargarMesasBarra() {
+      const container = document.getElementById("listaMesasBarra");
+      container.innerHTML = "Cargando reservas pendientes...";
+      try {
+        // Mostrar solo las pendientes
+        const snapshot = await db.collection("mesas").where("estado", "==", "pendiente").get();
+        if (snapshot.empty) {
+          container.innerHTML = "<div style='grid-column: 1/-1;'>No hay mesas pendientes por cobrar.</div>";
+          return;
+        }
+        let html = "";
+        snapshot.docs.forEach(doc => {
+          const m = doc.data();
+          // Escape strings for onClick function
+          const id = doc.id;
+          const num = escapeHtml(m.numero);
+          const nom = escapeHtml(m.cliente).replace(/'/g, "\\'");
+          const bot = escapeHtml(m.bebidaNombre).replace(/'/g, "\\'");
+          const res = m.resta;
+
+          html += `
+            <div class="mesa-card">
+              <h3>Mesa ${num}</h3>
+              <p><strong>Cliente:</strong> ${nom}</p>
+              <p><strong>Botella:</strong> ${bot}</p>
+              <div class="resta">Resta cobrar: $${formatNumber(res)}</div>
+              <button class="menu-btn socios-small" style="width:100%; font-size:16px;" onclick="cobrarMesaBarra('${id}', '${num}', '${nom}', '${bot}', ${res})">💳 Cobrar</button>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } catch (e) {
+        container.innerHTML = "Error al cargar mesas: " + e.message;
+      }
+    }
+
+    function cobrarMesaBarra(id, numero, cliente, bebidaNombre, resta) {
+      // Configuramos el modal de pago simulando que es una venta normal, pero de 1 solo item (el resto de la mesa)
+      ventaActualItems = [{
+        bebidaId: 'MESA_' + id,
+        nombre: `Mesa ${numero} - ${cliente} (${bebidaNombre})`,
+        precio: resta,
+        cantidad: 1,
+        subtotal: resta
+      }];
+      ventaActualTotal = resta;
+      mesaPagandoId = id; // Flag para saber que es pago de mesa
+
+      document.getElementById("pagoTotalText").textContent = "$" + formatNumber(ventaActualTotal);
+      document.getElementById("pagoModal").style.display = "flex";
+      reiniciarModalPago();
     }
 
     // ========= EVENTOS (COLECCIONES REGISTRO) =========
@@ -1548,16 +1751,12 @@
 
     async function getLastClosedEventNumber() {
       try {
-        const snap = await db.collection("ganancias_eventos")
-          .orderBy("eventoNumber", "desc")
-          .limit(1)
-          .get();
+        const snap = await db.collection("ganancias_eventos").orderBy("eventoNumber", "desc").limit(1).get();
         if (snap.empty) return 0;
         const data = snap.docs[0].data();
         const n = parseInt(data.eventoNumber);
         return isNaN(n) ? 0 : n;
       } catch (e) {
-        console.error("Error al obtener último evento cerrado:", e);
         return 0;
       }
     }
@@ -1565,7 +1764,7 @@
     function getEventNumberForCollectionId(id) {
       const idx = registroCollections.findIndex(c => c.id === id);
       if (idx === -1) return null;
-      return idx + 1; // idx 0 => Evento 1 (registros)
+      return idx + 1;
     }
 
     function renderPagination() {
@@ -1584,18 +1783,15 @@
       });
     }
 
-    // ========= VENTAS (BARRA) =========
+    // ========= VENTAS (BARRA DE BEBIDAS NORMAL) =========
     function mostrarVentas() {
-      document.getElementById("menuPrincipal").style.display = "none";
+      hideAllPanels();
       document.getElementById("ventasPanel").style.display = "block";
-
       carritoBebidas = {};
       bebidasCatalogo = [];
       deleteMode = false;
-
       const btnEliminar = document.getElementById("btnEliminarVenta");
       if (btnEliminar) btnEliminar.textContent = "Eliminar producto";
-
       cargarBebidasParaVenta();
     }
 
@@ -1635,10 +1831,8 @@
     function agregarBebidaVenta(id) {
       const actual = carritoBebidas[id] || 0;
       carritoBebidas[id] = actual + 1;
-
       const span = document.getElementById("count_" + id);
       if (span) span.textContent = carritoBebidas[id];
-
       actualizarResumenVenta();
     }
 
@@ -1681,27 +1875,21 @@
         alert("No hay productos agregados todavía.");
         return;
       }
-
       deleteMode = !deleteMode;
       const btn = document.getElementById("btnEliminarVenta");
-      if (btn) {
-        btn.textContent = deleteMode ? "Cancelar eliminar" : "Eliminar producto";
-      }
+      if (btn) btn.textContent = deleteMode ? "Cancelar eliminar" : "Eliminar producto";
       actualizarResumenVenta();
     }
 
     function eliminarUnaUnidad(id) {
       const actual = carritoBebidas[id] || 0;
       if (actual <= 0) return;
-
       carritoBebidas[id] = actual - 1;
       const span = document.getElementById("count_" + id);
       if (span) span.textContent = carritoBebidas[id];
-
       actualizarResumenVenta();
     }
 
-    // Click en el ticket para eliminar en modo eliminar
     document.addEventListener("DOMContentLoaded", () => {
       const ticketDiv = document.getElementById("ticketContainer");
       if (ticketDiv) {
@@ -1716,10 +1904,11 @@
       }
     });
 
-    // ========= PROCESO DE PAGO & IMPRESIÓN (NUEVO) =========
+    // ========= PROCESO DE PAGO & IMPRESIÓN (UNIFICADO) =========
     async function pagar() {
       ventaActualItems = [];
       ventaActualTotal = 0;
+      mesaPagandoId = null; // Reiniciar flag de mesa por si acaso
 
       bebidasCatalogo.forEach(b => {
         const cantidad = carritoBebidas[b.id] || 0;
@@ -1783,6 +1972,7 @@
 
     function cerrarModalPago() {
       document.getElementById("pagoModal").style.display = "none";
+      mesaPagandoId = null; // Limpiar si cancelan
     }
 
     async function confirmarPagoFinal(metodo) {
@@ -1799,18 +1989,26 @@
       }
 
       try {
+        // 1. Guardar la venta en historial general
         await db.collection("ventas").add({
           fecha: new Date(),
           items: ventaActualItems,
           total: ventaActualTotal,
           metodoPago: metodo,
           montoRecibido: recibido,
-          cambio: cambio
+          cambio: cambio,
+          tipoVenta: mesaPagandoId ? 'mesa' : 'barra' // Distinguir en BD
         });
 
-        // ==========================================
-        // LÓGICA PARA LLENAR Y LANZAR EL TICKET FÍSICO
-        // ==========================================
+        // 2. Si es una mesa, actualizar su estado a "pagada"
+        if (mesaPagandoId) {
+          await db.collection("mesas").doc(mesaPagandoId).update({
+            estado: 'pagada',
+            fechaPago: new Date()
+          });
+        }
+
+        // 3. Imprimir el ticket
         const fechaActual = new Date();
         document.getElementById('ticketFecha').textContent = fechaActual.toLocaleString();
 
@@ -1834,32 +2032,33 @@
         }
         document.getElementById('ticketImpresionMetodo').innerHTML = textoMetodo;
 
-        // LANZAR VENTANA DE IMPRESIÓN
         window.print();
 
-        // ==========================================
-        // LIMPIAR CARRITO Y PANTALLAS
-        // ==========================================
+        // 4. Limpiar UI
         cerrarModalPago();
-        carritoBebidas = {};
-        bebidasCatalogo.forEach(b => {
-          const span = document.getElementById("count_" + b.id);
-          if (span) span.textContent = "0";
-        });
-        deleteMode = false;
-        const btnEliminar = document.getElementById("btnEliminarVenta");
-        if (btnEliminar) btnEliminar.textContent = "Eliminar producto";
-        actualizarResumenVenta();
+
+        if (mesaPagandoId) {
+          abrirBarraMesas(); // Recargar las mesas pendientes
+        } else {
+          carritoBebidas = {};
+          bebidasCatalogo.forEach(b => {
+            const span = document.getElementById("count_" + b.id);
+            if (span) span.textContent = "0";
+          });
+          deleteMode = false;
+          const btnEliminar = document.getElementById("btnEliminarVenta");
+          if (btnEliminar) btnEliminar.textContent = "Eliminar producto";
+          actualizarResumenVenta();
+        }
         
       } catch (e) {
-        alert("❌ Error al registrar venta: " + e.message);
+        alert("❌ Error al registrar pago: " + e.message);
       }
     }
     // ===================================================================
 
     function volverMenu() {
-      document.getElementById("ventasPanel").style.display = "none";
-      document.getElementById("invitadosPanel").style.display = "none";
+      hideAllPanels();
       if (!currentUser) return;
       configurarMenuPorArea(currentUser.area);
     }
@@ -2025,7 +2224,7 @@
       document.getElementById("cantidadObtenida").value = "";
     }
 
-    // ========= PANEL EXTRAS EVENTO (NUEVO) =========
+    // ========= PANEL EXTRAS EVENTO =========
     async function abrirExtras() {
       document.getElementById("menuSocios").style.display = "none";
       document.getElementById("extrasPanel").style.display = "block";
